@@ -1439,7 +1439,7 @@ function readHomeLayout(){
   const saved=JSON.parse(localStorage.getItem(HOME_LAYOUT_KEY)||'null');if(!saved||typeof saved!=='object')return defaultHomeLayout();
   const normalize=(value)=>Array.isArray(value)?value.filter((id,index,array)=>HOME_SECTIONS.some(item=>item.id===id)&&array.indexOf(id)===index):[];
   const sections=normalize(saved.sections);HOME_SECTIONS.forEach(item=>{if(!sections.includes(item.id))sections.push(item.id);});
-  const visible=normalize(saved.visible);return {version:1,affirmation:saved.affirmation!==false,visible:visible.length?visible:[],sections};
+  const visible=normalize(saved.visible);if(!visible.includes('progress'))visible.unshift('progress');return {version:1,affirmation:saved.affirmation!==false,visible,sections};
  }catch(e){return defaultHomeLayout();}
 }
 let homeLayout=readHomeLayout();
@@ -1559,9 +1559,8 @@ function progressDays(){
 }
 function progressDateLabel(d,opts={day:'numeric',month:'short'}){return d.toLocaleDateString('ru-RU',opts);}
 function progressPlannerData(days){
- let total=0,done=0;const dayKeys=new Set(days.map(progressDateKey));
+ let total=0,done=0;
  const daily=days.map(d=>{const k=progressDateKey(d),items=getTasksForDate(d);total+=items.length;const count=items.filter(x=>{const t=x.task;if(t.repeat&&t.repeat!=='none')return (t.doneDates||[]).includes(k);if(t.completedAt)return String(t.completedAt).slice(0,10)===k;return !!t.done&&x.sourceKey===k;}).length;done+=count;return count;});
- Object.entries(tasks).forEach(([sourceKey,items])=>(items||[]).forEach(t=>{if(t.repeat&&t.repeat!=='none')(t.doneDates||[]).forEach(k=>{if(dayKeys.has(k)&&!days.some(d=>progressDateKey(d)===k&&getTasksForDate(d).some(x=>x.task===t)))done++;});}));
  return {total,done,rate:total?Math.round(done/total*100):0,daily};
 }
 function progressTodoData(days){
