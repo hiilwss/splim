@@ -856,7 +856,7 @@ function startRealtime(user){
   });
 }
 async function syncAccountData(user){
- if(!user){stopRealtime();syncUser=null;syncReady=false;syncLoading=false;clearTimeout(syncTimer);setSyncStatus('Войди в аккаунт, чтобы включить синхронизацию.');return;}
+ if(!user){stopRealtime();syncUser=null;syncReady=false;syncLoading=false;clearTimeout(syncTimer);try{localStorage.removeItem('splimWallpaperPath');}catch(e){}setSyncStatus('Войди в аккаунт, чтобы включить синхронизацию.');return;}
  if(syncUser&&syncUser.id===user.id&&(syncReady||syncLoading))return;
  stopRealtime();syncUser=user;syncReady=false;syncLoading=true;setSyncStatus('♡ Подключаем личное облачное хранилище…');
  const client=window.splimSupabase;if(!client){syncLoading=false;setSyncStatus('Модуль облака не загрузился. Обнови страницу.',true);return;}
