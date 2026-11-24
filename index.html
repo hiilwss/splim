@@ -805,6 +805,7 @@ function queueCloudSave(){
  if(!syncUser||!syncReady)return;
  clearTimeout(syncTimer);
  syncTimer=setTimeout(async()=>{
+  syncTimer=null;
   if(syncBusy){syncQueued=true;return;}
   syncBusy=true;
   try{await writeCloudSnapshot(syncUser);setSyncStatus('♡ Все записи сохранены в облаке. Синхронизация включена.');}
