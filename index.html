@@ -124,6 +124,10 @@ body.has-wallpaper{background:linear-gradient(135deg,color-mix(in srgb,var(--bg1
 
 .settings-options select{min-width:190px}
 .account-panel{margin-bottom:20px}
+.profile-account-panel{margin-top:24px;padding:clamp(18px,3vw,28px);border-radius:23px}
+.profile-account-panel .account-intro{align-items:center}
+.profile-account-panel .profile-eyebrow{margin-bottom:5px}
+.account-identity{padding:12px 14px;border:1px solid var(--line);border-radius:13px;background:var(--cell);overflow-wrap:anywhere}
 .account-intro{display:flex;align-items:center;gap:14px;margin-bottom:20px}
 .account-avatar{width:58px;height:58px;flex:0 0 58px;border-radius:20px;display:grid;place-items:center;background:var(--pale);border:1px solid var(--line);font-size:27px}
 .account-intro h2{margin:0;color:var(--ink)}
@@ -473,10 +477,10 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
           <p class="profile-status" id="profileStatus" role="status" aria-live="polite">♡ Загружаем профиль…</p>
         </div>
       </section>
-      <section class="panel settings-panel account-panel">
+      <section class="panel settings-panel account-panel profile-account-panel" id="profileAccountPanel">
         <div class="account-intro">
           <div class="account-avatar" aria-hidden="true">♡</div>
-          <div><h2>Мой аккаунт</h2><p>Управляй входом, электронной почтой и безопасностью своего аккаунта.</p></div>
+          <div><div class="profile-eyebrow">АККАУНТ И БЕЗОПАСНОСТЬ</div><h2>Мой аккаунт</h2><p>Электронная почта, смена пароля и выход из личного аккаунта.</p></div>
         </div>
         <div id="accountSignedOut">
           <div class="account-tabs" aria-label="Раздел аккаунта">
@@ -506,7 +510,7 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
           </form>
         </div>
         <div id="accountSignedIn" hidden>
-          <p class="account-note" id="accountWelcome">Ты вошла в свой аккаунт ♡</p>
+          <p class="account-note account-identity" id="accountWelcome">Ты вошла в свой аккаунт ♡</p>
           <p class="account-note" id="syncStatus" role="status" aria-live="polite">♡ Подключаем облачное хранилище…</p>
           <form class="account-form account-password-form" id="accountChangePasswordForm">
             <label class="account-field">Новый пароль
@@ -1397,8 +1401,9 @@ if(window.splimCurrentUser)syncAccountData(window.splimCurrentUser);
   const heading=byId('homeGreeting');if(!heading)return;
   const hour=new Date().getHours();
   const greeting=hour>=5&&hour<12?'Доброе утро':hour>=12&&hour<18?'Добрый день':hour>=18&&hour<23?'Добрый вечер':'Доброй ночи';
-  heading.textContent=homeGreetingName?greeting+', '+homeGreetingName+'! ♡':'Твоё пространство♡';
+  heading.textContent=homeGreetingName?greeting+', '+homeGreetingName+'! ♡':greeting+'! ♡';
  };
+ window.splimUpdateGreeting();
  setInterval(()=>window.splimUpdateGreeting(),60000);
  function say(message,error=false){if(!status)return;status.textContent=message;status.classList.toggle('error',!!error);}
  function showAvatar(url){if(url){avatarImage.src=url;avatar.classList.add('has-image');removeButton.hidden=false;}else{avatarImage.removeAttribute('src');avatar.classList.remove('has-image');removeButton.hidden=true;}}
