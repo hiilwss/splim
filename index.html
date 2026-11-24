@@ -1433,13 +1433,15 @@ $('#newAffirmation').addEventListener('click',()=>{
 });
 const HOME_SECTIONS=[{id:'progress',title:'Мой прогресс'},{id:'profile',title:'Мой профиль'},{id:'planner',title:'Календарь и планы'},{id:'todo',title:'Список дел'},{id:'habits',title:'Трекер привычек'},{id:'gratitude',title:'Моменты благодарности'},{id:'notes',title:'Заметки'},{id:'care',title:'Забота о себе'}];
 const HOME_LAYOUT_KEY='splimHomeLayout';
-function defaultHomeLayout(){return {version:1,affirmation:true,visible:HOME_SECTIONS.map(item=>item.id),sections:HOME_SECTIONS.map(item=>item.id)};}
+function defaultHomeLayout(){return {version:2,affirmation:true,visible:HOME_SECTIONS.map(item=>item.id),sections:HOME_SECTIONS.map(item=>item.id)};}
 function readHomeLayout(){
  try{
   const saved=JSON.parse(localStorage.getItem(HOME_LAYOUT_KEY)||'null');if(!saved||typeof saved!=='object')return defaultHomeLayout();
   const normalize=(value)=>Array.isArray(value)?value.filter((id,index,array)=>HOME_SECTIONS.some(item=>item.id===id)&&array.indexOf(id)===index):[];
   const sections=normalize(saved.sections);HOME_SECTIONS.forEach(item=>{if(!sections.includes(item.id))sections.push(item.id);});
-  const visible=normalize(saved.visible);return {version:1,affirmation:saved.affirmation!==false,visible,sections};
+  const visible=normalize(saved.visible);
+  if(Number(saved.version||1)<2&&!visible.includes('progress'))visible.unshift('progress');
+  return {version:2,affirmation:saved.affirmation!==false,visible,sections};
  }catch(e){return defaultHomeLayout();}
 }
 let homeLayout=readHomeLayout();
