@@ -868,6 +868,7 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
  function showRecovery(){signedOut.hidden=true;signedIn.hidden=true;recovery.hidden=false;}
  document.getElementById('gateGuest').addEventListener('click',()=>{
   try{localStorage.setItem('splimGuestMode','true');}catch(e){}
+  if(window.splimSetStorageContext&&window.splimSetStorageContext('guest')){location.reload();return;}
   if(typeof window.splimSetThemeAccess==='function')window.splimSetThemeAccess(false);
   if(typeof window.splimSetWallpaperAccess==='function')window.splimSetWallpaperAccess(false);
   if(typeof window.splimUpdatePasswordAccess==='function')window.splimUpdatePasswordAccess(null);
@@ -986,11 +987,36 @@ const SPLIM_SYNC_KEYS=['pinkPlannerTasks','splimNotes','splimGratitudeEntries','
 const syncStatus=$('#syncStatus');
 let syncUser=null,syncReady=false,syncTimer=null,syncBusy=false,syncQueued=false,syncLoading=false;
 let syncChannel=null;
+const nativeGetItem=Storage.prototype.getItem;
 const nativeSetItem=Storage.prototype.setItem;
+const nativeRemoveItem=Storage.prototype.removeItem;
+let splimStorageContext=nativeGetItem.call(localStorage,'splimStorageContext')||'legacy';
+function scopedStorageKey(key){
+ const name=String(key);
+ return this===localStorage&&SPLIM_SYNC_KEYS.includes(name)&&splimStorageContext!=='legacy'
+  ? 'splim:v2:'+splimStorageContext+':'+name : name;
+}
+Storage.prototype.getItem=function(key){return nativeGetItem.call(this,scopedStorageKey.call(this,key));};
 Storage.prototype.setItem=function(key,value){
- const result=nativeSetItem.call(this,key,value);
- if(this===localStorage&&SPLIM_SYNC_KEYS.includes(String(key))&&syncReady&&!window.splimSyncApplying)queueCloudSave();
+ const name=String(key),result=nativeSetItem.call(this,scopedStorageKey.call(this,name),value);
+ if(this===localStorage&&SPLIM_SYNC_KEYS.includes(name)&&syncReady&&!window.splimSyncApplying)queueCloudSave();
  return result;
+};
+Storage.prototype.removeItem=function(key){return nativeRemoveItem.call(this,scopedStorageKey.call(this,key));};
+window.splimSetStorageContext=function(next){
+ if(!next||splimStorageContext===next)return false;
+ // При первом обновлении переносим старые локальные записи в личное пространство аккаунта.
+ // Старые ключи не удаляем: они остаются резервной копией до проверки миграции.
+ if(splimStorageContext==='legacy'&&next.startsWith('user:')){
+  SPLIM_SYNC_KEYS.forEach(key=>{
+   const oldValue=nativeGetItem.call(localStorage,key);
+   const newKey='splim:v2:'+next+':'+key;
+   if(oldValue!==null&&nativeGetItem.call(localStorage,newKey)===null)nativeSetItem.call(localStorage,newKey,oldValue);
+  });
+ }
+ splimStorageContext=next;
+ nativeSetItem.call(localStorage,'splimStorageContext',next);
+ return true;
 };
 function setSyncStatus(message,isError=false){
  if(!syncStatus)return;
@@ -1032,7 +1058,7 @@ async function applyCloudSnapshot(storage){
  try{SPLIM_SYNC_KEYS.forEach(key=>{
   const next=Object.prototype.hasOwnProperty.call(storage||{},key)?String(storage[key]):null,current=localStorage.getItem(key);
   if(current!==next)changed=true;
-  if(next===null)localStorage.removeItem(key);else nativeSetItem.call(localStorage,key,next);
+  if(next===null)localStorage.removeItem(key);else localStorage.setItem(key,next);
  });}finally{window.splimSyncApplying=false;}
  return changed;
 }
@@ -1070,8 +1096,9 @@ function startRealtime(user){
   });
 }
 async function syncAccountData(user){
- if(!user){stopRealtime();syncUser=null;syncReady=false;syncLoading=false;clearTimeout(syncTimer);try{localStorage.removeItem('splimWallpaperPath');}catch(e){}setSyncStatus('Войди в аккаунт, чтобы включить синхронизацию.');return;}
+ if(!user){stopRealtime();syncUser=null;syncReady=false;syncLoading=false;clearTimeout(syncTimer);if(localStorage.getItem('splimGuestMode')==='true'&&window.splimSetStorageContext&&window.splimSetStorageContext('guest')){location.reload();return;}setSyncStatus('Войди в аккаунт, чтобы включить синхронизацию.');return;}
  if(syncUser&&syncUser.id===user.id&&(syncReady||syncLoading))return;
+ if(window.splimSetStorageContext&&window.splimSetStorageContext('user:'+user.id)){location.reload();return;}
  stopRealtime();syncUser=user;syncReady=false;syncLoading=true;setSyncStatus('♡ Подключаем личное облачное хранилище…');
  const client=window.splimSupabase;if(!client){syncLoading=false;setSyncStatus('Модуль облака не загрузился. Обнови страницу.',true);return;}
  try{
