@@ -771,6 +771,7 @@ const root=document.documentElement;
 const SPLIM_SYNC_KEYS=['pinkPlannerTasks','splimNotes','splimGratitudeEntries','splimHabits','splimTodoItems','pinkPlannerSettings','pinkPlannerTheme','pinkPlannerMode','splimWallpaperBlur'];
 const syncStatus=$('#syncStatus');
 let syncUser=null,syncReady=false,syncTimer=null,syncBusy=false,syncQueued=false,syncLoading=false;
+let syncChannel=null;
 const nativeSetItem=Storage.prototype.setItem;
 Storage.prototype.setItem=function(key,value){
  const result=nativeSetItem.call(this,key,value);
@@ -820,17 +821,50 @@ async function applyCloudSnapshot(storage){
  });}finally{window.splimSyncApplying=false;}
  return changed;
 }
+function stopRealtime(){
+ if(syncChannel){window.splimSupabase?.removeChannel(syncChannel);syncChannel=null;}
+}
+function startRealtime(user){
+ const client=window.splimSupabase;if(!client||!user)return;
+ if(syncChannel)stopRealtime();
+ syncChannel=client.channel('splim-live-'+user.id)
+  .on('postgres_changes',{event:'*',schema:'public',table:'user_data',filter:'user_id=eq.'+user.id},payload=>{
+   if(!syncReady||!payload||!payload.new||payload.new.user_id!==user.id)return;
+   const remote=payload.new.data&&payload.new.data.storage?payload.new.data.storage:{};
+   const local=readLocalSnapshot();
+   if(snapshotsEqual(local.storage,remote))return;
+   // Не перезаписываем локальные изменения, которые ещё ожидают отправки.
+   if(syncTimer||syncBusy||syncQueued){
+    setSyncStatus('♡ Есть локальные изменения — сначала сохраняем их в облако.');
+    return;
+   }
+   if(hasUsefulLocalData(local)){
+    const backupKey='splimLocalBackup_'+user.id;
+    if(!localStorage.getItem(backupKey))nativeSetItem.call(localStorage,backupKey,JSON.stringify({savedAt:new Date().toISOString(),storage:local.storage}));
+   }
+   applyCloudSnapshot(remote).then(changed=>{
+    if(changed){
+     setSyncStatus('♡ Получены изменения с другого устройства. Обновляем планер…');
+     setTimeout(()=>location.reload(),150);
+    }
+   }).catch(error=>setSyncStatus('Не удалось применить обновления: '+(error.message||'ошибка'),true));
+  })
+  .subscribe(status=>{
+   if(status==='SUBSCRIBED')setSyncStatus('♡ Живая синхронизация включена. Изменения с других устройств будут появляться автоматически.');
+   else if(status==='CHANNEL_ERROR'||status==='TIMED_OUT')setSyncStatus('♡ Облачное сохранение работает, но живая синхронизация временно недоступна. Проверь настройки Realtime.',true);
+  });
+}
 async function syncAccountData(user){
- if(!user){syncUser=null;syncReady=false;syncLoading=false;clearTimeout(syncTimer);setSyncStatus('Войди в аккаунт, чтобы включить синхронизацию.');return;}
+ if(!user){stopRealtime();syncUser=null;syncReady=false;syncLoading=false;clearTimeout(syncTimer);setSyncStatus('Войди в аккаунт, чтобы включить синхронизацию.');return;}
  if(syncUser&&syncUser.id===user.id&&(syncReady||syncLoading))return;
- syncUser=user;syncReady=false;syncLoading=true;setSyncStatus('♡ Подключаем личное облачное хранилище…');
+ stopRealtime();syncUser=user;syncReady=false;syncLoading=true;setSyncStatus('♡ Подключаем личное облачное хранилище…');
  const client=window.splimSupabase;if(!client){syncLoading=false;setSyncStatus('Модуль облака не загрузился. Обнови страницу.',true);return;}
  try{
   const {data:row,error}=await client.from('user_data').select('data,updated_at').eq('user_id',user.id).maybeSingle();
   if(error)throw error;
   const local=readLocalSnapshot(),cloudStorage=row&&row.data&&typeof row.data==='object'&&row.data.storage&&typeof row.data.storage==='object'?row.data.storage:{};
   if(!Object.keys(cloudStorage).length){
-   await writeCloudSnapshot(user);syncReady=true;
+   await writeCloudSnapshot(user);syncReady=true;startRealtime(user);
    setSyncStatus(hasUsefulLocalData(local)?'♡ Твои записи с этого устройства перенесены в облако.':'♡ Облачное хранилище аккаунта готово.');return;
   }
   if(!snapshotsEqual(local.storage,cloudStorage)&&hasUsefulLocalData(local)){
@@ -839,6 +873,7 @@ async function syncAccountData(user){
   }
   const changed=await applyCloudSnapshot(cloudStorage);syncReady=true;
   if(changed){setSyncStatus('♡ Загружены записи из твоего облачного профиля. Обновляем планер…');setTimeout(()=>location.reload(),150);return;}
+  startRealtime(user);
   setSyncStatus('♡ Все записи синхронизированы с твоим аккаунтом.');
  }catch(error){syncReady=false;setSyncStatus('Ошибка синхронизации: '+(error.message||'проверь подключение и доступ к user_data')+'. Локальные записи не удалены.',true);}
  finally{syncLoading=false;}
