@@ -991,6 +991,7 @@ const nativeGetItem=Storage.prototype.getItem;
 const nativeSetItem=Storage.prototype.setItem;
 const nativeRemoveItem=Storage.prototype.removeItem;
 let splimStorageContext=nativeGetItem.call(localStorage,'splimStorageContext')||'legacy';
+window.splimStorageScope=splimStorageContext;
 function scopedStorageKey(key){
  const name=String(key);
  return this===localStorage&&SPLIM_SYNC_KEYS.includes(name)&&splimStorageContext!=='legacy'
@@ -1014,7 +1015,7 @@ window.splimSetStorageContext=function(next){
    if(oldValue!==null&&nativeGetItem.call(localStorage,newKey)===null)nativeSetItem.call(localStorage,newKey,oldValue);
   });
  }
- splimStorageContext=next;
+ splimStorageContext=next;window.splimStorageScope=next;
  nativeSetItem.call(localStorage,'splimStorageContext',next);
  return true;
 };
@@ -1138,19 +1139,25 @@ function openWallpaperDb(){
   request.onerror=()=>reject(request.error||new Error('Не удалось открыть хранилище'));
  });
 }
+function wallpaperRecordKey(){return 'wallpaper:'+String(window.splimStorageScope||'legacy');}
 async function saveWallpaperData(data){
- const db=await openWallpaperDb();
- await new Promise((resolve,reject)=>{const tx=db.transaction('wallpapers','readwrite');tx.objectStore('wallpapers').put(data,'background');tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});
+ const db=await openWallpaperDb(),key=wallpaperRecordKey();
+ await new Promise((resolve,reject)=>{const tx=db.transaction('wallpapers','readwrite');tx.objectStore('wallpapers').put(data,key);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});
  db.close();
 }
 async function readWallpaperData(){
- const db=await openWallpaperDb();
- const data=await new Promise((resolve,reject)=>{const tx=db.transaction('wallpapers','readonly');const req=tx.objectStore('wallpapers').get('background');req.onsuccess=()=>resolve(req.result||'');req.onerror=()=>reject(req.error);});
+ const db=await openWallpaperDb(),key=wallpaperRecordKey();
+ let data=await new Promise((resolve,reject)=>{const tx=db.transaction('wallpapers','readonly');const req=tx.objectStore('wallpapers').get(key);req.onsuccess=()=>resolve(req.result||'');req.onerror=()=>reject(req.error);});
+ // Старый единый объект обоев сохраняем как личный, если у аккаунта ещё нет своей копии.
+ if(!data&&String(window.splimStorageScope||'').startsWith('user:')){
+  data=await new Promise((resolve,reject)=>{const tx=db.transaction('wallpapers','readonly');const req=tx.objectStore('wallpapers').get('background');req.onsuccess=()=>resolve(req.result||'');req.onerror=()=>reject(req.error);});
+  if(data)await saveWallpaperData(data);
+ }
  db.close();return data;
 }
 async function clearWallpaperData(){
- const db=await openWallpaperDb();
- await new Promise((resolve,reject)=>{const tx=db.transaction('wallpapers','readwrite');tx.objectStore('wallpapers').delete('background');tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});
+ const db=await openWallpaperDb(),key=wallpaperRecordKey();
+ await new Promise((resolve,reject)=>{const tx=db.transaction('wallpapers','readwrite');tx.objectStore('wallpapers').delete(key);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});
  db.close();
 }
 function wallpaperDataUrlToBlob(dataUrl){
