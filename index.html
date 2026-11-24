@@ -487,9 +487,10 @@ body.auth-pending #wallpaperLayer,body.gate-locked #wallpaperLayer{filter:blur(1
         </div>
         <div id="accountSignedIn" hidden>
           <p class="account-note" id="accountWelcome">Ты вошла в свой аккаунт ♡</p>
+          <p class="account-note" id="syncStatus" role="status" aria-live="polite">♡ Подключаем облачное хранилище…</p>
           <button class="account-secondary" id="accountSignOut" type="button">Выйти из аккаунта</button>
         </div>
-        <div class="account-note">♡ Регистрация требует подтверждения электронной почты. Данные планера пока остаются на этом устройстве — облачная синхронизация будет подключена отдельным этапом.</div>
+        <div class="account-note">♡ Регистрация требует подтверждения электронной почты. Записи и настройки синхронизируются с твоим личным аккаунтом. Обои пока хранятся на устройстве — их облачное хранение подключим отдельно.</div>
       </section>
       <section class="panel settings-panel">
         <h2>Внешний вид</h2>
@@ -601,13 +602,13 @@ body.auth-pending #wallpaperLayer,body.gate-locked #wallpaperLayer{filter:blur(1
   <section class="gate-card">
     <div class="gate-flower" aria-hidden="true">♡</div>
     <h2 id="gateTitle">Добро пожаловать в splim ♡</h2>
-    <p>Создай личный аккаунт, чтобы в будущем хранить свои планы и заметки в одном месте и пользоваться ими на разных устройствах.</p>
+    <p>Создай личный аккаунт, чтобы хранить планы и заметки в своём закрытом профиле и открывать их на разных устройствах.</p>
     <div class="gate-actions">
       <button class="gate-button primary" id="gateCreate" type="button">Создать аккаунт</button>
       <button class="gate-button secondary" id="gateLogin" type="button">У меня уже есть аккаунт</button>
       <button class="gate-button guest" id="gateGuest" type="button">Продолжить как гость</button>
     </div>
-    <small class="gate-footnote">Гостевые записи пока сохраняются только в этом браузере. Облачная синхронизация будет подключена отдельно ♡</small>
+    <small class="gate-footnote">Гостевые записи сохраняются в этом браузере. Чтобы синхронизировать их, войди в аккаунт ♡</small>
   </section>
 </div>
 
@@ -620,6 +621,8 @@ body.auth-pending #wallpaperLayer,body.gate-locked #wallpaperLayer{filter:blur(1
  const client=window.supabase&&window.supabase.createClient
   ? window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY)
   : null;
+ window.splimSupabase=client;
+ window.splimCurrentUser=null;
  const loginTab=document.getElementById('accountLoginTab');
  const signupTab=document.getElementById('accountSignupTab');
  const form=document.getElementById('accountForm');
@@ -670,6 +673,8 @@ body.auth-pending #wallpaperLayer,body.gate-locked #wallpaperLayer{filter:blur(1
  }
  function showSession(session){
   const user=session&&session.user;
+  window.splimCurrentUser=user||null;
+  if(typeof window.splimSyncSession==='function')window.splimSyncSession(window.splimCurrentUser);
   signedOut.hidden=!!user;
   signedIn.hidden=!user;
   if(user){
@@ -760,8 +765,85 @@ body.auth-pending #wallpaperLayer,body.gate-locked #wallpaperLayer{filter:blur(1
 
 </script>
 <script>
+
 const $=s=>document.querySelector(s);
 const root=document.documentElement;
+const SPLIM_SYNC_KEYS=['pinkPlannerTasks','splimNotes','splimGratitudeEntries','splimHabits','splimTodoItems','pinkPlannerSettings','pinkPlannerTheme','pinkPlannerMode','splimWallpaperBlur'];
+const syncStatus=$('#syncStatus');
+let syncUser=null,syncReady=false,syncTimer=null,syncBusy=false;
+const nativeSetItem=Storage.prototype.setItem;
+Storage.prototype.setItem=function(key,value){
+ const result=nativeSetItem.call(this,key,value);
+ if(this===localStorage&&SPLIM_SYNC_KEYS.includes(String(key))&&syncReady&&!window.splimSyncApplying)queueCloudSave();
+ return result;
+};
+function setSyncStatus(message,isError=false){
+ if(!syncStatus)return;
+ syncStatus.textContent=message;
+ syncStatus.classList.toggle('account-status-error',!!isError);
+}
+function readLocalSnapshot(){
+ const storage={};SPLIM_SYNC_KEYS.forEach(key=>{const value=localStorage.getItem(key);if(value!==null)storage[key]=value;});
+ return {version:1,storage};
+}
+function hasUsefulLocalData(snapshot){
+ const st=snapshot.storage||{};
+ return ['pinkPlannerTasks','splimNotes','splimGratitudeEntries','splimHabits','splimTodoItems'].some(key=>{
+  if(!st[key])return false;
+  try{const value=JSON.parse(st[key]);return Array.isArray(value)?value.length>0:(value&&typeof value==='object'&&Object.keys(value).length>0);}catch(e){return !!st[key];}
+ });
+}
+function snapshotsEqual(a,b){return JSON.stringify(a||{})===JSON.stringify(b||{});}
+async function writeCloudSnapshot(user){
+ const client=window.splimSupabase;if(!client||!user)throw new Error('Аккаунт не подключён');
+ const snapshot=readLocalSnapshot(),updatedAt=new Date().toISOString();
+ const {error}=await client.from('user_data').upsert({user_id:user.id,data:snapshot,updated_at:updatedAt},{onConflict:'user_id'});
+ if(error)throw error;
+}
+function queueCloudSave(){
+ if(!syncUser||!syncReady)return;
+ clearTimeout(syncTimer);
+ syncTimer=setTimeout(async()=>{
+  if(syncBusy)return;
+  syncBusy=true;
+  try{await writeCloudSnapshot(syncUser);setSyncStatus('♡ Все записи сохранены в облаке. Синхронизация включена.');}
+  catch(error){setSyncStatus('Не удалось синхронизировать: '+(error.message||'ошибка соединения')+'. Локальная копия сохранена.',true);}
+  finally{syncBusy=false;}
+ },700);
+}
+async function applyCloudSnapshot(storage){
+ window.splimSyncApplying=true;let changed=false;
+ try{SPLIM_SYNC_KEYS.forEach(key=>{
+  const next=Object.prototype.hasOwnProperty.call(storage||{},key)?String(storage[key]):null,current=localStorage.getItem(key);
+  if(current!==next)changed=true;
+  if(next===null)localStorage.removeItem(key);else nativeSetItem.call(localStorage,key,next);
+ });}finally{window.splimSyncApplying=false;}
+ return changed;
+}
+async function syncAccountData(user){
+ if(!user){syncUser=null;syncReady=false;clearTimeout(syncTimer);setSyncStatus('Войди в аккаунт, чтобы включить синхронизацию.');return;}
+ if(syncUser&&syncUser.id===user.id&&syncReady)return;
+ syncUser=user;syncReady=false;setSyncStatus('♡ Подключаем личное облачное хранилище…');
+ const client=window.splimSupabase;if(!client){setSyncStatus('Модуль облака не загрузился. Обнови страницу.',true);return;}
+ try{
+  const {data:row,error}=await client.from('user_data').select('data,updated_at').eq('user_id',user.id).maybeSingle();
+  if(error)throw error;
+  const local=readLocalSnapshot(),cloudStorage=row&&row.data&&typeof row.data==='object'&&row.data.storage&&typeof row.data.storage==='object'?row.data.storage:{};
+  if(!Object.keys(cloudStorage).length){
+   await writeCloudSnapshot(user);syncReady=true;
+   setSyncStatus(hasUsefulLocalData(local)?'♡ Твои записи с этого устройства перенесены в облако.':'♡ Облачное хранилище аккаунта готово.');return;
+  }
+  if(!snapshotsEqual(local.storage,cloudStorage)&&hasUsefulLocalData(local)){
+   const backupKey='splimLocalBackup_'+user.id;
+   if(!localStorage.getItem(backupKey))nativeSetItem.call(localStorage,backupKey,JSON.stringify({savedAt:new Date().toISOString(),storage:local.storage}));
+  }
+  const changed=await applyCloudSnapshot(cloudStorage);syncReady=true;
+  if(changed){setSyncStatus('♡ Загружены записи из твоего облачного профиля. Обновляем планер…');setTimeout(()=>location.reload(),150);return;}
+  setSyncStatus('♡ Все записи синхронизированы с твоим аккаунтом.');
+ }catch(error){syncReady=false;setSyncStatus('Ошибка синхронизации: '+(error.message||'проверь подключение и доступ к user_data')+'. Локальные записи не удалены.',true);}
+}
+window.splimSyncSession=user=>{syncAccountData(user);};
+window.splimSyncNow=()=>queueCloudSave();
 const wallpaperLayer=$('#wallpaperLayer');
 const wallpaperInput=$('#wallpaperInput');
 const wallpaperBlur=$('#wallpaperBlur');
@@ -1145,6 +1227,7 @@ $('#prev').onclick=()=>{shown=new Date(shown.getFullYear(),shown.getMonth()-1,1)
 $('#next').onclick=()=>{shown=new Date(shown.getFullYear(),shown.getMonth()+1,1);render()};
 $('#todayBtn').onclick=()=>{selected=new Date(today);shown=new Date(today.getFullYear(),today.getMonth(),1);render()};
 render();
+if(window.splimCurrentUser)syncAccountData(window.splimCurrentUser);
 </script>
 </body>
 </html>
