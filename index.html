@@ -449,7 +449,7 @@ body.auth-pending #wallpaperLayer,body.gate-locked #wallpaperLayer{filter:blur(1
       </form>
     </aside>
   </main>
-  <div class="footer">Твои планы сохраняются в этом браузере ♡</div>
+  <div class="footer">В гостевом режиме — в браузере, в аккаунте — в личном облаке ♡</div>
     </section>
     <section class="page settings-page hidden" id="settingsPage">
       <header class="settings-heading"><div class="eyebrow">ТВОЙ УЮТНЫЙ УГОЛОК</div><h1>Настройки</h1><p>Настрой splim под своё настроение ♡</p></header>
@@ -562,7 +562,7 @@ body.auth-pending #wallpaperLayer,body.gate-locked #wallpaperLayer{filter:blur(1
             <label for="gratitudeThree">И напоследок...</label><textarea id="gratitudeThree" rows="2" maxlength="500" placeholder="Любая мысль, человек или мелочь ♡"></textarea>
           </div>
           <button class="add gratitude-save" type="submit">♡ Сохранить мой день</button>
-          <p class="gratitude-saved" id="gratitudeSaved" aria-live="polite">Записи сохраняются только в этом браузере.</p>
+          <p class="gratitude-saved" id="gratitudeSaved" aria-live="polite">Твои ответы бережно сохраняются ♡</p>
         </form>
       </section>
     </section>
@@ -1146,7 +1146,7 @@ function renderGratitude(){
  $('#gratitudeOne').value=entry.one||'';
  $('#gratitudeTwo').value=entry.two||'';
  $('#gratitudeThree').value=entry.three||'';
- $('#gratitudeSaved').textContent=entry.savedAt?'Твои ответы за сегодня уже сохранены. Их можно изменить и сохранить снова ♡':'Записи сохраняются только в этом браузере.';
+ $('#gratitudeSaved').textContent=entry.savedAt?'Твои ответы за сегодня уже сохранены. Их можно изменить и сохранить снова ♡' :'Твои ответы бережно сохраняются ♡';
 }
 $('#gratitudeForm').addEventListener('submit',e=>{
  e.preventDefault();const dateKey=key(new Date()),entry={};
