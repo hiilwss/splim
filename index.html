@@ -35,6 +35,7 @@ body.has-wallpaper{background:linear-gradient(135deg,color-mix(in srgb,var(--bg1
 .wallpaper-blur-control label{font-size:14px}
 .wallpaper-blur-control input{width:100%;accent-color:var(--pink)}
 .wallpaper-hint{font-size:12px!important}
+.guest-access-notice{margin-top:14px!important;padding:12px 15px;border:1px solid var(--line);border-radius:14px;background:var(--pale);color:var(--ink)!important;font-size:13px;line-height:1.55!important}
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,var(--bg1),var(--bg2));font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);min-height:100vh;padding:28px;transition:background .25s,color .25s}
 .wrap{max-width:1100px;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px}
 .home-title{justify-content:flex-start;align-items:center;gap:15px;margin:8px 0 24px}
@@ -532,6 +533,7 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
       <section class="panel settings-panel">
         <h2>Внешний вид</h2>
         <p>Выбери любимую палитру и режим отображения. Изменения сохраняются автоматически.</p>
+        <p class="guest-access-notice" id="guestThemeNotice" hidden>♡ В гостевом режиме тему менять нельзя. Чтобы выбрать другую палитру или режим, войди в аккаунт или зарегистрируйся.</p>
         <div class="settings-options">
           <div class="theme-control"><label for="paletteSelect">Цвет темы</label><select id="paletteSelect" aria-label="Цветовая тема">
             <option value="pink">Розовая</option><option value="peach">Персиковая</option><option value="lavender">Лавандовая</option><option value="mint">Мятная</option><option value="sky">Небесная</option><option value="chocolate">Шоколадная</option><option value="beige">Мягкий беж</option>
@@ -542,6 +544,7 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
       <section class="panel settings-panel wallpaper-panel">
         <h2>Мои обои</h2>
         <p>Выбери фотографию из галереи и настрой мягкость фона. Войди в аккаунт, чтобы обои сохранялись в личном облаке и появлялись на других устройствах.</p>
+        <p class="guest-access-notice" id="guestWallpaperNotice" hidden>♡ В гостевом режиме менять обои и их размытие нельзя. Чтобы загрузить, убрать или настроить обои, войди в аккаунт или зарегистрируйся.</p>
         <div class="wallpaper-actions">
           <label class="pill wallpaper-upload" for="wallpaperInput">Выбрать фото</label>
           <input id="wallpaperInput" type="file" accept="image/*" hidden>
@@ -1022,6 +1025,8 @@ window.splimSetWallpaperAccess=function(isAuthenticated){
  wallpaperAccessAllowed=!!isAuthenticated;
  wallpaperInput.disabled=!wallpaperAccessAllowed;wallpaperBlur.disabled=!wallpaperAccessAllowed;$('#removeWallpaper').disabled=!wallpaperAccessAllowed;
  const panel=wallpaperInput.closest('.wallpaper-panel');if(panel)panel.classList.toggle('guest-wallpaper-locked',!wallpaperAccessAllowed);
+ let isGuest=false;try{isGuest=localStorage.getItem('splimGuestMode')==='true'&&!window.splimCurrentUser;}catch(e){}
+ const notice=document.getElementById('guestWallpaperNotice');if(notice)notice.hidden=wallpaperAccessAllowed||!isGuest;
  if(!wallpaperAccessAllowed){setWallpaper('');wallpaperStatus.textContent='♡ Обои доступны только после входа или регистрации.';}
 };
 async function syncWallpaperForUser(user){
@@ -1141,6 +1146,8 @@ window.splimSetThemeAccess=function(isAuthenticated){
   modeSelect.disabled=!isAuthenticated;
   const panel=paletteSelect.closest('.settings-panel');
   if(panel)panel.classList.toggle('guest-theme-locked',!isAuthenticated);
+  let isGuest=false;try{isGuest=localStorage.getItem('splimGuestMode')==='true'&&!window.splimCurrentUser;}catch(e){}
+  const notice=document.getElementById('guestThemeNotice');if(notice)notice.hidden=!!isAuthenticated||!isGuest;
 };
 window.splimApplyGuestTheme=function(){
   try{localStorage.setItem('pinkPlannerSettings',JSON.stringify({palette:'lavender',mode:'light'}));}catch(e){}
