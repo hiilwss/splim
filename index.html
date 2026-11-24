@@ -26,6 +26,14 @@
 .home-title h1{font-size:clamp(26px,4vw,36px);font-weight:750;letter-spacing:-.035em}
 .home-title-flower{width:62px;height:62px;flex:0 0 62px;padding:5px;border-radius:20px;background:color-mix(in srgb,var(--pink2) 55%,var(--white));color:var(--pink);transform:rotate(6deg)}
 .planner-tools{display:flex;justify-content:flex-end;margin-bottom:18px}
+.settings-page{max-width:850px}
+.settings-heading{margin:8px 0 24px}
+.settings-heading h1{font-size:clamp(26px,4vw,36px);margin:0}
+.settings-heading p,.settings-panel p{color:var(--muted);line-height:1.6;margin:8px 0 0}
+.settings-panel h2{margin:0;color:var(--ink)}
+.settings-options{display:flex;gap:14px;flex-wrap:wrap;margin-top:22px}
+.settings-options .theme-control{min-width:190px}
+.settings-options select{min-width:190px}
 @media(max-width:600px){.home-title{margin-top:4px;margin-bottom:20px}.home-title-flower{width:54px;height:54px;flex-basis:54px}.planner-tools{justify-content:flex-start}}
 h1{font-size:clamp(25px,4vw,36px);margin:0;color:var(--accentText)}
 .themebar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}.themebar label{font-size:12px;color:var(--muted);font-weight:700}
@@ -196,6 +204,7 @@ body[data-page="home"] #todayBtn{display:none}
     <nav class="side-nav" aria-label="Основная навигация">
       <button class="side-link active" data-page="home"><span class="side-icon">⌂</span><span>Главная</span></button>
       <button class="side-link" data-page="planner"><span class="side-icon">▦</span><span>Календарь и планы</span></button>
+      <button class="side-link" data-page="settings"><span class="side-icon">⚙</span><span>Настройки</span></button>
     </nav>
     <div class="sidebar-note"><span>♡</span><p>Маленькие шаги — тоже движение вперёд.</p></div>
   </aside>
@@ -215,7 +224,7 @@ body[data-page="home"] #todayBtn{display:none}
     <circle cx="50" cy="21" r="4" fill="white" stroke="none"/>
   </g>
 </svg></div>
-    </header>der>
+    </header>
     <section class="page home-page" id="homePage">
       <section class="affirmation-card">
         <div class="affirmation-kicker">АФФИРМАЦИЯ ДНЯ</div>
@@ -230,15 +239,7 @@ body[data-page="home"] #todayBtn{display:none}
       <div class="home-footnote">Здесь можно планировать не только дела, но и заботу о себе. ♡</div>
     </section>
     <section class="page planner-page hidden" id="plannerPage">
-  <div class="planner-tools">
-    <div class="top-actions">
-      <div class="theme-control"><label for="paletteSelect">Цвет темы</label><select id="paletteSelect" aria-label="Цветовая тема">
-        <option value="pink">Розовая</option><option value="peach">Персиковая</option><option value="lavender">Лавандовая</option><option value="mint">Мятная</option><option value="sky">Небесная</option>
-      </select></div>
-      <div class="theme-control"><label for="modeSelect">Режим</label><select id="modeSelect" aria-label="Светлая или тёмная тема"><option value="light">Светлая ☀</option><option value="dark">Тёмная ☾</option></select></div>
-      <button class="pill" id="todayBtn">Сегодня</button>
-    </div>
-  </div>
+  <div class="planner-tools"><button class="pill" id="todayBtn">Сегодня</button></div>
   <main class="layout">
     <section class="panel">
       <div class="monthbar"><h2 id="monthTitle"></h2><div class="nav"><button id="prev" aria-label="Предыдущий месяц">←</button><button id="next" aria-label="Следующий месяц">→</button></div></div>
@@ -259,6 +260,19 @@ body[data-page="home"] #todayBtn{display:none}
     </aside>
   </main>
   <div class="footer">Твои планы сохраняются в этом браузере ♡</div>
+    </section>
+    <section class="page settings-page hidden" id="settingsPage">
+      <header class="settings-heading"><div class="eyebrow">ТВОЙ УЮТНЫЙ УГОЛОК</div><h1>Настройки</h1><p>Настрой splim под своё настроение ♡</p></header>
+      <section class="panel settings-panel">
+        <h2>Внешний вид</h2>
+        <p>Выбери любимую палитру и режим отображения. Изменения сохраняются автоматически.</p>
+        <div class="settings-options">
+          <div class="theme-control"><label for="paletteSelect">Цвет темы</label><select id="paletteSelect" aria-label="Цветовая тема">
+            <option value="pink">Розовая</option><option value="peach">Персиковая</option><option value="lavender">Лавандовая</option><option value="mint">Мятная</option><option value="sky">Небесная</option>
+          </select></div>
+          <div class="theme-control"><label for="modeSelect">Режим</label><select id="modeSelect" aria-label="Светлая или тёмная тема"><option value="light">Светлая ☀</option><option value="dark">Тёмная ☾</option></select></div>
+        </div>
+      </section>
     </section>
    </div>
   </div>
@@ -330,12 +344,13 @@ $('#newAffirmation').addEventListener('click',()=>{
  $('.affirmation-quote').textContent=choices[Math.floor(Math.random()*choices.length)];
 });
 function showPage(page){
- const isPlanner=page==='planner';
- document.body.dataset.page=isPlanner?'planner':'home';
- $('#homePage').classList.toggle('hidden',isPlanner);
- $('#plannerPage').classList.toggle('hidden',!isPlanner);
- document.querySelectorAll('.side-link').forEach(button=>button.classList.toggle('active',button.dataset.page===page));
- if(isPlanner) render();
+ const validPage=['home','planner','settings'].includes(page)?page:'home';
+ document.body.dataset.page=validPage;
+ $('#homePage').classList.toggle('hidden',validPage!=='home');
+ $('#plannerPage').classList.toggle('hidden',validPage!=='planner');
+ $('#settingsPage').classList.toggle('hidden',validPage!=='settings');
+ document.querySelectorAll('.side-link').forEach(button=>button.classList.toggle('active',button.dataset.page===validPage));
+ if(validPage==='planner') render();
  window.scrollTo({top:0,behavior:'smooth'});
 }
 document.querySelectorAll('.side-link').forEach(button=>button.addEventListener('click',()=>showPage(button.dataset.page)));
