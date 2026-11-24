@@ -267,6 +267,13 @@ body.ready .app-shell{opacity:1}
 .home-editor-list-heading{margin:18px 0 10px;color:var(--ink);font-size:14px;font-weight:800}
 .home-editor-sections{display:grid;gap:8px}
 .home-editor-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:13px;background:var(--cell)}
+.home-editor-row{transition:transform .19s cubic-bezier(.2,.75,.25,1),box-shadow .19s,border-color .19s;will-change:transform}
+.home-editor-row.is-dragging{position:relative;z-index:2;opacity:.88;box-shadow:0 12px 28px color-mix(in srgb,var(--ink) 16%,transparent);border-color:var(--pink);transform:scale(1.015)}
+.home-editor-drag{width:30px;height:34px;flex:0 0 30px;border:0;border-radius:9px;background:transparent;color:var(--muted);font-size:21px;line-height:1;cursor:grab;touch-action:none;user-select:none}
+.home-editor-drag:active{cursor:grabbing;background:var(--pale)}
+.home-editor-sections.is-dragging{user-select:none}
+@media(prefers-reduced-motion:reduce){.home-editor-row{transition:none}}
+
 .home-editor-row label{display:flex;align-items:center;gap:9px;flex:1;min-width:0;color:var(--ink);font-size:13px;font-weight:650}
 .home-editor-move{width:34px;height:34px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);font-size:16px;cursor:pointer}
 .home-editor-move:disabled{opacity:.3;cursor:default}
@@ -1245,12 +1252,14 @@ function renderHomeEditor(){
  const target=document.getElementById('homeEditorSections');if(!target)return;target.innerHTML='';
  homeLayout.sections.forEach((id,index)=>{
   const item=HOME_SECTIONS.find(entry=>entry.id===id);if(!item)return;
-  const row=document.createElement('div');row.className='home-editor-row';const label=document.createElement('label');
+  const row=document.createElement('div');row.className='home-editor-row';row.dataset.homeRow=id;
+  const drag=document.createElement('button');drag.type='button';drag.className='home-editor-drag';drag.textContent='⠿';drag.title='Перетащить раздел';drag.setAttribute('aria-label','Перетащить '+item.title);drag.dataset.dragHandle='true';
+  const label=document.createElement('label');
   const checkbox=document.createElement('input');checkbox.type='checkbox';checkbox.checked=homeLayout.visible.includes(id);checkbox.dataset.homeSectionToggle=id;
   const title=document.createElement('span');title.textContent=item.title;label.append(checkbox,title);
   const up=document.createElement('button');up.type='button';up.className='home-editor-move';up.textContent='↑';up.title='Переместить выше';up.setAttribute('aria-label','Переместить '+item.title+' выше');up.disabled=index===0;up.dataset.homeMove='up';up.dataset.homeSection=id;
   const down=document.createElement('button');down.type='button';down.className='home-editor-move';down.textContent='↓';down.title='Переместить ниже';down.setAttribute('aria-label','Переместить '+item.title+' ниже');down.disabled=index===homeLayout.sections.length-1;down.dataset.homeMove='down';down.dataset.homeSection=id;
-  row.append(label,up,down);target.append(row);
+  row.append(drag,label,up,down);target.append(row);
  });
 }
 function refreshHomeEditor(){const toggle=document.getElementById('homeAffirmationToggle');if(toggle)toggle.checked=homeLayout.affirmation;renderHomeEditor();applyHomeLayout();}
@@ -1264,13 +1273,60 @@ document.getElementById('homeEditorSections').addEventListener('change',event=>{
  else homeLayout.visible=homeLayout.visible.filter(sectionId=>sectionId!==id);
  saveHomeLayout();applyHomeLayout();
 });
-document.getElementById('homeEditorSections').addEventListener('click',event=>{
+const homeEditorSections=document.getElementById('homeEditorSections');
+homeEditorSections.addEventListener('click',event=>{
  const button=event.target.closest('[data-home-move]');if(!button)return;
  const index=homeLayout.sections.indexOf(button.dataset.homeSection),next=index+(button.dataset.homeMove==='up'?-1:1);
  if(index<0||next<0||next>=homeLayout.sections.length)return;
  [homeLayout.sections[index],homeLayout.sections[next]]=[homeLayout.sections[next],homeLayout.sections[index]];
  saveHomeLayout();refreshHomeEditor();
 });
+let homeDragState=null;
+function animateHomeRows(before){
+ homeEditorSections.querySelectorAll('.home-editor-row').forEach(row=>{
+  const previous=before.get(row);if(!previous)return;
+  const current=row.getBoundingClientRect(),dy=previous.top-current.top;
+  if(Math.abs(dy)<1)return;
+  row.style.transition='none';row.style.transform='translateY('+dy+'px)';
+  requestAnimationFrame(()=>{row.style.transition='';row.style.transform='';});
+ });
+}
+function updateHomeOrderFromEditor(){
+ homeLayout.sections=Array.from(homeEditorSections.querySelectorAll('.home-editor-row')).map(row=>row.dataset.homeRow);
+ homeEditorSections.querySelectorAll('[data-home-move="up"]').forEach((button,index)=>button.disabled=index===0);
+ homeEditorSections.querySelectorAll('[data-home-move="down"]').forEach((button,index,buttons)=>button.disabled=index===buttons.length-1);
+ saveHomeLayout();
+}
+homeEditorSections.addEventListener('pointerdown',event=>{
+ const handle=event.target.closest('[data-drag-handle]');if(!handle||event.button!==0)return;
+ const row=handle.closest('.home-editor-row');if(!row)return;
+ homeDragState={row,handle,pointerId:event.pointerId};
+ homeEditorSections.classList.add('is-dragging');row.classList.add('is-dragging');
+ try{handle.setPointerCapture(event.pointerId);}catch(e){}
+ event.preventDefault();
+});
+homeEditorSections.addEventListener('pointermove',event=>{
+ if(!homeDragState||event.pointerId!==homeDragState.pointerId)return;
+ const row=homeDragState.row;
+ const siblings=Array.from(homeEditorSections.querySelectorAll('.home-editor-row')).filter(item=>item!==row);
+ const before=new Map(siblings.map(item=>[item,item.getBoundingClientRect()]));
+ let inserted=false;
+ for(const sibling of siblings){
+  const rect=sibling.getBoundingClientRect();
+  if(event.clientY<rect.top+rect.height/2){homeEditorSections.insertBefore(row,sibling);inserted=true;break;}
+ }
+ if(!inserted)homeEditorSections.appendChild(row);
+ animateHomeRows(before);
+});
+function finishHomeDrag(event){
+ if(!homeDragState||event.pointerId!==homeDragState.pointerId)return;
+ homeDragState.row.classList.remove('is-dragging');
+ homeEditorSections.classList.remove('is-dragging');
+ homeDragState=null;
+ updateHomeOrderFromEditor();
+}
+homeEditorSections.addEventListener('pointerup',finishHomeDrag);
+homeEditorSections.addEventListener('pointercancel',finishHomeDrag);
 applyHomeLayout();
 function showPage(page){
  const validPage=['home','profile','planner','todo','habits','gratitude','notes','settings'].includes(page)?page:'home';
