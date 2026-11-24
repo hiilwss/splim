@@ -78,15 +78,6 @@ body[data-mode="dark"] h1{color:var(--pink2)}
 <div class="wrap">
   <header class="top">
     <div><h1>♡ Мой планер</h1><div class="sub">Немного порядка и много заботы о себе</div>
-      <div class="themebar" aria-label="Настройки темы">
-        <label for="themeChoice">Цвет темы</label>
-        <select id="themeChoice">
-          <option value="pink">Розовый</option><option value="peach">Персиковый</option>
-          <option value="lavender">Лавандовый</option><option value="mint">Мятный</option>
-          <option value="sky">Голубой</option>
-        </select>
-        <button class="ghost" id="modeBtn" type="button">☾ Тёмная тема</button>
-      </div>
     </div>
     <div class="top-actions">
       <div class="theme-control"><label for="paletteSelect">Цвет темы</label><select id="paletteSelect" aria-label="Цветовая тема">
@@ -120,8 +111,6 @@ body[data-mode="dark"] h1{color:var(--pink2)}
 <script>
 const $=s=>document.querySelector(s);
 const root=document.documentElement;
-const themeChoice=$('#themeChoice');
-const modeBtn=$('#modeBtn');
 const paletteSelect=$('#paletteSelect');
 const modeSelect=$('#modeSelect');
 
@@ -159,10 +148,8 @@ function applyTheme(palette,mode){
   document.body.dataset.palette=palette;
   document.body.dataset.mode=mode;
 
-  themeChoice.value=palette;
   paletteSelect.value=palette;
   modeSelect.value=mode;
-  modeBtn.textContent=mode==='dark'?'☀️ Светлая тема':'☾ Тёмная тема';
 
   try{localStorage.setItem('pinkPlannerSettings',JSON.stringify({palette,mode}));}catch(e){}
 }
@@ -170,7 +157,6 @@ function applyTheme(palette,mode){
 const initialTheme=readThemeSettings();
 applyTheme(initialTheme.palette||'pink',initialTheme.mode||'light');
 
-themeChoice.addEventListener('change',()=>applyTheme(themeChoice.value,modeSelect.value));
 paletteSelect.addEventListener('change',()=>applyTheme(paletteSelect.value,modeSelect.value));
 modeSelect.addEventListener('change',()=>applyTheme(paletteSelect.value,modeSelect.value));
 modeBtn.addEventListener('click',()=>applyTheme(paletteSelect.value,modeSelect.value==='dark'?'light':'dark'));
