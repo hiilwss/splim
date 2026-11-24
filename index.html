@@ -913,7 +913,7 @@ async function clearWallpaperData(){
  db.close();
 }
 function wallpaperDataUrlToBlob(dataUrl){
- const match=String(dataUrl).match(/^data:(image\\/(?:jpeg|png|webp));base64,([\\s\\S]+)$/i);
+ const match=String(dataUrl).match(/^data:(image\/(?:jpeg|png|webp));base64,([\s\S]+)$/i);
  if(!match)throw new Error('Поддерживаются только JPEG, PNG и WebP.');
  const binary=atob(match[2]),bytes=new Uint8Array(binary.length);
  for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
