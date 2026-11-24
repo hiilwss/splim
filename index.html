@@ -12,9 +12,9 @@
 :root[data-theme="sky"]{--pink:#78a9d8;--pink2:#c7def3;--pale:#f2f8ff;--ink:#40566c;--muted:#8299ad;--line:#dce9f5;--bg1:#f2f8ff;--bg2:#e0effc;--accentText:#5487bb}
 :root[data-theme="chocolate"]{--pink:#9a7058;--pink2:#d8bda9;--pale:#f7f0e9;--ink:#49352b;--muted:#9b8172;--line:#e8d9cc;--bg1:#f7f0e9;--bg2:#eadbce;--accentText:#79523d}
 :root[data-theme="beige"]{--pink:#b8a58a;--pink2:#e5d9c7;--pale:#faf7f0;--ink:#51483c;--muted:#9b9182;--line:#e9e1d5;--bg1:#faf7f0;--bg2:#eee7da;--accentText:#88765e}
-:root[data-mode="dark"]{--ink:#f1f1ef;--muted:#b5b6b8;--line:#484a4e;--bg1:#202124;--bg2:#292a2e;--panel:#303236ed;--cell:#383a3f;--pale:#303236;--accentText:var(--pink)}
+:root[data-mode="dark"]{--ink:#f2f3f4;--muted:#aeb4bb;--line:#41464d;--bg1:#17191c;--bg2:#202328;--panel:#282c31f2;--cell:#30353b;--pale:#282c31;--accentText:var(--pink)}
 :root[data-mode="dark"] body{color:var(--ink)}
-:root[data-mode="dark"] .panel{border-color:#484a4e;box-shadow:0 12px 35px #00000030}
+:root[data-mode="dark"] .panel{border-color:#41464d;box-shadow:0 12px 35px #00000035}
 :root[data-mode="dark"] .day{background:var(--cell);border-color:var(--line);color:var(--ink)}
 :root[data-mode="dark"] .task{background:var(--cell);border-color:var(--line)}
 :root[data-mode="dark"] input[type=text],:root[data-mode="dark"] input[type=time],:root[data-mode="dark"] select{background:var(--cell);color:var(--ink);border-color:var(--line)}
@@ -25,7 +25,7 @@
 #wallpaperLayer{position:fixed;inset:-22px;z-index:-1;pointer-events:none;background-position:center;background-size:cover;background-repeat:no-repeat;opacity:0;filter:blur(8px);transform:scale(1.04);transition:filter .2s,opacity .25s}
 body{position:relative;isolation:isolate}
 body.has-wallpaper{background:linear-gradient(135deg,color-mix(in srgb,var(--bg1) 86%,transparent),color-mix(in srgb,var(--bg2) 86%,transparent))}
-:root[data-mode="dark"] body.has-wallpaper{background:linear-gradient(135deg,color-mix(in srgb,#202124 88%,transparent),color-mix(in srgb,#292a2e 88%,transparent))}
+:root[data-mode="dark"] body.has-wallpaper{background:linear-gradient(135deg,color-mix(in srgb,#17191c 96%,transparent),color-mix(in srgb,#202328 96%,transparent))}
 .wallpaper-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:18px}
 .wallpaper-upload{display:inline-flex;align-items:center;cursor:pointer}
 .wallpaper-actions .ghost{border:1px solid var(--line);border-radius:999px;padding:11px 16px;background:var(--panel);color:var(--ink);font:inherit;cursor:pointer}
