@@ -20,6 +20,18 @@
 :root[data-mode="dark"] .ghost,:root[data-mode="dark"] .nav button{background:var(--cell);color:var(--ink);border-color:var(--line)}
 :root[data-mode="dark"] .day.out{opacity:.3}
 
+#wallpaperLayer{position:fixed;inset:-22px;z-index:-1;pointer-events:none;background-position:center;background-size:cover;background-repeat:no-repeat;opacity:0;filter:blur(8px);transform:scale(1.04);transition:filter .2s,opacity .25s}
+body{position:relative;isolation:isolate}
+body.has-wallpaper{background:linear-gradient(135deg,color-mix(in srgb,var(--bg1) 72%,transparent),color-mix(in srgb,var(--bg2) 72%,transparent))}
+.wallpaper-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:18px}
+.wallpaper-upload{display:inline-flex;align-items:center;cursor:pointer}
+.wallpaper-actions .ghost{border:1px solid var(--line);border-radius:999px;padding:11px 16px;background:var(--panel);color:var(--ink);font:inherit;cursor:pointer}
+.wallpaper-preview{height:150px;margin-top:16px;border:1px dashed var(--line);border-radius:18px;overflow:hidden;display:grid;place-items:center;background:color-mix(in srgb,var(--panel) 70%,transparent);color:var(--muted);background-position:center;background-size:cover}
+.wallpaper-preview.has-image{border-style:solid}
+.wallpaper-blur-control{display:grid;gap:9px;margin-top:18px;color:var(--muted)}
+.wallpaper-blur-control label{font-size:14px}
+.wallpaper-blur-control input{width:100%;accent-color:var(--pink)}
+.wallpaper-hint{font-size:12px!important}
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,var(--bg1),var(--bg2));font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);min-height:100vh;padding:28px;transition:background .25s,color .25s}
 .wrap{max-width:1100px;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px}
 .home-title{justify-content:flex-start;align-items:center;gap:15px;margin:8px 0 24px}
@@ -172,6 +184,7 @@ body[data-page="home"] #todayBtn{display:none}
 </style>
 </head>
 <body>
+<div id="wallpaperLayer" aria-hidden="true"></div>
 <div class="splash" id="splashScreen" aria-label="Загрузка splim">
   <div class="splash-mark"><svg class="splim-symbol" viewBox="0 0 100 100" role="img" aria-label="Цветочек из блокнота" xmlns="http://www.w3.org/2000/svg">
   <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
@@ -273,6 +286,21 @@ body[data-page="home"] #todayBtn{display:none}
           <div class="theme-control"><label for="modeSelect">Режим</label><select id="modeSelect" aria-label="Светлая или тёмная тема"><option value="light">Светлая ☀</option><option value="dark">Тёмная ☾</option></select></div>
         </div>
       </section>
+      <section class="panel settings-panel wallpaper-panel">
+        <h2>Мои обои</h2>
+        <p>Выбери фотографию из галереи и настрой мягкость фона. Изображение хранится только в этом браузере на твоём устройстве.</p>
+        <div class="wallpaper-actions">
+          <label class="pill wallpaper-upload" for="wallpaperInput">Выбрать фото</label>
+          <input id="wallpaperInput" type="file" accept="image/*" hidden>
+          <button class="ghost" id="removeWallpaper" type="button">Убрать обои</button>
+        </div>
+        <div class="wallpaper-preview" id="wallpaperPreview"><span>Здесь появится предпросмотр 🌷</span></div>
+        <div class="wallpaper-blur-control">
+          <label for="wallpaperBlur">Размытие: <strong id="wallpaperBlurValue">8</strong></label>
+          <input id="wallpaperBlur" type="range" min="0" max="20" step="1" value="8">
+        </div>
+        <p class="wallpaper-hint" id="wallpaperStatus" aria-live="polite">Можно выбрать любое изображение из галереи.</p>
+      </section>
     </section>
    </div>
   </div>
@@ -280,6 +308,85 @@ body[data-page="home"] #todayBtn{display:none}
 <script>
 const $=s=>document.querySelector(s);
 const root=document.documentElement;
+const wallpaperLayer=$('#wallpaperLayer');
+const wallpaperInput=$('#wallpaperInput');
+const wallpaperBlur=$('#wallpaperBlur');
+const wallpaperBlurValue=$('#wallpaperBlurValue');
+const wallpaperPreview=$('#wallpaperPreview');
+const wallpaperStatus=$('#wallpaperStatus');
+const wallpaperDbName='splimPreferences';
+function openWallpaperDb(){
+ return new Promise((resolve,reject)=>{
+  if(!('indexedDB' in window)){reject(new Error('Хранилище недоступно'));return;}
+  const request=indexedDB.open(wallpaperDbName,1);
+  request.onupgradeneeded=()=>{if(!request.result.objectStoreNames.contains('wallpapers'))request.result.createObjectStore('wallpapers');};
+  request.onsuccess=()=>resolve(request.result);
+  request.onerror=()=>reject(request.error||new Error('Не удалось открыть хранилище'));
+ });
+}
+async function saveWallpaperData(data){
+ const db=await openWallpaperDb();
+ await new Promise((resolve,reject)=>{const tx=db.transaction('wallpapers','readwrite');tx.objectStore('wallpapers').put(data,'background');tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});
+ db.close();
+}
+async function readWallpaperData(){
+ const db=await openWallpaperDb();
+ const data=await new Promise((resolve,reject)=>{const tx=db.transaction('wallpapers','readonly');const req=tx.objectStore('wallpapers').get('background');req.onsuccess=()=>resolve(req.result||'');req.onerror=()=>reject(req.error);});
+ db.close();return data;
+}
+async function clearWallpaperData(){
+ const db=await openWallpaperDb();
+ await new Promise((resolve,reject)=>{const tx=db.transaction('wallpapers','readwrite');tx.objectStore('wallpapers').delete('background');tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});
+ db.close();
+}
+function setWallpaper(data){
+ if(data){
+  wallpaperLayer.style.backgroundImage='url("'+data+'")';
+  wallpaperLayer.style.opacity='1';
+  wallpaperPreview.style.backgroundImage='url("'+data+'")';
+  wallpaperPreview.classList.add('has-image');
+  wallpaperPreview.textContent='';
+  document.body.classList.add('has-wallpaper');
+ }else{
+  wallpaperLayer.style.backgroundImage='';
+  wallpaperLayer.style.opacity='0';
+  wallpaperPreview.style.backgroundImage='';
+  wallpaperPreview.classList.remove('has-image');
+  wallpaperPreview.innerHTML='<span>Здесь появится предпросмотр 🌷</span>';
+  document.body.classList.remove('has-wallpaper');
+ }
+}
+function setWallpaperBlur(value){
+ const blur=Math.max(0,Math.min(20,Number(value)||0));
+ wallpaperLayer.style.filter='blur('+blur+'px)';
+ wallpaperBlur.value=String(blur);
+ wallpaperBlurValue.textContent=String(blur);
+ try{localStorage.setItem('splimWallpaperBlur',String(blur));}catch(e){}
+}
+wallpaperInput.addEventListener('change',async()=>{
+ const file=wallpaperInput.files&&wallpaperInput.files[0];
+ if(!file)return;
+ if(!file.type.startsWith('image/')){wallpaperStatus.textContent='Пожалуйста, выбери изображение.';return;}
+ if(file.size>12*1024*1024){wallpaperStatus.textContent='Файл слишком большой. Выбери фото до 12 МБ.';wallpaperInput.value='';return;}
+ const reader=new FileReader();
+ reader.onload=async()=>{
+  try{await saveWallpaperData(reader.result);setWallpaper(reader.result);wallpaperStatus.textContent='Обои сохранены на этом устройстве ♡';}
+  catch(e){wallpaperStatus.textContent='Не удалось сохранить фото. Попробуй изображение меньшего размера.';}
+ };
+ reader.onerror=()=>{wallpaperStatus.textContent='Не удалось прочитать это изображение.';};
+ reader.readAsDataURL(file);
+});
+wallpaperBlur.addEventListener('input',()=>setWallpaperBlur(wallpaperBlur.value));
+$('#removeWallpaper').addEventListener('click',async()=>{
+ try{await clearWallpaperData();setWallpaper('');wallpaperStatus.textContent='Стандартный фон восстановлен ♡';}
+ catch(e){wallpaperStatus.textContent='Не удалось удалить обои.';}
+});
+(async()=>{
+ try{const saved=await readWallpaperData();if(saved)setWallpaper(saved);}
+ catch(e){wallpaperStatus.textContent='Хранилище фото недоступно в этом браузере.';}
+ let blur=8;try{blur=Number(localStorage.getItem('splimWallpaperBlur')??8);}catch(e){}
+ setWallpaperBlur(blur);
+})();
 const paletteSelect=$('#paletteSelect');
 const modeSelect=$('#modeSelect');
 
