@@ -798,9 +798,9 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
  const changePasswordForm=document.getElementById('accountChangePasswordForm');
  const passwordStatus=document.getElementById('accountPasswordStatus');
  window.splimUpdatePasswordAccess=function(user){
-  const verified=!!(user&&(user.email_confirmed_at||user.confirmed_at));
+  const verified=!!(user&&user.email_confirmed_at);
   changePasswordForm.querySelectorAll('input,button').forEach(control=>control.disabled=!verified);
-  passwordStatus.textContent=verified?'♡ Почта подтверждена. Можно изменить пароль.':'♡ Подтверди электронную почту, чтобы получить возможность изменить пароль.';
+  passwordStatus.textContent=!user?'♡ Войди в аккаунт, чтобы управлять паролем.':verified?'♡ Электронная почта подтверждена. Теперь можно изменить пароль.':'♡ Смена пароля станет доступна после подтверждения электронной почты по ссылке из письма.';
   changePasswordForm.hidden=!user;
  };
  changePasswordForm.addEventListener('submit',async function(event){
@@ -811,7 +811,7 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
   try{
    const {data:authData,error:authError}=await client.auth.getUser();
    if(authError)throw authError;
-   if(!(authData.user&&(authData.user.email_confirmed_at||authData.user.confirmed_at))){
+   if(!(authData.user&&authData.user.email_confirmed_at)){
     window.splimUpdatePasswordAccess(authData.user);return;
    }
   }catch(error){passwordStatus.textContent='Не удалось проверить подтверждение почты: '+(error.message||'ошибка');return;}
@@ -1017,11 +1017,12 @@ async function uploadWallpaperToCloud(dataUrl,user){
  if(previous&&previous!==path){const removed=await client.storage.from('user-wallpapers').remove([previous]);if(removed.error)console.warn('Не удалось удалить предыдущую версию обоев:',removed.error.message);}
  return path;
 }
+let wallpaperAccessAllowed=!!window.splimCurrentUser;
 window.splimSetWallpaperAccess=function(isAuthenticated){
- const allowed=!!isAuthenticated;
- wallpaperInput.disabled=!allowed;wallpaperBlur.disabled=!allowed;$('#removeWallpaper').disabled=!allowed;
- const panel=wallpaperInput.closest('.wallpaper-panel');if(panel)panel.classList.toggle('guest-wallpaper-locked',!allowed);
- if(!allowed){setWallpaper('');wallpaperStatus.textContent='♡ Обои доступны после входа или регистрации.';}
+ wallpaperAccessAllowed=!!isAuthenticated;
+ wallpaperInput.disabled=!wallpaperAccessAllowed;wallpaperBlur.disabled=!wallpaperAccessAllowed;$('#removeWallpaper').disabled=!wallpaperAccessAllowed;
+ const panel=wallpaperInput.closest('.wallpaper-panel');if(panel)panel.classList.toggle('guest-wallpaper-locked',!wallpaperAccessAllowed);
+ if(!wallpaperAccessAllowed){setWallpaper('');wallpaperStatus.textContent='♡ Обои доступны только после входа или регистрации.';}
 };
 async function syncWallpaperForUser(user){
  if(!user||!window.splimSupabase)return;
@@ -1038,11 +1039,13 @@ async function syncWallpaperForUser(user){
  const local=await readWallpaperData();
  if(local){
   const uploaded=await uploadWallpaperToCloud(local,user);
+  setWallpaper(local);
   wallpaperStatus.textContent='♡ Твои прежние обои перенесены в личное облако!';
   return uploaded;
  }
 }
 function setWallpaper(data){
+ if(data&&!wallpaperAccessAllowed)data='';
  if(data){
   wallpaperLayer.style.backgroundImage='url("'+data+'")';
   wallpaperLayer.style.opacity='1';
@@ -1101,7 +1104,7 @@ $('#removeWallpaper').addEventListener('click',async()=>{
 (async()=>{
  try{
   const guest=localStorage.getItem('splimGuestMode')==='true'&&!window.splimCurrentUser;
-  if(guest){setWallpaper('');wallpaperStatus.textContent='♡ Обои доступны после входа или регистрации.';}
+  if(guest||!window.splimCurrentUser){setWallpaper('');if(guest)wallpaperStatus.textContent='♡ Обои доступны только после входа или регистрации.';}
   else{const saved=await readWallpaperData();if(saved)setWallpaper(saved);}
  }catch(e){wallpaperStatus.textContent='Хранилище фото недоступно в этом браузере.';}
  let blur=8;try{blur=Number(localStorage.getItem('splimWallpaperBlur')??8);}catch(e){}
