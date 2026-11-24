@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8c8dc">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="splim">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icons/splim-icon.svg">
 <title>splim</title>
 <style>
 :root{--pink:#ec78a8;--pink2:#f8c8dc;--pale:#fff5f9;--ink:#593b4a;--muted:#a17d8d;--line:#f1dce5;--white:#fff;--bg1:#fff5f9;--bg2:#fde7f0;--panel:#ffffffd9;--cell:#fffafd;--accentText:#b84f7e}
@@ -436,6 +442,15 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
 @media(max-width:760px){.progress-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.progress-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.progress-controls{grid-template-columns:1fr auto}.progress-period-tabs{grid-column:1/-1;justify-self:center}.progress-date-nav{justify-content:flex-start}.progress-today{justify-self:end}}
 @media(max-width:480px){.progress-category-grid{grid-template-columns:1fr}.progress-flower{width:66px;height:66px;flex-basis:66px;border-radius:23px;font-size:43px}.progress-hero{gap:9px}.progress-controls{padding:12px}.progress-date-nav{gap:8px}.progress-today{font-size:11px;padding:8px}.progress-detail-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.progress-detail-stat{padding:9px}.progress-detail-stat strong{font-size:17px}}
 </style>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(error=>{
+      console.warn('splim: service worker registration failed',error);
+    });
+  });
+}
+</script>
 </head>
 <body class="auth-pending"><svg aria-hidden="true" width="0" height="0" style="position:absolute;overflow:hidden"><symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.4 2.2 4 2.2 4-2.2 4-2.2M9 9.5h.01M15 9.5h.01"/></symbol><symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 .4-8A5.8 5.8 0 0 0 6.3 9 4.5 4.5 0 0 0 7 18Z"/><path d="M9 21v-1m6 1v-1"/></symbol><symbol id="i-empty" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9 12h6"/></symbol><symbol id="i-question" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.6 2.6 0 1 1 4.6 1.7c-1.1 1.1-2.1 1.4-2.1 3M12 17.5h.01"/></symbol><symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.8 12s3.2-6 9.2-6 9.2 6 9.2 6-3.2 6-9.2 6-9.2-6-9.2-6Z"/><circle cx="12" cy="12" r="2.5"/></symbol><symbol id="i-message" viewBox="0 0 24 24"><path d="M4 5.5h16v11H9l-5 3v-14Z"/><path d="M8 10h8M8 13.5h5"/></symbol><symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 2.8c1.2 4.8 3.4 7 8.2 8.2-4.8 1.2-7 3.4-8.2 8.2-1.2-4.8-3.4-7-8.2-8.2 4.8-1.2 7-3.4 8.2-8.2Z"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1Z"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M7.5 3v4M16.5 3v4M3.5 10h17M8 14h2m4 0h2M8 17h2"/></symbol><symbol id="i-checklist" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="17" rx="2.5"/><path d="m7.5 9 1.5 1.5L12 7.5M14 9h3M7.5 16l1.5 1.5 3-3M14 16h3"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20.5 3.5C10 3 4 7 4 14a6.5 6.5 0 0 0 6.5 6.5c7 0 10-7 10-17Z"/><path d="M3 21c4-6 8-9 14-13"/></symbol><symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.5 8.5c0 5-8.5 11-8.5 11s-8.5-6-8.5-11A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 8.5 2.5Z"/></symbol><symbol id="i-note" viewBox="0 0 24 24"><path d="M6 3.5h9l4 4V21H6a2 2 0 0 1-2-2V5.5a2 2 0 0 1 2-2Z"/><path d="M14.5 3.5V8H19M8 12h8M8 16h8"/></symbol><symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M19 13.5 21 15l-2 3.5-2.5-.5-2 1-.5 2h-4l-.5-2-2-1-2.5.5L3 15l2-1.5v-3L3 9l2-3.5 2.5.5 2-1 .5-2h4l.5 2 2 1 2.5-.5L21 9l-2 1.5Z"/></symbol><symbol id="i-water" viewBox="0 0 24 24"><path d="M12 2.8S5 11 5 15.5a7 7 0 0 0 14 0C19 11 12 2.8 12 2.8Z"/><path d="M9 16a3 3 0 0 0 3 3"/></symbol><symbol id="i-moon" viewBox="0 0 24 24"><path d="M19.5 15.5A8.5 8.5 0 0 1 8.5 4.5 8.5 8.5 0 1 0 19.5 15.5Z"/></symbol><symbol id="i-shoe" viewBox="0 0 24 24"><path d="M3 15.5c3.5 0 5-2 6-6l2 1c1.5 2 3 3 5 3.5l4 1.5c1 .4 1.5 1.2 1.5 2.2V20H3Z"/><path d="M9 10l2 2m2-.5 2 2M3 17h18"/></symbol><symbol id="i-flame" viewBox="0 0 24 24"><path d="M13 2.5c1 5-3 6-2 9 1-1 2-2 2-3.5 4 3 6 6 5 9.5a6 6 0 0 1-12 0c0-3 1.5-5 4-7.5-.2 3 1 4 1 4 2-3 2-7 2-11.5Z"/></symbol><symbol id="i-yoga" viewBox="0 0 24 24"><circle cx="12" cy="4.5" r="2"/><path d="M12 7v5m0-3-5 3m5-3 5 3M12 12l-4 5m4-5 4 5M4 20h16"/></symbol></svg><link id="splimFavicon" rel="icon" type="image/svg+xml">
 <div id="wallpaperLayer" aria-hidden="true"></div>
