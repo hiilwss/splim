@@ -458,6 +458,14 @@ body[data-mode="light"] #taskRepeat option{
           </form>
           <p id="accountStatus" class="account-note" role="status" aria-live="polite">♡ Войди или создай личный аккаунт splim.</p>
         </div>
+        <div id="accountRecovery" hidden>
+          <form class="account-form" id="accountRecoveryForm">
+            <label class="account-field">Новый пароль
+              <input id="accountNewPassword" type="password" minlength="6" autocomplete="new-password" required placeholder="Не менее 6 символов">
+            </label>
+            <button class="account-primary" type="submit">Сохранить новый пароль</button>
+          </form>
+        </div>
         <div id="accountSignedIn" hidden>
           <p class="account-note" id="accountWelcome">Ты вошла в свой аккаунт ♡</p>
           <button class="account-secondary" id="accountSignOut" type="button">Выйти из аккаунта</button>
@@ -588,6 +596,9 @@ body[data-mode="light"] #taskRepeat option{
  const status=document.getElementById('accountStatus');
  const signedOut=document.getElementById('accountSignedOut');
  const signedIn=document.getElementById('accountSignedIn');
+ const recovery=document.getElementById('accountRecovery');
+ const recoveryForm=document.getElementById('accountRecoveryForm');
+ const newPassword=document.getElementById('accountNewPassword');
  const welcome=document.getElementById('accountWelcome');
  let mode='login';
  function say(message,isError){
@@ -612,6 +623,7 @@ body[data-mode="light"] #taskRepeat option{
   signedIn.hidden=!user;
   if(user) welcome.textContent='Ты вошла как '+(user.email||'пользователь')+' ♡';
  }
+ function showRecovery(){signedOut.hidden=true;signedIn.hidden=true;recovery.hidden=false;}
  if(!client){
   say('Не удалось загрузить модуль авторизации. Обнови страницу и попробуй снова.',true);
   submit.disabled=true;
@@ -659,13 +671,21 @@ body[data-mode="light"] #taskRepeat option{
   }catch(error){say(error&&error.message?error.message:'Не удалось отправить письмо для сброса пароля.',true);}
   finally{reset.disabled=false;}
  });
+ recoveryForm.addEventListener('submit',async function(event){
+  event.preventDefault();
+  if(newPassword.value.length<6){say('Пароль должен содержать не менее 6 символов.',true);return;}
+  const button=recoveryForm.querySelector('button[type=submit]');button.disabled=true;button.textContent='Сохраняем…';
+  try{const result=await client.auth.updateUser({password:newPassword.value});if(result.error)throw result.error;recovery.hidden=true;showSession((await client.auth.getSession()).data.session);say('Пароль успешно изменён. Теперь можно войти с новым паролем ♡');}
+  catch(error){say(error&&error.message?error.message:'Не удалось изменить пароль.',true);}
+  finally{button.disabled=false;button.textContent='Сохранить новый пароль';}
+ });
  document.getElementById('accountSignOut').addEventListener('click',async function(){
   const result=await client.auth.signOut();
   if(result.error){welcome.textContent='Не удалось выйти: '+result.error.message;return;}
   showSession(null);
   setMode('login');
  });
- client.auth.onAuthStateChange((_event,session)=>showSession(session));
+ client.auth.onAuthStateChange((event,session)=>{if(event==='PASSWORD_RECOVERY'){showRecovery();return;}if(!recovery.hidden&&event==='SIGNED_IN')return;showSession(session);});
  client.auth.getSession().then(({data,error})=>{
   if(error){say(error.message,true);return;}
   showSession(data.session);
