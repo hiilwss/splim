@@ -212,6 +212,34 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 }
 @media(prefers-reduced-motion:reduce){.splash-mark,.splash-dots i{animation:none}.app-shell,.splash{transition:none}}
 
+
+/* Consistent planner form controls in both appearance modes */
+body[data-mode="dark"] #taskColor,
+body[data-mode="dark"] #taskRepeat,
+body[data-mode="dark"] #taskRepeatUntil{
+  background:#302a36!important;
+  color:#f4eaf0!important;
+  border:1px solid #514653!important;
+  color-scheme:dark;
+}
+body[data-mode="dark"] #taskColor option,
+body[data-mode="dark"] #taskRepeat option{
+  background:#302a36;
+  color:#f4eaf0;
+}
+body[data-mode="light"] #taskColor,
+body[data-mode="light"] #taskRepeat,
+body[data-mode="light"] #taskRepeatUntil{
+  background:var(--white)!important;
+  color:var(--ink)!important;
+  border:1px solid var(--line)!important;
+  color-scheme:light;
+}
+body[data-mode="light"] #taskColor option,
+body[data-mode="light"] #taskRepeat option{
+  background:var(--white);
+  color:var(--ink);
+}
 </style>
 </head>
 <body>
