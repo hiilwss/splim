@@ -41,7 +41,22 @@ body.has-wallpaper{background:linear-gradient(135deg,color-mix(in srgb,var(--bg1
 .home-title h1{font-size:clamp(26px,4vw,36px);font-weight:750;letter-spacing:-.035em}
 .home-title-flower{width:62px;height:62px;flex:0 0 62px;padding:5px;border-radius:20px;background:color-mix(in srgb,var(--pink2) 55%,var(--white));color:var(--pink);transform:rotate(6deg)}
 .planner-tools{display:flex;justify-content:flex-end;margin-bottom:18px}
-.settings-page,.todo-page,.habits-page,.gratitude-page{max-width:900px}
+.settings-page,.todo-page,.habits-page,.gratitude-page,.notes-page{max-width:900px}
+.notes-panel{padding:clamp(18px,4vw,30px)}
+.note-form{display:grid;gap:10px}
+.note-form label{font-weight:700}
+.note-form textarea{width:100%;resize:vertical;min-height:120px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--cell);color:var(--ink);font:inherit;line-height:1.55}
+.note-form .add{justify-self:start}
+.notes-list-heading{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);margin-top:25px;padding-top:20px}
+.notes-list-heading h2{font-size:20px;margin:0}
+.notes-list-heading span{color:var(--muted);font-size:13px}
+.notes-list{display:grid;gap:12px;margin-top:15px}
+.note-entry{padding:16px;border:1px solid var(--line);border-radius:16px;background:var(--cell)}
+.note-entry time{display:block;color:var(--muted);font-size:12px;margin-bottom:9px}
+.note-entry p{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6;margin:0;color:var(--ink)}
+.note-entry-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+.note-entry-actions button{border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--muted);padding:7px 11px;font:inherit;font-size:12px;cursor:pointer}
+.notes-empty{padding:28px 16px;text-align:center;color:var(--muted);background:var(--cell);border-radius:15px;line-height:1.6}
 .gratitude-panel{padding:clamp(18px,4vw,30px)}
 .gratitude-date{color:var(--muted);font-size:13px;margin-bottom:18px;text-transform:capitalize}
 .gratitude-intro{position:relative;padding:20px;border-radius:18px;background:color-mix(in srgb,var(--pink2) 17%,var(--panel));margin-bottom:22px;overflow:hidden}
@@ -327,6 +342,7 @@ body[data-mode="light"] #taskRepeat option{
       <button class="side-link" data-page="todo"><span class="side-icon">☑</span><span>Список дел</span></button>
       <button class="side-link" data-page="habits"><span class="side-icon">✿</span><span>Трекер привычек</span></button>
       <button class="side-link" data-page="gratitude"><span class="side-icon">♡</span><span>Благодарности</span></button>
+      <button class="side-link" data-page="notes"><span class="side-icon">✎</span><span>Заметки</span></button>
       <button class="side-link" data-page="settings"><span class="side-icon">⚙</span><span>Настройки</span></button>
     </nav>
     <div class="sidebar-note"><span>♡</span><p>Маленькие шаги — тоже движение вперёд.</p></div>
@@ -355,7 +371,7 @@ body[data-mode="light"] #taskRepeat option{
         <div class="affirmation-bottom"><span>бережно к себе, каждый день</span><button id="newAffirmation" class="affirmation-refresh" type="button">↻ Другая мысль</button></div>
         <span class="affirmation-sparkle">✧</span>
       </section>
-      <div class="section-heading"><div><div class="eyebrow">ТВОИ ИНСТРУМЕНТЫ</div><h2>Разделы</h2></div><span class="section-count">04</span></div>
+      <div class="section-heading"><div><div class="eyebrow">ТВОИ ИНСТРУМЕНТЫ</div><h2>Разделы</h2></div><span class="section-count">05</span></div>
       <button class="section-card" type="button" data-open-page="planner">
         <span class="section-card-icon">▦</span><span class="section-card-copy"><strong>Календарь и планы</strong><small>Расставляй задачи, выбирай даты и отмечай маленькие победы.</small></span><span class="section-card-arrow">→</span>
       </button>
@@ -364,6 +380,7 @@ body[data-mode="light"] #taskRepeat option{
       </button>
       <button class="section-card" type="button" data-open-page="habits"><span class="section-card-icon">✿</span><span class="section-card-copy"><strong>Трекер привычек</strong><small>Отмечай маленькие полезные привычки и наблюдай за своим ритмом.</small></span><span class="section-card-arrow">→</span></button>
       <button class="section-card" type="button" data-open-page="gratitude"><span class="section-card-icon">♡</span><span class="section-card-copy"><strong>Моменты благодарности</strong><small>Остановись на минутку, прислушайся к себе и сохрани тёплые моменты дня.</small></span><span class="section-card-arrow">→</span></button>
+      <button class="section-card" type="button" data-open-page="notes"><span class="section-card-icon">✎</span><span class="section-card-copy"><strong>Заметки</strong><small>Личное место для мыслей, идей и любых записей.</small></span><span class="section-card-arrow">→</span></button>
       <div class="home-footnote">Здесь можно планировать не только дела, но и заботу о себе. ♡</div>
     </section>
     <section class="page planner-page hidden" id="plannerPage">
@@ -419,6 +436,18 @@ body[data-mode="light"] #taskRepeat option{
           <input id="wallpaperBlur" type="range" min="0" max="20" step="1" value="8">
         </div>
         <p class="wallpaper-hint" id="wallpaperStatus" aria-live="polite">Можно выбрать любое изображение из галереи.</p>
+      </section>
+    </section>
+    <section class="page notes-page hidden" id="notesPage">
+      <header class="settings-heading"><div class="eyebrow">ТВОЁ ЛИЧНОЕ ПРОСТРАНСТВО</div><h1>Заметки ♡</h1><p>Мысли, идеи и всё, что хочется сохранить.</p></header>
+      <section class="panel notes-panel">
+        <form id="noteForm" class="note-form">
+          <label for="noteText">Новая запись</label>
+          <textarea id="noteText" rows="5" maxlength="12000" placeholder="Напиши всё, что хочется..." required></textarea>
+          <button class="add" type="submit">＋ Сохранить заметку</button>
+        </form>
+        <div class="notes-list-heading"><h2>Мои записи</h2><span id="notesCount">0</span></div>
+        <div id="notesList" class="notes-list" aria-live="polite"></div>
       </section>
     </section>
     <section class="page gratitude-page hidden" id="gratitudePage">
@@ -635,19 +664,21 @@ $('#newAffirmation').addEventListener('click',()=>{
  $('.affirmation-quote').textContent=choices[Math.floor(Math.random()*choices.length)];
 });
 function showPage(page){
- const validPage=['home','planner','todo','habits','gratitude','settings'].includes(page)?page:'home';
+ const validPage=['home','planner','todo','habits','gratitude','notes','settings'].includes(page)?page:'home';
  document.body.dataset.page=validPage;
  $('#homePage').classList.toggle('hidden',validPage!=='home');
  $('#plannerPage').classList.toggle('hidden',validPage!=='planner');
  $('#todoPage').classList.toggle('hidden',validPage!=='todo');
  $('#habitsPage').classList.toggle('hidden',validPage!=='habits');
  $('#gratitudePage').classList.toggle('hidden',validPage!=='gratitude');
+ $('#notesPage').classList.toggle('hidden',validPage!=='notes');
  $('#settingsPage').classList.toggle('hidden',validPage!=='settings');
  document.querySelectorAll('.side-link').forEach(button=>button.classList.toggle('active',button.dataset.page===validPage));
  if(validPage==='planner') render();
  if(validPage==='todo') renderTodo();
  if(validPage==='habits') renderHabits();
  if(validPage==='gratitude') renderGratitude();
+ if(validPage==='notes') renderNotes();
  window.scrollTo({top:0,behavior:'smooth'});
 }
 document.querySelectorAll('.side-link').forEach(button=>button.addEventListener('click',()=>showPage(button.dataset.page)));
@@ -751,6 +782,32 @@ $('#taskForm').addEventListener('submit',e=>{
  e.preventDefault();const name=$('#taskName').value.trim();if(!name)return;
  const k=key(selected);(tasks[k]??=[]).push({name,time:$('#taskTime').value,color:$('#taskColor').value,done:false,repeat:$('#taskRepeat').value,until:$('#taskRepeatUntil').value||''});
  save();$('#taskName').value='';$('#taskRepeat').value='none';$('#taskRepeatUntil').value='';render();
+});
+// Simple personal notes
+const notesStorageKey='splimNotes';
+let notes=[];
+try{notes=JSON.parse(localStorage.getItem(notesStorageKey)||'[]')||[]}catch(e){notes=[]}
+function saveNotes(){localStorage.setItem(notesStorageKey,JSON.stringify(notes))}
+function renderNotes(){
+ const list=$('#notesList');if(!list)return;list.innerHTML='';
+ $('#notesCount').textContent=String(notes.length);
+ if(!notes.length){const empty=document.createElement('div');empty.className='notes-empty';empty.textContent='Здесь пока пусто. Сохрани первую мысль ♡';list.appendChild(empty);return}
+ [...notes].sort((a,b)=>b.createdAt-a.createdAt).forEach(note=>{
+  const article=document.createElement('article');article.className='note-entry';
+  const time=document.createElement('time');time.dateTime=new Date(note.createdAt).toISOString();time.textContent=new Date(note.createdAt).toLocaleString('ru-RU',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  const body=document.createElement('p');body.textContent=note.text;
+  const actions=document.createElement('div');actions.className='note-entry-actions';
+  const edit=document.createElement('button');edit.type='button';edit.textContent='Изменить';
+  edit.addEventListener('click',()=>{const updated=prompt('Измени свою заметку:',note.text);if(updated===null)return;if(!updated.trim()){alert('Заметка не может быть пустой.');return}note.text=updated.trim();saveNotes();renderNotes()});
+  const remove=document.createElement('button');remove.type='button';remove.textContent='Удалить';
+  remove.addEventListener('click',()=>{if(!confirm('Удалить эту заметку?'))return;notes=notes.filter(item=>item.id!==note.id);saveNotes();renderNotes()});
+  actions.append(edit,remove);article.append(time,body,actions);list.appendChild(article);
+ });
+}
+$('#noteForm').addEventListener('submit',e=>{
+ e.preventDefault();const field=$('#noteText'),value=field.value.trim();if(!value)return;
+ notes.push({id:Date.now()+'-'+Math.random().toString(16).slice(2),text:value,createdAt:Date.now()});
+ saveNotes();field.value='';renderNotes();
 });
 // Daily gratitude check-in
 const gratitudeStorageKey='splimGratitudeEntries';
