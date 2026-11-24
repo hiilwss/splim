@@ -685,7 +685,7 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
         <p class="care-soft-note" id="waterEncouragement" aria-live="polite">Начни с одного стаканчика — спешить не нужно ♡</p>
         <div class="care-settings-box">
           <h3>Подстроим ориентир под тебя</h3>
-          <p>Можно оставить базовую цель в 8 стаканов по 250 мл или рассчитать примерный объём по весу.</p>
+          <p>Можно оставить базовый ориентир в 8 стаканов по 250 мл или прикинуть общий объём жидкости по весу. Это приблизительная подсказка, а не обязательная норма: потребности у всех разные.</p>
           <label for="waterWeight">Твой вес, кг <span class="care-optional">необязательно</span></label>
           <input id="waterWeight" type="number" min="25" max="250" step="0.5" placeholder="Например, 60">
           <div class="care-target-result" id="waterTargetResult">Ориентир: 8 стаканов (около 2 л) в день.</div>
@@ -958,7 +958,7 @@ function readLocalSnapshot(){
 }
 function hasUsefulLocalData(snapshot){
  const st=snapshot.storage||{};
- return ['pinkPlannerTasks','splimNotes','splimGratitudeEntries','splimHabits','splimTodoItems'].some(key=>{
+ return ['pinkPlannerTasks','splimNotes','splimGratitudeEntries','splimHabits','splimTodoItems','splimWaterTracker','splimSleepTracker'].some(key=>{
   if(!st[key])return false;
   try{const value=JSON.parse(st[key]);return Array.isArray(value)?value.length>0:(value&&typeof value==='object'&&Object.keys(value).length>0);}catch(e){return !!st[key];}
  });
@@ -1612,7 +1612,7 @@ function renderSleepTracker(){
  document.getElementById('sleepTodayText').textContent=record?'Сегодня записано: '+record.hours+' ч сна':'Запиши, сколько ты спала';
  document.getElementById('sleepSaved').textContent=record?'Запись за сегодня сохранена ♡':'Можно записать данные позже — ничего страшного, если пока не хочется.';
 }
-document.getElementById('sleepBedtime').addEventListener('change',event=>{if(/^([01]\\d|2[0-3]):[0-5]\\d$/.test(event.target.value)){sleepStore.bedtime=event.target.value;saveSleepStore();renderSleepTracker();}});
+document.getElementById('sleepBedtime').addEventListener('change',event=>{if(/^([01]\d|2[0-3]):[0-5]\d$/.test(event.target.value)){sleepStore.bedtime=event.target.value;saveSleepStore();renderSleepTracker();}});
 document.getElementById('sleepSave').addEventListener('click',()=>{
  const input=document.getElementById('sleepHours'),value=Number(input.value);
  if(input.value.trim()===''||!Number.isFinite(value)||value<0||value>24){document.getElementById('sleepSaved').textContent='Укажи количество часов от 0 до 24.';return;}
