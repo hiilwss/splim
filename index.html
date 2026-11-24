@@ -735,6 +735,15 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
         </div>
       </section>
       <section class="panel care-panel activity-panel">
+        <div class="activity-section-heading"><div><div class="eyebrow">ТВОЯ АКТИВНОСТЬ</div><h2>Потраченные калории</h2></div><span class="care-big-emoji">🔥</span></div>
+        <div class="activity-steps-summary"><strong id="activityCaloriesValue">0</strong><span>ккал за день</span></div>
+        <div class="activity-step-inputs">
+          <label for="activityCaloriesInput">Сколько калорий ты потратила за выбранный день?</label>
+          <div class="activity-inline-input"><input id="activityCaloriesInput" type="number" min="0" max="20000" step="1" placeholder="Например, 320"><button class="add" id="activityCaloriesSave" type="button">Сохранить</button></div>
+          <p class="care-soft-note" id="activityCaloriesMessage" aria-live="polite">Введи примерное число потраченных калорий вручную ♡</p>
+        </div>
+      </section>
+      <section class="panel care-panel activity-panel">
         <div class="activity-section-heading"><div><div class="eyebrow">ТВОЯ АКТИВНОСТЬ</div><h2>Тренировки</h2></div><span class="care-big-emoji">🧘‍♀️</span></div>
         <form id="activityWorkoutForm" class="activity-workout-form">
           <label for="activityType">Что ты делала?</label>
@@ -765,6 +774,7 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
         <div class="activity-week-grid" id="activityWeekGrid"></div>
         <div class="activity-week-stats">
           <div><strong id="activityWeekSteps">0</strong><span>шагов за неделю</span></div>
+          <div><strong id="activityWeekCalories">0</strong><span>потрачено ккал за неделю</span></div>
           <div><strong id="activityWeekMinutes">0</strong><span>минут активности</span></div>
           <div><strong id="activityWeekWorkouts">0</strong><span>тренировок</span></div>
           <div><strong id="activityWeekActiveDays">0</strong><span>активных дней</span></div>
@@ -1700,12 +1710,14 @@ function activityWorkoutIcon(type){return ({'Прогулка':'🚶‍♀️','
 function activityWeekStart(offset=0){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-(d.getDay()+6)%7+offset*7);return d;}
 function renderActivityTracker(){
  const selectedDate=activityDateFromKey(activitySelectedDateKey),selectedIsToday=activitySelectedDateKey===activityToday();
- const today=activityDay(activitySelectedDateKey),goal=Math.max(500,Number(activityStore.goal)||6000),steps=Math.max(0,Number(today.steps)||0);
+ const today=activityDay(activitySelectedDateKey),goal=Math.max(500,Number(activityStore.goal)||6000),steps=Math.max(0,Number(today.steps)||0),calories=Math.max(0,Number(today.calories)||0);
  document.getElementById('activityWorkoutDayTitle').textContent=selectedIsToday?'Сегодняшние занятия':'Занятия за '+selectedDate.toLocaleDateString('ru-RU',{day:'numeric',month:'long'});
  document.getElementById('activitySelectedDateLabel').textContent=selectedIsToday?'Выбран сегодняшний день ♡':'Просмотр записей за выбранную дату. Нажми на сегодняшний день в календаре, чтобы вернуться.';
  const stepsInput=document.getElementById('activityStepsInput'),goalInput=document.getElementById('activityGoalInput');
  if(document.activeElement!==stepsInput)stepsInput.value=today.steps||'';
  if(document.activeElement!==goalInput)goalInput.value=goal;
+ const caloriesInput=document.getElementById('activityCaloriesInput');if(document.activeElement!==caloriesInput)caloriesInput.value=today.calories??'';
+ document.getElementById('activityCaloriesValue').textContent=calories.toLocaleString('ru-RU');
  document.getElementById('activityStepsValue').textContent=steps.toLocaleString('ru-RU');
  document.getElementById('activityStepsGoalText').textContent='из '+goal.toLocaleString('ru-RU')+' шагов';
  document.getElementById('activityStepsBar').style.width=Math.min(100,steps/goal*100)+'%';
@@ -1734,24 +1746,30 @@ function renderActivityWeek(){
  document.getElementById('activityWeekTitle').textContent=start.toLocaleDateString('ru-RU',{day:'numeric',month:'short'})+' — '+end.toLocaleDateString('ru-RU',{day:'numeric',month:'short'});
  const grid=document.getElementById('activityWeekGrid');grid.innerHTML='';
  const weekday=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
- let totalSteps=0,totalMinutes=0,totalWorkouts=0,activeDays=0;
+ let totalSteps=0,totalMinutes=0,totalWorkouts=0,totalCalories=0,activeDays=0;
  const now=new Date();now.setHours(23,59,59,999);
  for(let i=0;i<7;i++){
   const date=new Date(start);date.setDate(start.getDate()+i);const dateKey=key(date),record=activityStore.days[dateKey]||{steps:0,workouts:[]};
-  const future=date>now,steps=Math.max(0,Number(record.steps)||0),workouts=Array.isArray(record.workouts)?record.workouts:[];
+  const future=date>now,steps=Math.max(0,Number(record.steps)||0),calories=Math.max(0,Number(record.calories)||0),workouts=Array.isArray(record.workouts)?record.workouts:[];
   const minutes=workouts.reduce((sum,w)=>sum+Math.max(0,Number(w.minutes)||0),0);
-  if(!future){totalSteps+=steps;totalMinutes+=minutes;totalWorkouts+=workouts.length;if(steps>0||workouts.length)activeDays++;}
-  const cell=document.createElement('button');cell.type='button';cell.className='activity-day'+(key(new Date())===dateKey?' is-today':'')+(activitySelectedDateKey===dateKey?' is-selected':'')+((steps>0||workouts.length)?' has-activity':'');cell.disabled=future;cell.setAttribute('aria-pressed',String(activitySelectedDateKey===dateKey));cell.setAttribute('aria-label',date.toLocaleDateString('ru-RU')+', '+steps+' шагов, '+workouts.length+' тренировок');
+  if(!future){totalSteps+=steps;totalCalories+=calories;totalMinutes+=minutes;totalWorkouts+=workouts.length;if(steps>0||workouts.length||calories>0)activeDays++;}
+  const cell=document.createElement('button');cell.type='button';cell.className='activity-day'+(key(new Date())===dateKey?' is-today':'')+(activitySelectedDateKey===dateKey?' is-selected':'')+((steps>0||workouts.length||calories>0)?' has-activity':'');cell.disabled=future;cell.setAttribute('aria-pressed',String(activitySelectedDateKey===dateKey));cell.setAttribute('aria-label',date.toLocaleDateString('ru-RU')+', '+steps+' шагов, '+workouts.length+' тренировок');
   const day=document.createElement('small');day.textContent=weekday[i];
   const num=document.createElement('strong');num.textContent=date.getDate();
   const info=document.createElement('small');info.textContent=future?'·':(steps>0||workouts.length?'♥':'—');
   cell.append(day,num,info);cell.addEventListener('click',()=>{activitySelectedDateKey=dateKey;renderActivityTracker();});grid.appendChild(cell);
  }
  document.getElementById('activityWeekSteps').textContent=totalSteps.toLocaleString('ru-RU');
+ document.getElementById('activityWeekCalories').textContent=totalCalories.toLocaleString('ru-RU');
  document.getElementById('activityWeekMinutes').textContent=totalMinutes.toLocaleString('ru-RU');
  document.getElementById('activityWeekWorkouts').textContent=String(totalWorkouts);
  document.getElementById('activityWeekActiveDays').textContent=String(activeDays);
 }
+document.getElementById('activityCaloriesSave').addEventListener('click',()=>{
+ const input=document.getElementById('activityCaloriesInput'),raw=input.value.trim(),value=Number(raw);
+ if(!raw||!Number.isInteger(value)||value<0||value>20000){document.getElementById('activityCaloriesMessage').textContent='Введи целое число потраченных калорий от 0 до 20 000.';return;}
+ activityDay(activitySelectedDateKey).calories=value;saveActivityStore();renderActivityTracker();document.getElementById('activityCaloriesMessage').textContent='Записано! Калории за выбранный день сохранены ♡';
+});
 document.getElementById('activityStepsSave').addEventListener('click',()=>{
  const input=document.getElementById('activityStepsInput'),raw=input.value.trim(),value=Number(raw);
  if(!raw||!Number.isInteger(value)||value<0||value>100000){document.getElementById('activityStepsMessage').textContent='Введи целое число шагов от 0 до 100 000.';return;}
