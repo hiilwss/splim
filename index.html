@@ -40,7 +40,17 @@ body.has-wallpaper{background:linear-gradient(135deg,color-mix(in srgb,var(--bg1
 .home-title h1{font-size:clamp(26px,4vw,36px);font-weight:750;letter-spacing:-.035em}
 .home-title-flower{width:62px;height:62px;flex:0 0 62px;padding:5px;border-radius:20px;background:color-mix(in srgb,var(--pink2) 55%,var(--white));color:var(--pink);transform:rotate(6deg)}
 .planner-tools{display:flex;justify-content:flex-end;margin-bottom:18px}
-.settings-page{max-width:850px}
+.settings-page,.todo-page{max-width:850px}
+.repeat-row{margin-top:12px}
+.todo-form{display:flex;align-items:end;gap:12px;flex-wrap:wrap}
+.todo-form>div{flex:1;min-width:190px}
+.todo-form input{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--cell);color:var(--ink);font:inherit}
+.todo-form .add{white-space:nowrap}
+.todo-summary{margin:20px 0 10px;color:var(--muted);font-size:14px}
+.todo-list .task{display:flex;align-items:center;gap:12px}
+.todo-list .tasktext{flex:1}
+.todo-empty{padding:22px;text-align:center;border-radius:16px;background:var(--cell);color:var(--muted)}
+.recurring-label{font-size:11px;color:var(--muted);margin-top:4px}
 .settings-heading{margin:8px 0 24px}
 .settings-heading h1{font-size:clamp(26px,4vw,36px);margin:0}
 .settings-heading p,.settings-panel p{color:var(--muted);line-height:1.6;margin:8px 0 0}
@@ -219,6 +229,7 @@ body[data-page="home"] #todayBtn{display:none}
     <nav class="side-nav" aria-label="Основная навигация">
       <button class="side-link active" data-page="home"><span class="side-icon">⌂</span><span>Главная</span></button>
       <button class="side-link" data-page="planner"><span class="side-icon">▦</span><span>Календарь и планы</span></button>
+      <button class="side-link" data-page="todo"><span class="side-icon">☑</span><span>Список дел</span></button>
       <button class="side-link" data-page="settings"><span class="side-icon">⚙</span><span>Настройки</span></button>
     </nav>
     <div class="sidebar-note"><span>♡</span><p>Маленькие шаги — тоже движение вперёд.</p></div>
@@ -270,6 +281,10 @@ body[data-page="home"] #todayBtn{display:none}
           <div><label for="taskTime">Время</label><input id="taskTime" type="time" value="09:00"></div>
           <div><label for="taskColor">Цвет</label><select id="taskColor" style="width:100%;padding:11px;border:1px solid var(--line);border-radius:12px;background:#fffafd;color:var(--ink)"><option value="#ec78a8">Розовый</option><option value="#b69be8">Лавандовый</option><option value="#f0ae76">Персиковый</option><option value="#83b9ad">Мятный</option></select></div>
         </div>
+        <div class="formrow repeat-row">
+          <div><label for="taskRepeat">Повторять</label><select id="taskRepeat" style="width:100%;padding:11px;border:1px solid var(--line);border-radius:12px;background:var(--cell);color:var(--ink)"><option value="none">Не повторять</option><option value="daily">Каждый день</option><option value="weekly">Каждую неделю</option><option value="biweekly">Каждые две недели</option><option value="monthly">Каждый месяц</option><option value="yearly">Каждый год</option></select></div>
+          <div><label for="taskRepeatUntil">Повторять до (необязательно)</label><input id="taskRepeatUntil" type="date"></div>
+        </div>
         <button class="add" type="submit">＋ Добавить план</button>
       </form>
     </aside>
@@ -302,6 +317,17 @@ body[data-page="home"] #todayBtn{display:none}
           <input id="wallpaperBlur" type="range" min="0" max="20" step="1" value="8">
         </div>
         <p class="wallpaper-hint" id="wallpaperStatus" aria-live="polite">Можно выбрать любое изображение из галереи.</p>
+      </section>
+    </section>
+    <section class="page todo-page hidden" id="todoPage">
+      <header class="settings-heading"><div class="eyebrow">МАЛЕНЬКИЕ ШАГИ</div><h1>Список дел ♡</h1><p>Все дела, которые хочется держать под рукой.</p></header>
+      <section class="panel settings-panel">
+        <form id="todoForm" class="todo-form">
+          <div><label for="todoName">Новое дело</label><input id="todoName" type="text" maxlength="120" placeholder="Например, купить любимый чай" required></div>
+          <button class="add" type="submit">＋ Добавить дело</button>
+        </form>
+        <div class="todo-summary" id="todoSummary"></div>
+        <div id="todoList" class="tasklist todo-list"></div>
       </section>
     </section>
    </div>
@@ -453,13 +479,15 @@ $('#newAffirmation').addEventListener('click',()=>{
  $('.affirmation-quote').textContent=choices[Math.floor(Math.random()*choices.length)];
 });
 function showPage(page){
- const validPage=['home','planner','settings'].includes(page)?page:'home';
+ const validPage=['home','planner','todo','settings'].includes(page)?page:'home';
  document.body.dataset.page=validPage;
  $('#homePage').classList.toggle('hidden',validPage!=='home');
  $('#plannerPage').classList.toggle('hidden',validPage!=='planner');
+ $('#todoPage').classList.toggle('hidden',validPage!=='todo');
  $('#settingsPage').classList.toggle('hidden',validPage!=='settings');
  document.querySelectorAll('.side-link').forEach(button=>button.classList.toggle('active',button.dataset.page===validPage));
  if(validPage==='planner') render();
+ if(validPage==='todo') renderTodo();
  window.scrollTo({top:0,behavior:'smooth'});
 }
 document.querySelectorAll('.side-link').forEach(button=>button.addEventListener('click',()=>showPage(button.dataset.page)));
@@ -486,7 +514,7 @@ function render(){
  for(let i=0;i<42;i++){
   const d=new Date(start);d.setDate(start.getDate()+i);
   const b=document.createElement('button');b.className='day'+(d.getMonth()!==shown.getMonth()?' out':'')+(same(d,today)?' today':'')+(same(d,selected)?' selected':'');
-  const count=(tasks[key(d)]||[]).length;
+  const count=getTasksForDate(d).length;
   b.innerHTML=`<span class="num">${d.getDate()}</span>${count?`<div class="dots">${Array.from({length:Math.min(count,5)},()=>'<i class="dot"></i>').join('')}</div>`:''}`;
   b.addEventListener('click',()=>{selected=d; if(d.getMonth()!==shown.getMonth())shown=new Date(d.getFullYear(),d.getMonth(),1);render()});
   $('#calendar').appendChild(b);
@@ -494,22 +522,95 @@ function render(){
  $('#selectedLabel').textContent=selected.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
  renderTasks();
 }
+function dateFromKey(value){const [y,m,d]=value.split('-').map(Number);return new Date(y,m-1,d)}
+function dayNumber(date){return Date.UTC(date.getFullYear(),date.getMonth(),date.getDate())/86400000}
+function repeatsOn(task,start,date){
+ if(date<start)return false;
+ if(task.until&&key(date)>task.until)return false;
+ const days=Math.round(dayNumber(date)-dayNumber(start));
+ const months=(date.getFullYear()-start.getFullYear())*12+date.getMonth()-start.getMonth();
+ switch(task.repeat){
+  case 'daily':return true;
+  case 'weekly':return days%7===0;
+  case 'biweekly':return days%14===0;
+  case 'monthly':return months>=0&&date.getDate()===start.getDate();
+  case 'yearly':return date.getMonth()===start.getMonth()&&date.getDate()===start.getDate();
+  default:return false;
+ }
+}
+function getTasksForDate(date){
+ const dateKey=key(date),result=[];
+ Object.entries(tasks).forEach(([sourceKey,items])=>{
+  const start=dateFromKey(sourceKey);
+  (items||[]).forEach(task=>{
+   if(!task.repeat||task.repeat==='none'){
+    if(sourceKey===dateKey)result.push({task,sourceKey,occurrenceKey:dateKey,done:!!task.done});
+   }else if(repeatsOn(task,start,date)&&!(task.skippedDates||[]).includes(dateKey)){
+    result.push({task,sourceKey,occurrenceKey:dateKey,done:(task.doneDates||[]).includes(dateKey)||(dateKey===sourceKey&&!!task.done)});
+   }
+  });
+ });
+ return result.sort((a,b)=>(a.task.time||'').localeCompare(b.task.time||''));
+}
 function renderTasks(){
  const list=$('#taskList');list.innerHTML='';
- const items=(tasks[key(selected)]||[]).slice().sort((a,b)=>a.time.localeCompare(b.time));
+ const items=getTasksForDate(selected);
  if(!items.length){list.innerHTML='<div class="empty">На этот день пока ничего нет.<br>Добавь первый план ♡</div>';return}
- items.forEach((t,i)=>{
-  const el=document.createElement('div');el.className='task'+(t.done?' done':'');
-  const check=document.createElement('input');check.type='checkbox';check.checked=!!t.done;check.setAttribute('aria-label','Выполнено');check.addEventListener('change',()=>{t.done=check.checked;save();renderTasks()});
+ items.forEach((item)=>{
+  const {task:t,sourceKey,occurrenceKey}=item;
+  const el=document.createElement('div');el.className='task'+(item.done?' done':'');
+  const check=document.createElement('input');check.type='checkbox';check.checked=item.done;check.setAttribute('aria-label','Выполнено');check.addEventListener('change',()=>{
+   const original=tasks[sourceKey].find(x=>x===t);
+   if(t.repeat&&t.repeat!=='none'){
+    original.doneDates=original.doneDates||[];
+    original.doneDates=check.checked?[...new Set([...original.doneDates,occurrenceKey])]:original.doneDates.filter(d=>d!==occurrenceKey);
+   }else original.done=check.checked;
+   save();renderTasks();
+  });
   const body=document.createElement('div');body.className='tasktext';
   const time=document.createElement('div');time.className='tasktime';time.textContent=t.time||'Без времени';
-  const name=document.createElement('div');name.className='taskname';name.textContent=t.name;name.style.borderLeft=`3px solid ${t.color}`;name.style.paddingLeft='8px';
+  const name=document.createElement('div');name.className='taskname';name.textContent=t.name;name.style.borderLeft='3px solid '+(t.color||'var(--pink)');name.style.paddingLeft='8px';
   body.append(time,name);
-  const del=document.createElement('button');del.className='delete';del.textContent='×';del.setAttribute('aria-label','Удалить план');del.addEventListener('click',()=>{tasks[key(selected)].splice(i,1);if(!tasks[key(selected)].length)delete tasks[key(selected)];save();render()});
+  if(t.repeat&&t.repeat!=='none'){const repeat=document.createElement('div');repeat.className='recurring-label';repeat.textContent='↻ '+({daily:'Каждый день',weekly:'Каждую неделю',biweekly:'Каждые две недели',monthly:'Каждый месяц',yearly:'Каждый год'}[t.repeat]||'Повторяется');body.appendChild(repeat);}
+  const del=document.createElement('button');del.className='delete';del.textContent='×';del.setAttribute('aria-label','Удалить план');
+  del.addEventListener('click',()=>{
+   if(t.repeat&&t.repeat!=='none'){
+    t.skippedDates=t.skippedDates||[];
+    if(!t.skippedDates.includes(occurrenceKey))t.skippedDates.push(occurrenceKey);
+    t.doneDates=(t.doneDates||[]).filter(d=>d!==occurrenceKey);
+   }else{
+    tasks[sourceKey]=tasks[sourceKey].filter(x=>x!==t);
+    if(!tasks[sourceKey].length)delete tasks[sourceKey];
+   }
+   save();render();
+  });
   el.append(check,body,del);list.appendChild(el);
  });
 }
-$('#taskForm').addEventListener('submit',e=>{e.preventDefault();const name=$('#taskName').value.trim();if(!name)return;const k=key(selected);(tasks[k]??=[]).push({name,time:$('#taskTime').value,color:$('#taskColor').value,done:false});save();$('#taskName').value='';render()});
+$('#taskForm').addEventListener('submit',e=>{
+ e.preventDefault();const name=$('#taskName').value.trim();if(!name)return;
+ const k=key(selected);(tasks[k]??=[]).push({name,time:$('#taskTime').value,color:$('#taskColor').value,done:false,repeat:$('#taskRepeat').value,until:$('#taskRepeatUntil').value||''});
+ save();$('#taskName').value='';$('#taskRepeat').value='none';$('#taskRepeatUntil').value='';render();
+});
+let todoItems=[];
+try{todoItems=JSON.parse(localStorage.getItem('splimTodoItems')||'[]')||[]}catch(e){todoItems=[]}
+function saveTodo(){localStorage.setItem('splimTodoItems',JSON.stringify(todoItems))}
+function renderTodo(){
+ const list=$('#todoList');list.innerHTML='';
+ const completed=todoItems.filter(item=>item.done).length;
+ $('#todoSummary').textContent=todoItems.length?('Выполнено: '+completed+' из '+todoItems.length):'Твой список пока пуст ♡';
+ if(!todoItems.length){list.innerHTML='<div class="todo-empty">Здесь появятся твои дела. Добавь первое! ♡</div>';return}
+ todoItems.forEach(item=>{
+  const row=document.createElement('div');row.className='task'+(item.done?' done':'');
+  const check=document.createElement('input');check.type='checkbox';check.checked=!!item.done;check.setAttribute('aria-label','Выполнено');
+  check.addEventListener('change',()=>{item.done=check.checked;saveTodo();renderTodo()});
+  const body=document.createElement('div');body.className='tasktext';
+  const name=document.createElement('div');name.className='taskname';name.textContent=item.name;body.appendChild(name);
+  const del=document.createElement('button');del.className='delete';del.textContent='×';del.setAttribute('aria-label','Удалить дело');del.addEventListener('click',()=>{todoItems=todoItems.filter(x=>x.id!==item.id);saveTodo();renderTodo()});
+  row.append(check,body,del);list.appendChild(row);
+ });
+}
+$('#todoForm').addEventListener('submit',e=>{e.preventDefault();const input=$('#todoName');const name=input.value.trim();if(!name)return;todoItems.push({id:Date.now()+'-'+Math.random().toString(16).slice(2),name,done:false});saveTodo();input.value='';renderTodo()});
 $('#prev').onclick=()=>{shown=new Date(shown.getFullYear(),shown.getMonth()-1,1);render()};
 $('#next').onclick=()=>{shown=new Date(shown.getFullYear(),shown.getMonth()+1,1);render()};
 $('#todayBtn').onclick=()=>{selected=new Date(today);shown=new Date(today.getFullYear(),today.getMonth(),1);render()};
