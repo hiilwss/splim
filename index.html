@@ -121,7 +121,29 @@ body.has-wallpaper{background:linear-gradient(135deg,color-mix(in srgb,var(--bg1
 .settings-panel h2{margin:0;color:var(--ink)}
 .settings-options{display:flex;gap:14px;flex-wrap:wrap;margin-top:22px}
 .settings-options .theme-control{min-width:190px}
+
 .settings-options select{min-width:190px}
+.account-panel{margin-bottom:20px}
+.account-intro{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.account-avatar{width:58px;height:58px;flex:0 0 58px;border-radius:20px;display:grid;place-items:center;background:var(--pale);border:1px solid var(--line);font-size:27px}
+.account-intro h2{margin:0;color:var(--ink)}
+.account-intro p{margin:5px 0 0;color:var(--muted);font-size:14px;line-height:1.5}
+.account-tabs{display:flex;gap:8px;padding:5px;background:var(--cell);border:1px solid var(--line);border-radius:999px;margin-bottom:18px}
+.account-tab{flex:1;border:0;border-radius:999px;padding:10px 14px;background:transparent;color:var(--muted);font:inherit;font-weight:700;cursor:default}
+.account-tab.active{background:var(--pink);color:white;box-shadow:0 4px 12px #ec78a822}
+.account-form{display:grid;gap:13px;max-width:520px}
+.account-field{display:grid;gap:7px;color:var(--ink);font-size:13px;font-weight:700}
+.account-field input{width:100%;min-width:0;padding:13px 15px;border:1px solid var(--line);border-radius:13px;background:var(--cell);color:var(--ink);font:inherit;font-weight:400;outline:none}
+.account-field input::placeholder{color:var(--muted);opacity:.8}
+.account-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:2px}
+.account-primary{border:0;border-radius:999px;padding:12px 20px;background:var(--pink);color:#fff;font:inherit;font-weight:700;cursor:default;box-shadow:0 5px 14px #ec78a833}
+.account-link{border:0;background:transparent;color:var(--accentText);font:inherit;font-size:13px;text-decoration:underline;text-underline-offset:3px;cursor:default;padding:8px 2px}
+.account-divider{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12px;margin:18px 0}
+.account-divider:before,.account-divider:after{content:"";height:1px;background:var(--line);flex:1}
+.account-note{margin-top:16px;padding:12px 14px;border-radius:13px;background:var(--pale);color:var(--muted);font-size:12px;line-height:1.55}
+.account-secondary{width:100%;border:1px solid var(--line);border-radius:13px;padding:11px;background:var(--cell);color:var(--ink);font:inherit;cursor:default}
+@media(max-width:600px){.account-actions{align-items:stretch;flex-direction:column}.account-primary{width:100%}.account-link{align-self:center}}
+
 @media(max-width:600px){.home-title{margin-top:4px;margin-bottom:20px}.home-title-flower{width:54px;height:54px;flex-basis:54px}.planner-tools{justify-content:flex-start}}
 h1{font-size:clamp(25px,4vw,36px);margin:0;color:var(--accentText)}
 .themebar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}.themebar label{font-size:12px;color:var(--muted);font-weight:700}
@@ -412,6 +434,31 @@ body[data-mode="light"] #taskRepeat option{
     </section>
     <section class="page settings-page hidden" id="settingsPage">
       <header class="settings-heading"><div class="eyebrow">ТВОЙ УЮТНЫЙ УГОЛОК</div><h1>Настройки</h1><p>Настрой splim под своё настроение ♡</p></header>
+      <section class="panel settings-panel account-panel">
+        <div class="account-intro">
+          <div class="account-avatar" aria-hidden="true">♡</div>
+          <div><h2>Мой аккаунт</h2><p>Твоё личное пространство — только для тебя.</p></div>
+        </div>
+        <div class="account-tabs" aria-label="Раздел аккаунта">
+          <button class="account-tab active" type="button" aria-pressed="true">Войти</button>
+          <button class="account-tab" type="button" aria-pressed="false">Создать аккаунт</button>
+        </div>
+        <form class="account-form" aria-label="Демонстрационная форма входа">
+          <label class="account-field">Электронная почта
+            <input type="email" placeholder="you@example.com" autocomplete="email">
+          </label>
+          <label class="account-field">Пароль
+            <input type="password" placeholder="Введи пароль" autocomplete="current-password">
+          </label>
+          <div class="account-actions">
+            <button class="account-primary" type="button">Войти в аккаунт</button>
+            <button class="account-link" type="button">Забыл(а) пароль?</button>
+          </div>
+        </form>
+        <div class="account-divider">или</div>
+        <button class="account-secondary" type="button">Продолжить с помощью Google</button>
+        <div class="account-note">♡ Пока это только предварительный макет: кнопки и поля показаны для знакомства с дизайном и ещё не выполняют вход или регистрацию.</div>
+      </section>
       <section class="panel settings-panel">
         <h2>Внешний вид</h2>
         <p>Выбери любимую палитру и режим отображения. Изменения сохраняются автоматически.</p>
