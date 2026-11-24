@@ -406,6 +406,20 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
 @media(max-width:430px){.activity-inline-input{align-items:stretch}.activity-inline-input button{font-size:11px;padding:9px}.activity-moods{grid-template-columns:repeat(2,minmax(0,1fr))}.activity-week-grid{gap:4px}.activity-day{padding:8px 1px}}
 </style>
 
+<style>
+.progress-page{display:grid;gap:20px;max-width:1000px}.progress-heading h1 span{color:var(--pink)}
+.progress-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;overflow:hidden;position:relative;padding:clamp(20px,4vw,30px);background:linear-gradient(120deg,color-mix(in srgb,var(--pink2) 35%,var(--panel)),var(--panel));border:1px solid var(--line)}
+.progress-hero-copy{position:relative;z-index:1;max-width:620px}.progress-kicker{font-size:10px;letter-spacing:1.5px;font-weight:800;color:var(--muted)}.progress-hero h2{font-size:clamp(21px,4vw,29px);margin:8px 0;color:var(--ink)}.progress-hero p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}.progress-flower{width:100px;height:100px;flex:0 0 100px;border-radius:34px;display:grid;place-items:center;background:color-mix(in srgb,var(--pink2) 45%,var(--panel));color:var(--pink);font-size:65px;transform:rotate(10deg)}
+.progress-controls{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;padding:15px}.progress-period-tabs{display:flex;gap:5px;padding:4px;border-radius:14px;background:var(--cell)}.progress-period-tabs button,.progress-today{border:0;border-radius:11px;padding:9px 13px;background:transparent;color:var(--muted);font:inherit;font-size:13px;cursor:pointer}.progress-period-tabs button.is-active{background:var(--panel);color:var(--ink);box-shadow:0 2px 9px #0000000b}.progress-date-nav{display:flex;align-items:center;justify-content:center;gap:15px;text-align:center}.progress-date-nav>button{width:34px;height:34px;border:1px solid var(--line);border-radius:11px;background:var(--cell);color:var(--ink);font-size:22px;cursor:pointer}.progress-date-nav strong,.progress-date-nav small{display:block}.progress-date-nav strong{font-size:14px;color:var(--ink)}.progress-date-nav small{font-size:11px;color:var(--muted);margin-top:3px}.progress-today{background:color-mix(in srgb,var(--pink2) 28%,var(--panel));color:var(--accentText);white-space:nowrap}
+.progress-section-title{display:flex;align-items:center;justify-content:space-between;margin:5px 0 12px}.progress-section-title h2{font-size:22px;margin:4px 0;color:var(--ink)}.progress-section-title p{font-size:12px;color:var(--muted);margin:4px 0}.progress-soft-mark{font-size:27px;color:var(--pink)}
+.progress-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}.progress-stat-card,.progress-category-card{border:1px solid var(--line);border-radius:17px;background:var(--panel);padding:16px;min-width:0}.progress-stat-icon{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--pink2) 32%,var(--panel));color:var(--accentText);font-size:18px}.progress-stat-value{font-size:clamp(21px,3vw,28px);font-weight:800;color:var(--ink);margin:12px 0 3px;overflow-wrap:anywhere}.progress-stat-label{font-size:12px;color:var(--muted)}.progress-stat-hint{font-size:10px;color:var(--muted);margin-top:7px;line-height:1.4}
+.progress-chart-card{margin-top:13px;padding:18px}.progress-card-heading,.progress-detail-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.progress-card-heading h3,.progress-detail-chart-wrap h3{margin:0;color:var(--ink);font-size:15px}.progress-card-heading p{font-size:11px;color:var(--muted);margin:4px 0 0}.progress-chart-mark{color:var(--pink);font-size:22px}
+.progress-bars{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:clamp(6px,2vw,15px);align-items:end;min-height:132px;padding:18px 4px 0}.progress-bar-col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:7px;min-width:0;height:100%}.progress-bar-value{font-size:10px;color:var(--muted);min-height:13px}.progress-bar-track{height:82px;width:min(100%,34px);border-radius:99px;background:var(--cell);display:flex;align-items:flex-end;overflow:hidden}.progress-bar-fill{width:100%;min-height:0;border-radius:99px;background:linear-gradient(180deg,var(--pink),var(--pink2));transition:height .25s}.progress-bar-label{font-size:10px;color:var(--muted)}
+.progress-category-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}.progress-category-card{display:flex;align-items:center;gap:11px;text-align:left;cursor:pointer;color:var(--ink);transition:border-color .18s,transform .18s}.progress-category-card:hover,.progress-category-card.is-selected{border-color:var(--pink);transform:translateY(-1px)}.progress-category-icon{width:39px;height:39px;flex:0 0 39px;border-radius:14px;display:grid;place-items:center;background:color-mix(in srgb,var(--pink2) 32%,var(--panel));font-size:19px}.progress-category-copy{min-width:0;flex:1}.progress-category-copy strong,.progress-category-copy small{display:block}.progress-category-copy strong{font-size:12px}.progress-category-copy small{font-size:10px;color:var(--muted);margin-top:4px}.progress-category-arrow{color:var(--muted);font-size:18px}
+.progress-detail-card{padding:clamp(17px,3vw,24px)}.progress-detail-top h2{font-size:21px;color:var(--ink);margin:5px 0}.progress-detail-top p{font-size:12px;color:var(--muted);margin:0}.progress-detail-icon{width:43px;height:43px;border-radius:15px;display:grid;place-items:center;background:color-mix(in srgb,var(--pink2) 35%,var(--panel));color:var(--accentText);font-size:21px}.progress-detail-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:18px 0}.progress-detail-stat{background:var(--cell);border-radius:13px;padding:12px}.progress-detail-stat strong{display:block;font-size:20px;color:var(--ink)}.progress-detail-stat span{display:block;font-size:10px;color:var(--muted);margin-top:3px}.progress-detail-chart-wrap{border-top:1px solid var(--line);padding-top:17px}.progress-detail-bars{min-height:125px}.progress-detail-note,.progress-footer-note{font-size:11px;line-height:1.6;color:var(--muted);margin:13px 0 0}.progress-footer-note{text-align:center;margin:0 0 10px}
+@media(max-width:760px){.progress-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.progress-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.progress-controls{grid-template-columns:1fr auto}.progress-period-tabs{grid-column:1/-1;justify-self:center}.progress-date-nav{justify-content:flex-start}.progress-today{justify-self:end}}
+@media(max-width:480px){.progress-category-grid{grid-template-columns:1fr}.progress-flower{width:66px;height:66px;flex-basis:66px;border-radius:23px;font-size:43px}.progress-hero{gap:9px}.progress-controls{padding:12px}.progress-date-nav{gap:8px}.progress-today{font-size:11px;padding:8px}.progress-detail-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.progress-detail-stat{padding:9px}.progress-detail-stat strong{font-size:17px}}
+</style>
 </head>
 <body class="auth-pending"><svg aria-hidden="true" width="0" height="0" style="position:absolute;overflow:hidden"><symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.4 2.2 4 2.2 4-2.2 4-2.2M9 9.5h.01M15 9.5h.01"/></symbol><symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 .4-8A5.8 5.8 0 0 0 6.3 9 4.5 4.5 0 0 0 7 18Z"/><path d="M9 21v-1m6 1v-1"/></symbol><symbol id="i-empty" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9 12h6"/></symbol><symbol id="i-question" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.6 2.6 0 1 1 4.6 1.7c-1.1 1.1-2.1 1.4-2.1 3M12 17.5h.01"/></symbol><symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.8 12s3.2-6 9.2-6 9.2 6 9.2 6-3.2 6-9.2 6-9.2-6-9.2-6Z"/><circle cx="12" cy="12" r="2.5"/></symbol><symbol id="i-message" viewBox="0 0 24 24"><path d="M4 5.5h16v11H9l-5 3v-14Z"/><path d="M8 10h8M8 13.5h5"/></symbol><symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 2.8c1.2 4.8 3.4 7 8.2 8.2-4.8 1.2-7 3.4-8.2 8.2-1.2-4.8-3.4-7-8.2-8.2 4.8-1.2 7-3.4 8.2-8.2Z"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1Z"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M7.5 3v4M16.5 3v4M3.5 10h17M8 14h2m4 0h2M8 17h2"/></symbol><symbol id="i-checklist" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="17" rx="2.5"/><path d="m7.5 9 1.5 1.5L12 7.5M14 9h3M7.5 16l1.5 1.5 3-3M14 16h3"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20.5 3.5C10 3 4 7 4 14a6.5 6.5 0 0 0 6.5 6.5c7 0 10-7 10-17Z"/><path d="M3 21c4-6 8-9 14-13"/></symbol><symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.5 8.5c0 5-8.5 11-8.5 11s-8.5-6-8.5-11A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 8.5 2.5Z"/></symbol><symbol id="i-note" viewBox="0 0 24 24"><path d="M6 3.5h9l4 4V21H6a2 2 0 0 1-2-2V5.5a2 2 0 0 1 2-2Z"/><path d="M14.5 3.5V8H19M8 12h8M8 16h8"/></symbol><symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M19 13.5 21 15l-2 3.5-2.5-.5-2 1-.5 2h-4l-.5-2-2-1-2.5.5L3 15l2-1.5v-3L3 9l2-3.5 2.5.5 2-1 .5-2h4l.5 2 2 1 2.5-.5L21 9l-2 1.5Z"/></symbol><symbol id="i-water" viewBox="0 0 24 24"><path d="M12 2.8S5 11 5 15.5a7 7 0 0 0 14 0C19 11 12 2.8 12 2.8Z"/><path d="M9 16a3 3 0 0 0 3 3"/></symbol><symbol id="i-moon" viewBox="0 0 24 24"><path d="M19.5 15.5A8.5 8.5 0 0 1 8.5 4.5 8.5 8.5 0 1 0 19.5 15.5Z"/></symbol><symbol id="i-shoe" viewBox="0 0 24 24"><path d="M3 15.5c3.5 0 5-2 6-6l2 1c1.5 2 3 3 5 3.5l4 1.5c1 .4 1.5 1.2 1.5 2.2V20H3Z"/><path d="M9 10l2 2m2-.5 2 2M3 17h18"/></symbol><symbol id="i-flame" viewBox="0 0 24 24"><path d="M13 2.5c1 5-3 6-2 9 1-1 2-2 2-3.5 4 3 6 6 5 9.5a6 6 0 0 1-12 0c0-3 1.5-5 4-7.5-.2 3 1 4 1 4 2-3 2-7 2-11.5Z"/></symbol><symbol id="i-yoga" viewBox="0 0 24 24"><circle cx="12" cy="4.5" r="2"/><path d="M12 7v5m0-3-5 3m5-3 5 3M12 12l-4 5m4-5 4 5M4 20h16"/></symbol></svg><link id="splimFavicon" rel="icon" type="image/svg+xml">
 <div id="wallpaperLayer" aria-hidden="true"></div>
@@ -418,6 +432,7 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
     <div class="sidebar-caption">ТВОЁ ПРОСТРАНСТВО</div>
     <nav class="side-nav" aria-label="Основная навигация">
       <button class="side-link active" data-page="home"><span class="side-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-home"></use></svg></span><span>Главная</span></button>
+      <button class="side-link" data-page="progress"><span class="side-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sparkle"></use></svg></span><span>Мой прогресс</span></button>
       <button class="side-link" data-page="profile"><span class="side-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-user"></use></svg></span><span>Мой профиль</span></button>
       <button class="side-link" data-page="planner"><span class="side-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-calendar"></use></svg></span><span>Календарь и планы</span></button>
       <button class="side-link" data-page="todo"><span class="side-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-checklist"></use></svg></span><span>Список дел</span></button>
@@ -444,6 +459,7 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
       </section>
       <div class="section-heading"><div><div class="eyebrow">ТВОИ ИНСТРУМЕНТЫ</div><h2>Разделы</h2></div><span class="section-count" id="homeSectionCount">6</span></div>
       <div class="home-section-list" id="homeSectionList">
+      <button class="section-card" type="button" data-open-page="progress"><span class="section-card-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sparkle"></use></svg></span><span class="section-card-copy"><strong>Мой прогресс</strong><small>Замечай свои маленькие победы и смотри, как меняется твой путь.</small></span><span class="section-card-arrow">→</span></button>
       <button class="section-card" type="button" data-open-page="profile"><span class="section-card-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-user"></use></svg></span><span class="section-card-copy"><strong>Мой профиль</strong><small>Добавь аватар и имя, чтобы сделать своё пространство по-настоящему личным.</small></span><span class="section-card-arrow">→</span></button>
       <button class="section-card" type="button" data-open-page="planner"><span class="section-card-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-calendar"></use></svg></span><span class="section-card-copy"><strong>Календарь и планы</strong><small>Расставляй задачи, выбирай даты и отмечай маленькие победы.</small></span><span class="section-card-arrow">→</span></button>
       <button class="section-card" type="button" data-open-page="todo"><span class="section-card-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-checklist"></use></svg></span><span class="section-card-copy"><strong>Список дел</strong><small>Собирай повседневные дела в одном месте и отмечай выполненное.</small></span><span class="section-card-arrow">→</span></button>
@@ -512,6 +528,34 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
 </details></div>
         </div>
       </section>
+    </section>
+    <section class="page progress-page hidden" id="progressPage">
+      <header class="settings-heading progress-heading"><div class="eyebrow">ТВОЙ ПУТЬ, ТВОИ МАЛЕНЬКИЕ ПОБЕДЫ</div><h1>Мой прогресс <span>♡</span></h1><p>Смотри, сколько всего ты уже делаешь для себя. Каждый маленький шаг имеет значение.</p></header>
+      <section class="progress-hero panel">
+        <div class="progress-hero-copy"><div class="progress-kicker">ТВОЙ ЛИЧНЫЙ ПУТЬ</div><h2 id="progressHeroTitle">Ты движешься в своём ритме ♡</h2><p id="progressHeroText">Здесь соберутся твои записи, привычки и маленькие достижения.</p></div>
+        <div class="progress-flower" aria-hidden="true">✿</div>
+      </section>
+      <section class="progress-controls panel">
+        <div class="progress-period-tabs" role="group" aria-label="Период статистики"><button type="button" class="is-active" data-progress-period="week" aria-pressed="true">Неделя</button><button type="button" data-progress-period="month" aria-pressed="false">Месяц</button></div>
+        <div class="progress-date-nav"><button type="button" id="progressPrev" aria-label="Предыдущий период">‹</button><div><strong id="progressPeriodTitle">Эта неделя</strong><small id="progressPeriodSubtitle"></small></div><button type="button" id="progressNext" aria-label="Следующий период">›</button></div>
+        <button type="button" class="progress-today" id="progressToday">К текущему периоду</button>
+      </section>
+      <section class="progress-overview">
+        <div class="progress-section-title"><div><div class="eyebrow">НЕБОЛЬШИЕ ШАГИ</div><h2>Общий обзор</h2></div><span class="progress-soft-mark">✧</span></div>
+        <div class="progress-summary-grid" id="progressSummary"></div>
+        <div class="progress-chart-card panel"><div class="progress-card-heading"><div><h3>Твоя активность</h3><p id="progressChartCaption">По дням выбранного периода</p></div><span class="progress-chart-mark">♡</span></div><div class="progress-bars" id="progressOverviewChart"></div></div>
+      </section>
+      <section class="progress-details">
+        <div class="progress-section-title"><div><div class="eyebrow">МОИ РАЗДЕЛЫ</div><h2>Посмотреть подробнее</h2><p>Нажми на карточку, чтобы увидеть отдельную статистику.</p></div></div>
+        <div class="progress-category-grid" id="progressCategories"></div>
+      </section>
+      <section class="progress-detail-card panel" id="progressDetail">
+        <div class="progress-detail-top"><div><div class="eyebrow">ПОДРОБНЕЕ</div><h2 id="progressDetailTitle">Трекер привычек</h2><p id="progressDetailDescription">Твои регулярные маленькие шаги.</p></div><span class="progress-detail-icon" id="progressDetailIcon">✿</span></div>
+        <div class="progress-detail-stats" id="progressDetailStats"></div>
+        <div class="progress-detail-chart-wrap"><h3>Динамика за период</h3><div class="progress-bars progress-detail-bars" id="progressDetailChart"></div></div>
+        <p class="progress-detail-note" id="progressDetailNote">Здесь отображаются сохранённые записи за выбранный период ♡</p>
+      </section>
+      <p class="progress-footer-note">Статистика рассчитывается автоматически по твоим записям и синхронизируется вместе с ними. Здесь нет оценок — только твой путь ♡</p>
     </section>
     <section class="page settings-page hidden" id="settingsPage">
       <header class="settings-heading"><div class="eyebrow">ТВОЙ УЮТНЫЙ УГОЛОК</div><h1>Настройки</h1><p>Настрой splim под своё настроение ♡</p></header>
@@ -1387,7 +1431,7 @@ $('#newAffirmation').addEventListener('click',()=>{
  const choices=affirmations.filter(item=>item!==current);
  $('.affirmation-quote').textContent=choices[Math.floor(Math.random()*choices.length)];
 });
-const HOME_SECTIONS=[{id:'profile',title:'Мой профиль'},{id:'planner',title:'Календарь и планы'},{id:'todo',title:'Список дел'},{id:'habits',title:'Трекер привычек'},{id:'gratitude',title:'Моменты благодарности'},{id:'notes',title:'Заметки'},{id:'care',title:'Забота о себе'}];
+const HOME_SECTIONS=[{id:'progress',title:'Мой прогресс'},{id:'profile',title:'Мой профиль'},{id:'planner',title:'Календарь и планы'},{id:'todo',title:'Список дел'},{id:'habits',title:'Трекер привычек'},{id:'gratitude',title:'Моменты благодарности'},{id:'notes',title:'Заметки'},{id:'care',title:'Забота о себе'}];
 const HOME_LAYOUT_KEY='splimHomeLayout';
 function defaultHomeLayout(){return {version:1,affirmation:true,visible:HOME_SECTIONS.map(item=>item.id),sections:HOME_SECTIONS.map(item=>item.id)};}
 function readHomeLayout(){
@@ -1488,13 +1532,118 @@ function finishHomeDrag(event){
 homeEditorSections.addEventListener('pointerup',finishHomeDrag);
 homeEditorSections.addEventListener('pointercancel',finishHomeDrag);
 applyHomeLayout();
+
+// Personal progress dashboard. All values are calculated from existing synced stores.
+let progressPeriod='week',progressOffset=0,progressCategory='habits';
+const progressDefinitions=[
+ {id:'habits',title:'Трекер привычек',icon:'✿',description:'Регулярность твоих маленьких привычек.',hint:'Отметки привычек',stats:(a)=>[['Отметки',a.done],['Дней с отметками',a.active],['Привычки',a.items]],series:a=>a.daily},
+ {id:'planner',title:'Календарь и планы',icon:'▦',description:'Запланированные дела и выполненные планы.',hint:'Выполненные планы',stats:a=>[['Выполнено',a.done],['Всего запланировано',a.total],['Доля выполнения',a.rate+'%']],series:a=>a.daily},
+ {id:'todo',title:'Список дел',icon:'☑',description:'Твои завершённые дела из личного списка.',hint:'Завершённые дела',stats:a=>[['Выполнено',a.done],['Всего дел',a.total],['Доля выполнения',a.rate+'%']],series:a=>a.daily},
+ {id:'water',title:'Вода',icon:'♡',description:'Небольшие напоминания о заботе о себе.',hint:'Стаканы воды',stats:a=>[['Стаканов',a.total],['Дней с записями',a.active],['Среднее за день',a.average]],series:a=>a.daily},
+ {id:'sleep',title:'Сон',icon:'☾',description:'Как часто ты записывала продолжительность сна.',hint:'Часы сна',stats:a=>[['Среднее',a.average+' ч'],['Записей',a.active],['Всего часов',a.total+' ч']],series:a=>a.daily},
+ {id:'activity',title:'Моё движение',icon:'⌁',description:'Шаги, тренировки и потраченные калории.',hint:'Шаги',stats:a=>[['Шаги',a.steps.toLocaleString('ru-RU')],['Тренировки',a.workouts],['Потрачено ккал',a.calories.toLocaleString('ru-RU')]],series:a=>a.daily},
+ {id:'mood',title:'Дневник настроения',icon:'☁',description:'Записи и эмоции, которыми ты делилась с собой.',hint:'Записи настроения',stats:a=>[['Записей',a.total],['Дней с записями',a.active],['Частое настроение',a.topMood||'—']],series:a=>a.daily},
+ {id:'gratitude',title:'Благодарности',icon:'♡',description:'Дни, в которые ты сохраняла тёплые моменты.',hint:'Заполненные дни',stats:a=>[['Записей',a.total],['Дней',a.active],['Всего ответов',a.answers]],series:a=>a.daily},
+ {id:'notes',title:'Заметки',icon:'✎',description:'Мысли и идеи, которые ты решила сохранить.',hint:'Новые заметки',stats:a=>[['Заметок',a.total],['Дней с заметками',a.active],['Всего в коллекции',a.all]],series:a=>a.daily}
+];
+const progressDateKey=d=>key(d);
+function progressRange(){
+ const now=new Date();now.setHours(0,0,0,0);
+ if(progressPeriod==='week'){const start=new Date(now);start.setDate(now.getDate()-(now.getDay()+6)%7+progressOffset*7);const end=new Date(start);end.setDate(start.getDate()+6);return {start,end:end>now?now:end,fullEnd:end};}
+ const start=new Date(now.getFullYear(),now.getMonth()+progressOffset,1),fullEnd=new Date(start.getFullYear(),start.getMonth()+1,0);return {start,end:fullEnd>now?now:fullEnd,fullEnd};
+}
+function progressDays(){
+ const range=progressRange(),days=[],cursor=new Date(range.start);
+ while(cursor<=range.end){days.push(new Date(cursor));cursor.setDate(cursor.getDate()+1);}
+ return days;
+}
+function progressDateLabel(d,opts={day:'numeric',month:'short'}){return d.toLocaleDateString('ru-RU',opts);}
+function progressPlannerData(days){
+ let total=0,done=0;const daily=days.map(d=>{const items=getTasksForDate(d);total+=items.length;const count=items.filter(x=>x.done).length;done+=count;return count;});return {total,done,rate:total?Math.round(done/total*100):0,daily};
+}
+function progressTodoData(days){
+ const keys=new Set(days.map(progressDateKey));const dated=todoItems.filter(x=>x.done&&x.completedAt&&keys.has(String(x.completedAt).slice(0,10)));const total=todoItems.length,legacy=todoItems.filter(x=>x.done&&!x.completedAt).length;const daily=days.map(d=>todoItems.filter(x=>x.done&&x.completedAt&&String(x.completedAt).slice(0,10)===progressDateKey(d)).length);return {done:dated.length,total,rate:total?Math.round(todoItems.filter(x=>x.done).length/total*100):0,daily,legacy};
+}
+function progressCategoryData(id,days){
+ const keys=days.map(progressDateKey),countDays=fn=>days.map(d=>Math.max(0,Number(fn(progressDateKey(d)))||0));
+ if(id==='habits'){const daily=countDays(k=>habits.reduce((n,h)=>n+(h.done&&h.done[k]?1:0),0));return {done:daily.reduce((a,b)=>a+b,0),active:daily.filter(x=>x>0).length,items:habits.length,daily};}
+ if(id==='planner')return progressPlannerData(days);
+ if(id==='todo')return progressTodoData(days);
+ if(id==='water'){const daily=countDays(k=>waterStore.days[k]);const active=daily.filter(x=>x>0).length,total=daily.reduce((a,b)=>a+b,0);return {total,active,average:active?(total/active).toFixed(1):'0',daily};}
+ if(id==='sleep'){const values=keys.map(k=>sleepStore.days[k]&&Number(sleepStore.days[k].hours)||0),active=values.filter(x=>x>0).length,total=values.reduce((a,b)=>a+b,0);return {total:Math.round(total*10)/10,active,average:active?(total/active).toFixed(1):'0',daily:values};}
+ if(id==='activity'){const records=keys.map(k=>activityStore.days[k]||{}),daily=records.map(x=>Math.max(0,Number(x.steps)||0)),steps=daily.reduce((a,b)=>a+b,0),workouts=records.reduce((n,x)=>n+(Array.isArray(x.workouts)?x.workouts.length:0),0),calories=records.reduce((n,x)=>n+Math.max(0,Number(x.calories)||0),0);return {steps,workouts,calories,daily};}
+ if(id==='mood'){const entries=keys.map(k=>moodStore.entries[k]).filter(Boolean),counts={};entries.forEach(x=>{const name=x.primary||((x.emotions||[])[0])||'Без названия';counts[name]=(counts[name]||0)+1;});const topMood=Object.keys(counts).sort((a,b)=>counts[b]-counts[a])[0]||'';return {total:entries.length,active:entries.length,topMood,daily:keys.map(k=>moodStore.entries[k]?1:0)};}
+ if(id==='gratitude'){const entries=keys.map(k=>gratitudeEntries[k]).filter(Boolean),answers=entries.reduce((n,x)=>n+['win','one','two','three'].filter(f=>String(x[f]||'').trim()).length,0);return {total:entries.length,active:entries.length,answers,daily:keys.map(k=>gratitudeEntries[k]?1:0)};}
+ if(id==='notes'){const inRange=notes.filter(x=>{const d=new Date(x.createdAt);return d>=progressRange().start&&d<=progressRange().end;});const daily=days.map(d=>notes.filter(x=>{const n=new Date(x.createdAt);return progressDateKey(n)===progressDateKey(d);}).length);return {total:inRange.length,active:daily.filter(x=>x>0).length,all:notes.length,daily};}
+ return {total:0,active:0,daily:days.map(()=>0)};
+}
+function progressAggregate(days){
+ const ids=['habits','planner','todo','water','sleep','activity','mood','gratitude','notes'],data=ids.map(id=>progressCategoryData(id,days));
+ const active=new Set();ids.forEach(id=>days.forEach(d=>{const k=progressDateKey(d);let yes=false;
+  if(id==='habits')yes=habits.some(h=>h.done&&h.done[k]);
+  else if(id==='planner')yes=getTasksForDate(d).some(x=>x.done);
+  else if(id==='todo')yes=todoItems.some(x=>x.done&&x.completedAt&&String(x.completedAt).slice(0,10)===k);
+  else if(id==='water')yes=Number(waterStore.days[k])>0;
+  else if(id==='sleep')yes=!!sleepStore.days[k];
+  else if(id==='activity'){const a=activityStore.days[k]||{};yes=Number(a.steps)>0||(a.workouts||[]).length>0||Number(a.calories)>0;}
+  else if(id==='mood')yes=!!moodStore.entries[k];
+  else if(id==='gratitude')yes=!!gratitudeEntries[k];
+  else if(id==='notes')yes=notes.some(x=>progressDateKey(new Date(x.createdAt))===k);
+  if(yes)active.add(k);
+ });});
+ const total=days.reduce((n,d)=>n+getTasksForDate(d).filter(x=>x.done).length,0)+data[0].done+data[2].done+data[6].total+data[7].total;
+ return {active:active.size,total,notes:data[8].total,workouts:data[5].workouts,water:data[3].total,sleep:data[4].average};
+}
+function progressRenderBars(container,values,days){
+ container.innerHTML='';const max=Math.max(1,...values);
+ values.forEach((v,i)=>{const col=document.createElement('div');col.className='progress-bar-col';const value=document.createElement('span');value.className='progress-bar-value';value.textContent=v?Number(v).toLocaleString('ru-RU'):'';
+ const track=document.createElement('div');track.className='progress-bar-track';const fill=document.createElement('div');fill.className='progress-bar-fill';fill.style.height=(v?Math.max(5,Math.round(v/max*100)):0)+'%';track.append(fill);
+ const label=document.createElement('span');label.className='progress-bar-label';label.textContent=progressDateLabel(days[i],{weekday:'short',day:'numeric'}).replace('.','');col.append(value,track,label);container.append(col);});
+}
+function progressRenderDetail(days){
+ const def=progressDefinitions.find(x=>x.id===progressCategory)||progressDefinitions[0],data=progressCategoryData(def.id,days);
+ document.getElementById('progressDetailTitle').textContent=def.title;document.getElementById('progressDetailDescription').textContent=def.description;document.getElementById('progressDetailIcon').textContent=def.icon;
+ const stats=document.getElementById('progressDetailStats');stats.innerHTML='';def.stats(data).forEach(([label,value])=>{const card=document.createElement('div');card.className='progress-detail-stat';const strong=document.createElement('strong');strong.textContent=value;const span=document.createElement('span');span.textContent=label;card.append(strong,span);stats.append(card);});
+ progressRenderBars(document.getElementById('progressDetailChart'),def.series(data),days);
+ let note='Показаны только записи с датами внутри выбранного периода.';
+ if(def.id==='todo'&&data.legacy)note+=' '+data.legacy+' старых выполненных дел не имеют даты завершения и поэтому не распределяются по неделям и месяцам.';
+ if(def.id==='planner')note+=' Для повторяющихся планов учитываются отдельные даты выполнения. Старые отметки без даты выполнения не приписываются к текущему периоду.';
+ if(def.id==='water')note+=' Цель воды индивидуальна, поэтому здесь показано фактическое количество отмеченных стаканов.';
+ if(def.id==='activity')note+=' Шаги и калории учитываются по выбранной дате, а тренировки — по количеству записей.';
+ document.getElementById('progressDetailNote').textContent=note;
+ document.querySelectorAll('.progress-category-card').forEach(b=>b.classList.toggle('is-selected',b.dataset.progressCategory===progressCategory));
+}
+function renderProgress(){
+ const days=progressDays(),range=progressRange(),now=new Date();now.setHours(0,0,0,0);const isCurrent=progressOffset===0;
+ document.querySelectorAll('[data-progress-period]').forEach(b=>{const active=b.dataset.progressPeriod===progressPeriod;b.classList.toggle('is-active',active);b.setAttribute('aria-pressed',String(active));});
+ const title=document.getElementById('progressPeriodTitle'),subtitle=document.getElementById('progressPeriodSubtitle');
+ if(progressPeriod==='week'){const end=new Date(range.start);end.setDate(end.getDate()+6);title.textContent=isCurrent?'Эта неделя':progressDateLabel(range.start,{day:'numeric',month:'short'})+' — '+progressDateLabel(end,{day:'numeric',month:'short'});subtitle.textContent=range.start.toLocaleDateString('ru-RU',{month:'long',year:'numeric'});}
+ else{title.textContent=range.start.toLocaleDateString('ru-RU',{month:'long',year:'numeric'});subtitle.textContent=isCurrent?'Текущий месяц':'Архив месяца';}
+ document.getElementById('progressPrev').disabled=false;document.getElementById('progressNext').disabled=progressOffset>=0;document.getElementById('progressNext').style.opacity=progressOffset>=0?'.35':'1';
+ const agg=progressAggregate(days),summary=document.getElementById('progressSummary');summary.innerHTML='';
+ [['✧',agg.active,'Активных дней','Дни, когда ты что-то отмечала'],['♡',agg.total,'Маленьких побед','Выполненные дела, привычки и записи'],['⌁',agg.workouts,'Тренировок','Записи о движении'],['✎',agg.notes,'Новых заметок','Мысли, сохранённые за период']].forEach(([icon,value,label,hint])=>{const card=document.createElement('div');card.className='progress-stat-card';const mark=document.createElement('div');mark.className='progress-stat-icon';mark.textContent=icon;const val=document.createElement('div');val.className='progress-stat-value';val.textContent=Number(value).toLocaleString('ru-RU');const name=document.createElement('div');name.className='progress-stat-label';name.textContent=label;const small=document.createElement('div');small.className='progress-stat-hint';small.textContent=hint;card.append(mark,val,name,small);summary.append(card);});
+ document.getElementById('progressHeroText').textContent=agg.active?'За этот период у тебя уже '+agg.active+' '+(agg.active===1?'активный день':'активных дней')+'. Продолжай в своём темпе — это здорово!':'Здесь соберутся твои записи, привычки и маленькие достижения. Начни с любого небольшого шага.';
+ const overview=days.map(d=>{const k=progressDateKey(d);return (habits.reduce((n,h)=>n+(h.done&&h.done[k]?1:0),0))+(getTasksForDate(d).filter(x=>x.done).length)+(todoItems.filter(x=>x.done&&x.completedAt&&String(x.completedAt).slice(0,10)===k).length)+(moodStore.entries[k]?1:0)+(gratitudeEntries[k]?1:0);});
+ progressRenderBars(document.getElementById('progressOverviewChart'),overview,days);document.getElementById('progressChartCaption').textContent=progressPeriod==='week'?'Количество отметок и завершённых дел по дням недели':'Количество отметок и завершённых дел по дням месяца';
+ const categories=document.getElementById('progressCategories');categories.innerHTML='';
+ progressDefinitions.forEach(def=>{const data=progressCategoryData(def.id,days),value=def.id==='activity'?data.steps.toLocaleString('ru-RU'):def.id==='sleep'?data.average+' ч':def.id==='water'?data.total+' стак.':def.id==='habits'||def.id==='planner'||def.id==='todo'?data.done+' выполнено':data.total+' записей';
+ const b=document.createElement('button');b.type='button';b.className='progress-category-card'+(def.id===progressCategory?' is-selected':'');b.dataset.progressCategory=def.id;const icon=document.createElement('span');icon.className='progress-category-icon';icon.textContent=def.icon;const copy=document.createElement('span');copy.className='progress-category-copy';const strong=document.createElement('strong');strong.textContent=def.title;const small=document.createElement('small');small.textContent=value;copy.append(strong,small);const arrow=document.createElement('span');arrow.className='progress-category-arrow';arrow.textContent='›';b.append(icon,copy,arrow);b.addEventListener('click',()=>{progressCategory=def.id;progressRenderDetail(days);document.getElementById('progressDetail').scrollIntoView({behavior:'smooth',block:'start'});});categories.append(b);});
+ progressRenderDetail(days);
+}
+document.querySelectorAll('[data-progress-period]').forEach(b=>b.addEventListener('click',()=>{progressPeriod=b.dataset.progressPeriod;progressOffset=0;renderProgress();}));
+document.getElementById('progressPrev').addEventListener('click',()=>{progressOffset--;renderProgress();});
+document.getElementById('progressNext').addEventListener('click',()=>{if(progressOffset<0){progressOffset++;renderProgress();}});
+document.getElementById('progressToday').addEventListener('click',()=>{progressOffset=0;renderProgress();});
+
 function showPage(page){
- const validPage=['home','profile','planner','todo','habits','gratitude','notes','settings','care','water','sleep','activity','mood'].includes(page)?page:'home';
+ const validPage=['home','progress','profile','planner','todo','habits','gratitude','notes','settings','care','water','sleep','activity','mood'].includes(page)?page:'home';
  document.body.dataset.page=validPage;
  // Запоминаем раздел отдельно на каждом устройстве — этот ключ не отправляется в облако.
  try{localStorage.setItem('splimActivePage',validPage);}catch(e){}
  $('#homePage').classList.toggle('hidden',validPage!=='home');
  $('#profilePage').classList.toggle('hidden',validPage!=='profile');
+ $('#progressPage').classList.toggle('hidden',validPage!=='progress');
+ if(validPage==='progress')renderProgress();
  $('#plannerPage').classList.toggle('hidden',validPage!=='planner');
  $('#todoPage').classList.toggle('hidden',validPage!=='todo');
  $('#habitsPage').classList.toggle('hidden',validPage!=='habits');
@@ -1593,7 +1742,7 @@ function renderTasks(){
    if(t.repeat&&t.repeat!=='none'){
     original.doneDates=original.doneDates||[];
     original.doneDates=check.checked?[...new Set([...original.doneDates,occurrenceKey])]:original.doneDates.filter(d=>d!==occurrenceKey);
-   }else original.done=check.checked;
+   }else{original.done=check.checked;if(check.checked)original.completedAt=new Date().toISOString();else delete original.completedAt;}
    save();renderTasks();
   });
   const body=document.createElement('div');body.className='tasktext';
@@ -1904,7 +2053,7 @@ function renderTodo(){
  todoItems.forEach(item=>{
   const row=document.createElement('div');row.className='task'+(item.done?' done':'');
   const check=document.createElement('input');check.type='checkbox';check.checked=!!item.done;check.setAttribute('aria-label','Выполнено');
-  check.addEventListener('change',()=>{item.done=check.checked;saveTodo();renderTodo()});
+  check.addEventListener('change',()=>{item.done=check.checked;if(check.checked)item.completedAt=new Date().toISOString();else delete item.completedAt;saveTodo();renderTodo()});
   const body=document.createElement('div');body.className='tasktext';
   const name=document.createElement('div');name.className='taskname';name.textContent=item.name;body.appendChild(name);
   const del=document.createElement('button');del.className='delete';del.textContent='×';del.setAttribute('aria-label','Удалить дело');del.addEventListener('click',()=>{todoItems=todoItems.filter(x=>x.id!==item.id);saveTodo();renderTodo()});
