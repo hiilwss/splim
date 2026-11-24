@@ -329,6 +329,7 @@ body[data-mode="light"] #taskRepeat option{
 /* Guest welcome gate */
 body.auth-pending .app-shell,body.gate-locked .app-shell{filter:blur(7px);transform:scale(1.008);transform-origin:center;pointer-events:none;user-select:none}
 body.auth-pending #wallpaperLayer,body.gate-locked #wallpaperLayer{filter:blur(12px)}
+.gate-overlay[hidden]{display:none!important}
 .gate-overlay{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;padding:22px;background:rgba(255,239,246,.30);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
 .gate-card{width:min(100%,470px);padding:clamp(24px,5vw,38px);border:1px solid #f0cfdd;border-radius:28px;background:rgba(255,250,252,.96);box-shadow:0 24px 80px rgba(142,73,103,.22);text-align:center;color:#80516a}
 .gate-flower{width:62px;height:62px;margin:0 auto 14px;border-radius:22px;display:grid;place-items:center;background:#fae6ef;color:#c16e93;font-size:34px}
@@ -681,6 +682,10 @@ body.auth-pending #wallpaperLayer,body.gate-locked #wallpaperLayer{filter:blur(1
   }
  }
  function showRecovery(){signedOut.hidden=true;signedIn.hidden=true;recovery.hidden=false;}
+ document.getElementById('gateGuest').addEventListener('click',()=>{
+  try{localStorage.setItem('splimGuestMode','true');}catch(e){}
+  unlockPlanner();
+ });
  if(!client){
   say('Не удалось загрузить модуль авторизации. Обнови страницу и попробуй снова.',true);
   submit.disabled=true;
@@ -688,10 +693,6 @@ body.auth-pending #wallpaperLayer,body.gate-locked #wallpaperLayer{filter:blur(1
  }
  document.getElementById('gateCreate').addEventListener('click',()=>openAccount('signup'));
  document.getElementById('gateLogin').addEventListener('click',()=>openAccount('login'));
- document.getElementById('gateGuest').addEventListener('click',()=>{
-  try{localStorage.setItem('splimGuestMode','true');}catch(e){}
-  unlockPlanner();
- });
  loginTab.addEventListener('click',()=>setMode('login'));
  signupTab.addEventListener('click',()=>setMode('signup'));
  form.addEventListener('submit',async function(event){
