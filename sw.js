@@ -1,9 +1,10 @@
-const CACHE_NAME = 'splim-shell-v1';
+const CACHE_NAME = 'splim-shell-v2';
 const APP_ROOT = new URL('./', self.registration.scope);
 const APP_FILES = [
   APP_ROOT.href,
   new URL('manifest.webmanifest', APP_ROOT).href,
-  new URL('icons/splim-icon.svg', APP_ROOT).href
+  new URL('icons/splim-icon.svg', APP_ROOT).href,
+  new URL('icons/splim-icon-maskable.svg', APP_ROOT).href
 ];
 
 self.addEventListener('install', event => {
