@@ -1455,6 +1455,7 @@ function readHomeLayout(){
   const normalize=(value)=>Array.isArray(value)?value.filter((id,index,array)=>HOME_SECTIONS.some(item=>item.id===id)&&array.indexOf(id)===index):[];
   const sections=normalize(saved.sections);HOME_SECTIONS.forEach(item=>{if(!sections.includes(item.id))sections.push(item.id);});
   const visible=normalize(saved.visible);
+  if(Number(saved.version||1)<3){const at=sections.indexOf('progress');if(!sections.includes('study'))sections.splice(at>=0?at+1:0,0,'study');}
   if(Number(saved.version||1)<2&&!visible.includes('progress'))visible.unshift('progress');
   if(Number(saved.version||1)<3&&!visible.includes('study'))visible.splice(Math.max(0,visible.indexOf('progress')+1),0,'study');
   return {version:3,affirmation:saved.affirmation!==false,visible,sections};
