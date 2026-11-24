@@ -129,19 +129,19 @@ body.has-wallpaper{background:linear-gradient(135deg,color-mix(in srgb,var(--bg1
 .account-intro h2{margin:0;color:var(--ink)}
 .account-intro p{margin:5px 0 0;color:var(--muted);font-size:14px;line-height:1.5}
 .account-tabs{display:flex;gap:8px;padding:5px;background:var(--cell);border:1px solid var(--line);border-radius:999px;margin-bottom:18px}
-.account-tab{flex:1;border:0;border-radius:999px;padding:10px 14px;background:transparent;color:var(--muted);font:inherit;font-weight:700;cursor:default}
+.account-tab{flex:1;border:0;border-radius:999px;padding:10px 14px;background:transparent;color:var(--muted);font:inherit;font-weight:700;cursor:pointer}
 .account-tab.active{background:var(--pink);color:white;box-shadow:0 4px 12px #ec78a822}
 .account-form{display:grid;gap:13px;max-width:520px}
 .account-field{display:grid;gap:7px;color:var(--ink);font-size:13px;font-weight:700}
 .account-field input{width:100%;min-width:0;padding:13px 15px;border:1px solid var(--line);border-radius:13px;background:var(--cell);color:var(--ink);font:inherit;font-weight:400;outline:none}
 .account-field input::placeholder{color:var(--muted);opacity:.8}
 .account-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:2px}
-.account-primary{border:0;border-radius:999px;padding:12px 20px;background:var(--pink);color:#fff;font:inherit;font-weight:700;cursor:default;box-shadow:0 5px 14px #ec78a833}
-.account-link{border:0;background:transparent;color:var(--accentText);font:inherit;font-size:13px;text-decoration:underline;text-underline-offset:3px;cursor:default;padding:8px 2px}
+.account-primary{border:0;border-radius:999px;padding:12px 20px;background:var(--pink);color:#fff;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 5px 14px #ec78a833}
+.account-link{border:0;background:transparent;color:var(--accentText);font:inherit;font-size:13px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:8px 2px}
 .account-divider{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12px;margin:18px 0}
 .account-divider:before,.account-divider:after{content:"";height:1px;background:var(--line);flex:1}
 .account-note{margin-top:16px;padding:12px 14px;border-radius:13px;background:var(--pale);color:var(--muted);font-size:12px;line-height:1.55}
-.account-secondary{width:100%;border:1px solid var(--line);border-radius:13px;padding:11px;background:var(--cell);color:var(--ink);font:inherit;cursor:default}
+.account-secondary{width:100%;border:1px solid var(--line);border-radius:13px;padding:11px;background:var(--cell);color:var(--ink);font:inherit;cursor:pointer}\n.account-status-error{border:1px solid #e6a0a0}\n.account-primary:disabled{opacity:.65;cursor:wait}
 @media(max-width:600px){.account-actions{align-items:stretch;flex-direction:column}.account-primary{width:100%}.account-link{align-self:center}}
 
 @media(max-width:600px){.home-title{margin-top:4px;margin-bottom:20px}.home-title-flower{width:54px;height:54px;flex-basis:54px}.planner-tools{justify-content:flex-start}}
@@ -439,25 +439,30 @@ body[data-mode="light"] #taskRepeat option{
           <div class="account-avatar" aria-hidden="true">♡</div>
           <div><h2>Мой аккаунт</h2><p>Твоё личное пространство — только для тебя.</p></div>
         </div>
-        <div class="account-tabs" aria-label="Раздел аккаунта">
-          <button class="account-tab active" type="button" aria-pressed="true">Войти</button>
-          <button class="account-tab" type="button" aria-pressed="false">Создать аккаунт</button>
-        </div>
-        <form class="account-form" aria-label="Демонстрационная форма входа">
-          <label class="account-field">Электронная почта
-            <input type="email" placeholder="you@example.com" autocomplete="email">
-          </label>
-          <label class="account-field">Пароль
-            <input type="password" placeholder="Введи пароль" autocomplete="current-password">
-          </label>
-          <div class="account-actions">
-            <button class="account-primary" type="button">Войти в аккаунт</button>
-            <button class="account-link" type="button">Забыл(а) пароль?</button>
+        <div id="accountSignedOut">
+          <div class="account-tabs" aria-label="Раздел аккаунта">
+            <button class="account-tab active" id="accountLoginTab" type="button" aria-pressed="true">Войти</button>
+            <button class="account-tab" id="accountSignupTab" type="button" aria-pressed="false">Создать аккаунт</button>
           </div>
-        </form>
-        <div class="account-divider">или</div>
-        <button class="account-secondary" type="button">Продолжить с помощью Google</button>
-        <div class="account-note">♡ Пока это только предварительный макет: кнопки и поля показаны для знакомства с дизайном и ещё не выполняют вход или регистрацию.</div>
+          <form class="account-form" id="accountForm" aria-label="Вход или регистрация">
+            <label class="account-field">Электронная почта
+              <input id="accountEmail" type="email" placeholder="you@example.com" autocomplete="email" required>
+            </label>
+            <label class="account-field">Пароль
+              <input id="accountPassword" type="password" placeholder="Введи пароль" autocomplete="current-password" minlength="6" required>
+            </label>
+            <div class="account-actions">
+              <button class="account-primary" id="accountSubmit" type="submit">Войти в аккаунт</button>
+              <button class="account-link" id="accountReset" type="button">Забыл(а) пароль?</button>
+            </div>
+          </form>
+          <p id="accountStatus" class="account-note" role="status" aria-live="polite">♡ Войди или создай личный аккаунт splim.</p>
+        </div>
+        <div id="accountSignedIn" hidden>
+          <p class="account-note" id="accountWelcome">Ты вошла в свой аккаунт ♡</p>
+          <button class="account-secondary" id="accountSignOut" type="button">Выйти из аккаунта</button>
+        </div>
+        <div class="account-note">♡ Регистрация требует подтверждения электронной почты. Данные планера пока остаются на этом устройстве — облачная синхронизация будет подключена отдельным этапом.</div>
       </section>
       <section class="panel settings-panel">
         <h2>Внешний вид</h2>
@@ -565,6 +570,110 @@ body[data-mode="light"] #taskRepeat option{
    </div>
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+/* splim account authentication */
+(function(){
+ const SUPABASE_URL='https://jbzmvuxlmsawipolidfb.supabase.co';
+ const SUPABASE_PUBLISHABLE_KEY='sb_publishable_sjL-6p2W0yoT_ZU7E26-zQ_2ccqMs3C';
+ const client=window.supabase&&window.supabase.createClient
+  ? window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY)
+  : null;
+ const loginTab=document.getElementById('accountLoginTab');
+ const signupTab=document.getElementById('accountSignupTab');
+ const form=document.getElementById('accountForm');
+ const email=document.getElementById('accountEmail');
+ const password=document.getElementById('accountPassword');
+ const submit=document.getElementById('accountSubmit');
+ const reset=document.getElementById('accountReset');
+ const status=document.getElementById('accountStatus');
+ const signedOut=document.getElementById('accountSignedOut');
+ const signedIn=document.getElementById('accountSignedIn');
+ const welcome=document.getElementById('accountWelcome');
+ let mode='login';
+ function say(message,isError){
+  if(!status)return;
+  status.textContent=message;
+  status.classList.toggle('account-status-error',!!isError);
+ }
+ function setMode(next){
+  mode=next;
+  loginTab.classList.toggle('active',mode==='login');
+  signupTab.classList.toggle('active',mode==='signup');
+  loginTab.setAttribute('aria-pressed',String(mode==='login'));
+  signupTab.setAttribute('aria-pressed',String(mode==='signup'));
+  submit.textContent=mode==='login'?'Войти в аккаунт':'Создать аккаунт';
+  password.autocomplete=mode==='login'?'current-password':'new-password';
+  reset.hidden=mode!=='login';
+  say(mode==='login'?'♡ Войди в свой аккаунт splim.':'♡ После регистрации мы отправим письмо для подтверждения почты.');
+ }
+ function showSession(session){
+  const user=session&&session.user;
+  signedOut.hidden=!!user;
+  signedIn.hidden=!user;
+  if(user) welcome.textContent='Ты вошла как '+(user.email||'пользователь')+' ♡';
+ }
+ if(!client){
+  say('Не удалось загрузить модуль авторизации. Обнови страницу и попробуй снова.',true);
+  submit.disabled=true;
+  return;
+ }
+ loginTab.addEventListener('click',()=>setMode('login'));
+ signupTab.addEventListener('click',()=>setMode('signup'));
+ form.addEventListener('submit',async function(event){
+  event.preventDefault();
+  const mail=email.value.trim();
+  const pass=password.value;
+  if(!mail||!pass){say('Заполни электронную почту и пароль.',true);return;}
+  submit.disabled=true;
+  submit.textContent=mode==='login'?'Входим…':'Создаём аккаунт…';
+  try{
+   if(mode==='signup'){
+    const result=await client.auth.signUp({
+     email:mail,password:pass,
+     options:{emailRedirectTo:'https://hiilwss.github.io/splim/'}
+    });
+    if(result.error)throw result.error;
+    if(result.data.session)showSession(result.data.session);
+    else say('Почти готово! Проверь почту и перейди по ссылке подтверждения, чтобы активировать аккаунт ♡');
+   }else{
+    const result=await client.auth.signInWithPassword({email:mail,password:pass});
+    if(result.error)throw result.error;
+    showSession(result.data.session);
+    say('Ты успешно вошла в splim ♡');
+   }
+  }catch(error){
+   say(error&&error.message?error.message:'Не удалось выполнить запрос. Попробуй ещё раз.',true);
+  }finally{
+   submit.disabled=false;
+   submit.textContent=mode==='login'?'Войти в аккаунт':'Создать аккаунт';
+  }
+ });
+ reset.addEventListener('click',async function(){
+  const mail=email.value.trim();
+  if(!mail){say('Сначала введи электронную почту — на неё придёт ссылка для сброса пароля.',true);email.focus();return;}
+  reset.disabled=true;
+  try{
+   const result=await client.auth.resetPasswordForEmail(mail,{redirectTo:'https://hiilwss.github.io/splim/'});
+   if(result.error)throw result.error;
+   say('Письмо для восстановления пароля отправлено. Проверь входящие и папку «Спам» ♡');
+  }catch(error){say(error&&error.message?error.message:'Не удалось отправить письмо для сброса пароля.',true);}
+  finally{reset.disabled=false;}
+ });
+ document.getElementById('accountSignOut').addEventListener('click',async function(){
+  const result=await client.auth.signOut();
+  if(result.error){welcome.textContent='Не удалось выйти: '+result.error.message;return;}
+  showSession(null);
+  setMode('login');
+ });
+ client.auth.onAuthStateChange((_event,session)=>showSession(session));
+ client.auth.getSession().then(({data,error})=>{
+  if(error){say(error.message,true);return;}
+  showSession(data.session);
+ });
+ setMode('login');
+})();
+
+</script>
 <script>
 const $=s=>document.querySelector(s);
 const root=document.documentElement;
