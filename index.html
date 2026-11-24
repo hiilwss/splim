@@ -504,7 +504,7 @@ body.auth-pending #wallpaperLayer,body.gate-locked #wallpaperLayer{filter:blur(1
       </section>
       <section class="panel settings-panel wallpaper-panel">
         <h2>Мои обои</h2>
-        <p>Выбери фотографию из галереи и настрой мягкость фона. Изображение хранится только в этом браузере на твоём устройстве.</p>
+        <p>Выбери фотографию из галереи и настрой мягкость фона. Войди в аккаунт, чтобы обои сохранялись в личном облаке и появлялись на других устройствах.</p>
         <div class="wallpaper-actions">
           <label class="pill wallpaper-upload" for="wallpaperInput">Выбрать фото</label>
           <input id="wallpaperInput" type="file" accept="image/*" hidden>
@@ -768,7 +768,7 @@ body.auth-pending #wallpaperLayer,body.gate-locked #wallpaperLayer{filter:blur(1
 
 const $=s=>document.querySelector(s);
 const root=document.documentElement;
-const SPLIM_SYNC_KEYS=['pinkPlannerTasks','splimNotes','splimGratitudeEntries','splimHabits','splimTodoItems','pinkPlannerSettings','pinkPlannerTheme','pinkPlannerMode','splimWallpaperBlur'];
+const SPLIM_SYNC_KEYS=['pinkPlannerTasks','splimNotes','splimGratitudeEntries','splimHabits','splimTodoItems','pinkPlannerSettings','pinkPlannerTheme','pinkPlannerMode','splimWallpaperBlur','splimWallpaperPath'];
 const syncStatus=$('#syncStatus');
 let syncUser=null,syncReady=false,syncTimer=null,syncBusy=false,syncQueued=false,syncLoading=false;
 let syncChannel=null;
@@ -865,14 +865,14 @@ async function syncAccountData(user){
   if(error)throw error;
   const local=readLocalSnapshot(),cloudStorage=row&&row.data&&typeof row.data==='object'&&row.data.storage&&typeof row.data.storage==='object'?row.data.storage:{};
   if(!Object.keys(cloudStorage).length){
-   await writeCloudSnapshot(user);syncReady=true;startRealtime(user);
+   await writeCloudSnapshot(user);syncReady=true;await syncWallpaperForUser(user);startRealtime(user);
    setSyncStatus(hasUsefulLocalData(local)?'♡ Твои записи с этого устройства перенесены в облако.':'♡ Облачное хранилище аккаунта готово.');return;
   }
   if(!snapshotsEqual(local.storage,cloudStorage)&&hasUsefulLocalData(local)){
    const backupKey='splimLocalBackup_'+user.id;
    if(!localStorage.getItem(backupKey))nativeSetItem.call(localStorage,backupKey,JSON.stringify({savedAt:new Date().toISOString(),storage:local.storage}));
   }
-  const changed=await applyCloudSnapshot(cloudStorage);syncReady=true;
+  const changed=await applyCloudSnapshot(cloudStorage);syncReady=true;await syncWallpaperForUser(user);
   if(changed){setSyncStatus('♡ Загружены записи из твоего облачного профиля. Обновляем планер…');setTimeout(()=>location.reload(),150);return;}
   startRealtime(user);
   setSyncStatus('♡ Все записи синхронизированы с твоим аккаунтом.');
@@ -912,6 +912,52 @@ async function clearWallpaperData(){
  await new Promise((resolve,reject)=>{const tx=db.transaction('wallpapers','readwrite');tx.objectStore('wallpapers').delete('background');tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});
  db.close();
 }
+function wallpaperDataUrlToBlob(dataUrl){
+ const match=String(dataUrl).match(/^data:(image\\/(?:jpeg|png|webp));base64,([\\s\\S]+)$/i);
+ if(!match)throw new Error('Поддерживаются только JPEG, PNG и WebP.');
+ const binary=atob(match[2]),bytes=new Uint8Array(binary.length);
+ for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
+ return new Blob([bytes],{type:match[1].toLowerCase()});
+}
+function wallpaperBlobToDataUrl(blob){
+ return new Promise((resolve,reject)=>{
+  const reader=new FileReader();reader.onload=()=>resolve(reader.result);
+  reader.onerror=()=>reject(new Error('Не удалось прочитать облачные обои.'));
+  reader.readAsDataURL(blob);
+ });
+}
+function wallpaperExtension(type){
+ return type==='image/png'?'png':type==='image/webp'?'webp':'jpg';
+}
+async function uploadWallpaperToCloud(dataUrl,user){
+ const client=window.splimSupabase;if(!client||!user)throw new Error('Войди в аккаунт для облачной загрузки.');
+ const blob=wallpaperDataUrlToBlob(dataUrl),path=user.id+'/wallpaper.'+wallpaperExtension(blob.type);
+ const {error}=await client.storage.from('user-wallpapers').upload(path,blob,{upsert:true,contentType:blob.type,cacheControl:'3600'});
+ if(error)throw error;
+ const previous=localStorage.getItem('splimWallpaperPath');
+ localStorage.setItem('splimWallpaperPath',path);
+ if(previous&&previous!==path){const removed=await client.storage.from('user-wallpapers').remove([previous]);if(removed.error)console.warn('Не удалось удалить предыдущую версию обоев:',removed.error.message);}
+ return path;
+}
+async function syncWallpaperForUser(user){
+ if(!user||!window.splimSupabase)return;
+ const client=window.splimSupabase;
+ let path=localStorage.getItem('splimWallpaperPath')||'';
+ if(path){
+  const {data,error}=await client.storage.from('user-wallpapers').download(path);
+  if(error)throw error;
+  const dataUrl=await wallpaperBlobToDataUrl(data);
+  await saveWallpaperData(dataUrl);setWallpaper(dataUrl);
+  wallpaperStatus.textContent='♡ Обои загружены из облака и доступны на этом устройстве.';
+  return;
+ }
+ const local=await readWallpaperData();
+ if(local){
+  const uploaded=await uploadWallpaperToCloud(local,user);
+  wallpaperStatus.textContent='♡ Твои прежние обои перенесены в личное облако!';
+  return uploaded;
+ }
+}
 function setWallpaper(data){
  if(data){
   wallpaperLayer.style.backgroundImage='url("'+data+'")';
@@ -939,20 +985,32 @@ function setWallpaperBlur(value){
 wallpaperInput.addEventListener('change',async()=>{
  const file=wallpaperInput.files&&wallpaperInput.files[0];
  if(!file)return;
- if(!file.type.startsWith('image/')){wallpaperStatus.textContent='Пожалуйста, выбери изображение.';return;}
+ if(!['image/jpeg','image/png','image/webp'].includes(file.type)){wallpaperStatus.textContent='Выбери изображение в формате JPEG, PNG или WebP.';wallpaperInput.value='';return;}
  if(file.size>12*1024*1024){wallpaperStatus.textContent='Файл слишком большой. Выбери фото до 12 МБ.';wallpaperInput.value='';return;}
  const reader=new FileReader();
  reader.onload=async()=>{
-  try{await saveWallpaperData(reader.result);setWallpaper(reader.result);wallpaperStatus.textContent='Обои сохранены на этом устройстве ♡';}
-  catch(e){wallpaperStatus.textContent='Не удалось сохранить фото. Попробуй изображение меньшего размера.';}
+  try{
+   await saveWallpaperData(reader.result);setWallpaper(reader.result);
+   if(window.splimCurrentUser){
+    await uploadWallpaperToCloud(reader.result,window.splimCurrentUser);
+    wallpaperStatus.textContent='♡ Обои сохранены в личном облаке и на этом устройстве!';
+   }else wallpaperStatus.textContent='Обои сохранены на этом устройстве. Войди в аккаунт, чтобы загрузить их в облако ♡';
+  }catch(e){wallpaperStatus.textContent='Фото сохранено локально, но облачная загрузка не удалась: '+(e.message||'проверь bucket и политики доступа')+'.';}
  };
  reader.onerror=()=>{wallpaperStatus.textContent='Не удалось прочитать это изображение.';};
  reader.readAsDataURL(file);
 });
 wallpaperBlur.addEventListener('input',()=>setWallpaperBlur(wallpaperBlur.value));
 $('#removeWallpaper').addEventListener('click',async()=>{
- try{await clearWallpaperData();setWallpaper('');wallpaperStatus.textContent='Стандартный фон восстановлен ♡';}
- catch(e){wallpaperStatus.textContent='Не удалось удалить обои.';}
+ try{
+  const path=localStorage.getItem('splimWallpaperPath');
+  if(path&&window.splimCurrentUser){
+   const {error}=await window.splimSupabase.storage.from('user-wallpapers').remove([path]);
+   if(error)throw error;
+  }
+  localStorage.removeItem('splimWallpaperPath');
+  await clearWallpaperData();setWallpaper('');wallpaperStatus.textContent='Стандартный фон восстановлен ♡';
+ }catch(e){wallpaperStatus.textContent='Не удалось удалить обои из облака: '+(e.message||'ошибка доступа')+'. Локальная копия сохранена.';}
 });
 (async()=>{
  try{const saved=await readWallpaperData();if(saved)setWallpaper(saved);}
