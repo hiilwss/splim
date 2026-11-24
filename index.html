@@ -1559,7 +1559,10 @@ function progressDays(){
 }
 function progressDateLabel(d,opts={day:'numeric',month:'short'}){return d.toLocaleDateString('ru-RU',opts);}
 function progressPlannerData(days){
- let total=0,done=0;const daily=days.map(d=>{const items=getTasksForDate(d);total+=items.length;const count=items.filter(x=>x.done).length;done+=count;return count;});return {total,done,rate:total?Math.round(done/total*100):0,daily};
+ let total=0,done=0;const dayKeys=new Set(days.map(progressDateKey));
+ const daily=days.map(d=>{const k=progressDateKey(d),items=getTasksForDate(d);total+=items.length;const count=items.filter(x=>{const t=x.task;if(t.repeat&&t.repeat!=='none')return (t.doneDates||[]).includes(k);if(t.completedAt)return String(t.completedAt).slice(0,10)===k;return !!t.done&&x.sourceKey===k;}).length;done+=count;return count;});
+ Object.entries(tasks).forEach(([sourceKey,items])=>(items||[]).forEach(t=>{if(t.repeat&&t.repeat!=='none')(t.doneDates||[]).forEach(k=>{if(dayKeys.has(k)&&!days.some(d=>progressDateKey(d)===k&&getTasksForDate(d).some(x=>x.task===t)))done++;});}));
+ return {total,done,rate:total?Math.round(done/total*100):0,daily};
 }
 function progressTodoData(days){
  const keys=new Set(days.map(progressDateKey));const dated=todoItems.filter(x=>x.done&&x.completedAt&&keys.has(String(x.completedAt).slice(0,10)));const total=todoItems.length,legacy=todoItems.filter(x=>x.done&&!x.completedAt).length;const daily=days.map(d=>todoItems.filter(x=>x.done&&x.completedAt&&String(x.completedAt).slice(0,10)===progressDateKey(d)).length);return {done:dated.length,total,rate:total?Math.round(todoItems.filter(x=>x.done).length/total*100):0,daily,legacy};
@@ -1590,15 +1593,17 @@ function progressAggregate(days){
   else if(id==='gratitude')yes=!!gratitudeEntries[k];
   else if(id==='notes')yes=notes.some(x=>progressDateKey(new Date(x.createdAt))===k);
   if(yes)active.add(k);
- });});
+ }));
  const total=days.reduce((n,d)=>n+getTasksForDate(d).filter(x=>x.done).length,0)+data[0].done+data[2].done+data[6].total+data[7].total;
  return {active:active.size,total,notes:data[8].total,workouts:data[5].workouts,water:data[3].total,sleep:data[4].average};
 }
 function progressRenderBars(container,values,days){
- container.innerHTML='';const max=Math.max(1,...values);
- values.forEach((v,i)=>{const col=document.createElement('div');col.className='progress-bar-col';const value=document.createElement('span');value.className='progress-bar-value';value.textContent=v?Number(v).toLocaleString('ru-RU'):'';
- const track=document.createElement('div');track.className='progress-bar-track';const fill=document.createElement('div');fill.className='progress-bar-fill';fill.style.height=(v?Math.max(5,Math.round(v/max*100)):0)+'%';track.append(fill);
- const label=document.createElement('span');label.className='progress-bar-label';label.textContent=progressDateLabel(days[i],{weekday:'short',day:'numeric'}).replace('.','');col.append(value,track,label);container.append(col);});
+ container.innerHTML='';let bars=values.map((value,i)=>({value,day:days[i],label:progressDateLabel(days[i],{weekday:'short',day:'numeric'}).replace('.','')}));
+ if(progressPeriod==='month'&&bars.length>10){const grouped=[];bars.forEach(item=>{const week=Math.floor((item.day.getDate()-1)/7);if(!grouped[week])grouped[week]={value:0,day:item.day,label:(week+1)+' нед.'};grouped[week].value+=Number(item.value)||0;});bars=grouped;}
+ const max=Math.max(1,...bars.map(x=>x.value));
+ bars.forEach(item=>{const col=document.createElement('div');col.className='progress-bar-col';const value=document.createElement('span');value.className='progress-bar-value';value.textContent=item.value?Number(item.value).toLocaleString('ru-RU'):'';
+ const track=document.createElement('div');track.className='progress-bar-track';const fill=document.createElement('div');fill.className='progress-bar-fill';fill.style.height=(item.value?Math.max(5,Math.round(item.value/max*100)):0)+'%';track.append(fill);
+ const label=document.createElement('span');label.className='progress-bar-label';label.textContent=item.label;col.append(value,track,label);container.append(col);});
 }
 function progressRenderDetail(days){
  const def=progressDefinitions.find(x=>x.id===progressCategory)||progressDefinitions[0],data=progressCategoryData(def.id,days);
