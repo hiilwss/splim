@@ -400,7 +400,7 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
   <div class="app-main">
    <div class="wrap">
     <header class="top home-title">
-      <h1>Твоё пространство♡</h1>
+      <h1 id="homeGreeting">Твоё пространство♡</h1>
       <div class="home-title-flower"><svg class="splim-symbol" viewBox="0 0 100 100" role="img" aria-label="Цветочек из блокнота" xmlns="http://www.w3.org/2000/svg">
   <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
     <path d="M50 49 C49 59 49 64 50 71" stroke-width="4"/>
@@ -473,13 +473,10 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
           <p class="profile-status" id="profileStatus" role="status" aria-live="polite">♡ Загружаем профиль…</p>
         </div>
       </section>
-    </section>
-    <section class="page settings-page hidden" id="settingsPage">
-      <header class="settings-heading"><div class="eyebrow">ТВОЙ УЮТНЫЙ УГОЛОК</div><h1>Настройки</h1><p>Настрой splim под своё настроение ♡</p></header>
       <section class="panel settings-panel account-panel">
         <div class="account-intro">
           <div class="account-avatar" aria-hidden="true">♡</div>
-          <div><h2>Мой аккаунт</h2><p>Твоё личное пространство — только для тебя.</p></div>
+          <div><h2>Мой аккаунт</h2><p>Управляй входом, электронной почтой и безопасностью своего аккаунта.</p></div>
         </div>
         <div id="accountSignedOut">
           <div class="account-tabs" aria-label="Раздел аккаунта">
@@ -511,10 +508,23 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
         <div id="accountSignedIn" hidden>
           <p class="account-note" id="accountWelcome">Ты вошла в свой аккаунт ♡</p>
           <p class="account-note" id="syncStatus" role="status" aria-live="polite">♡ Подключаем облачное хранилище…</p>
+          <form class="account-form account-password-form" id="accountChangePasswordForm">
+            <label class="account-field">Новый пароль
+              <input id="accountChangePassword" type="password" minlength="6" autocomplete="new-password" required placeholder="Не менее 6 символов">
+            </label>
+            <label class="account-field">Повтори новый пароль
+              <input id="accountConfirmPassword" type="password" minlength="6" autocomplete="new-password" required placeholder="Повтори пароль">
+            </label>
+            <button class="account-primary" type="submit">Изменить пароль ♡</button>
+          </form>
+          <p class="account-note" id="accountPasswordStatus" role="status" aria-live="polite">♡ Используй не менее 6 символов.</p>
           <button class="account-secondary" id="accountSignOut" type="button">Выйти из аккаунта</button>
         </div>
-        <div class="account-note">♡ Регистрация требует подтверждения электронной почты. Записи и настройки синхронизируются с твоим личным аккаунтом. Обои пока хранятся на устройстве — их облачное хранение подключим отдельно.</div>
+        <div class="account-note">♡ Регистрация требует подтверждения электронной почты. Записи и настройки синхронизируются с твоим личным аккаунтом. Твои записи, настройки и обои синхронизируются с личным облаком.</div>
       </section>
+    </section>
+    <section class="page settings-page hidden" id="settingsPage">
+      <header class="settings-heading"><div class="eyebrow">ТВОЙ УЮТНЫЙ УГОЛОК</div><h1>Настройки</h1><p>Настрой splim под своё настроение ♡</p></header>
       <section class="panel settings-panel">
         <h2>Внешний вид</h2>
         <p>Выбери любимую палитру и режим отображения. Изменения сохраняются автоматически.</p>
@@ -690,7 +700,7 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
  function openAccount(nextMode){
   try{localStorage.removeItem('splimGuestMode');}catch(e){}
   unlockPlanner();
-  if(typeof showPage==='function')showPage('settings');
+  if(typeof showPage==='function')showPage('profile');
   setMode(nextMode);
   email.focus();
  }
@@ -770,6 +780,24 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
   try{const result=await client.auth.updateUser({password:newPassword.value});if(result.error)throw result.error;recovery.hidden=true;showSession((await client.auth.getSession()).data.session);say('Пароль успешно изменён. Теперь можно войти с новым паролем ♡');}
   catch(error){say(error&&error.message?error.message:'Не удалось изменить пароль.',true);}
   finally{button.disabled=false;button.textContent='Сохранить новый пароль';}
+ });
+ const changePasswordForm=document.getElementById('accountChangePasswordForm');
+ changePasswordForm.addEventListener('submit',async function(event){
+  event.preventDefault();
+  const nextPassword=document.getElementById('accountChangePassword').value;
+  const confirmPassword=document.getElementById('accountConfirmPassword').value;
+  const passwordStatus=document.getElementById('accountPasswordStatus');
+  const button=changePasswordForm.querySelector('button[type="submit"]');
+  if(nextPassword.length<6){passwordStatus.textContent='Пароль должен содержать не менее 6 символов.';return;}
+  if(nextPassword!==confirmPassword){passwordStatus.textContent='Пароли не совпадают. Проверь оба поля.';return;}
+  button.disabled=true;button.textContent='Изменяем…';
+  try{
+   const result=await client.auth.updateUser({password:nextPassword});
+   if(result.error)throw result.error;
+   changePasswordForm.reset();
+   passwordStatus.textContent='♡ Пароль успешно изменён!';
+  }catch(error){passwordStatus.textContent='Не удалось изменить пароль: '+(error.message||'попробуй ещё раз');}
+  finally{button.disabled=false;button.textContent='Изменить пароль ♡';}
  });
  document.getElementById('accountSignOut').addEventListener('click',async function(){
   try{localStorage.removeItem('splimGuestMode');}catch(e){}
@@ -1363,16 +1391,23 @@ if(window.splimCurrentUser)syncAccountData(window.splimCurrentUser);
  const fileInput=byId('profileAvatarFile'),avatar=byId('profileAvatar'),avatarImage=byId('profileAvatarImage');
  const removeButton=byId('profileRemoveAvatar'),status=byId('profileStatus');
  let currentPath=null,selectedFile=null,profileUserId=null;
+ window.splimUpdateGreeting=function(name){
+  const heading=byId('homeGreeting');if(!heading)return;
+  const hour=new Date().getHours();
+  const greeting=hour>=5&&hour<12?'Доброе утро':hour>=12&&hour<18?'Добрый день':hour>=18&&hour<23?'Добрый вечер':'Доброй ночи';
+  const cleanName=String(name||'').trim();
+  heading.textContent=cleanName?greeting+', '+cleanName+'! ♡':'Твоё пространство♡';
+ };
  function say(message,error=false){if(!status)return;status.textContent=message;status.classList.toggle('error',!!error);}
  function showAvatar(url){if(url){avatarImage.src=url;avatar.classList.add('has-image');removeButton.hidden=false;}else{avatarImage.removeAttribute('src');avatar.classList.remove('has-image');removeButton.hidden=true;}}
  async function refresh(){
   const user=window.splimCurrentUser;signedOut.hidden=!!user;signedIn.hidden=!user;
-  if(!user){profileUserId=null;currentPath=null;selectedFile=null;showAvatar(null);return;}
+  if(!user){profileUserId=null;currentPath=null;selectedFile=null;showAvatar(null);if(window.splimUpdateGreeting)window.splimUpdateGreeting('');return;}
   if(profileUserId===user.id&&status.textContent.includes('сохранены'))return;
   profileUserId=user.id;selectedFile=null;fileInput.value='';say('♡ Загружаем профиль…');
   try{
    const {data,error}=await client.from('profiles').select('display_name,avatar_url').eq('id',user.id).single();if(error)throw error;
-   nameInput.value=data.display_name||'';currentPath=data.avatar_url||null;
+   nameInput.value=data.display_name||'';if(window.splimUpdateGreeting)window.splimUpdateGreeting(data.display_name||'');currentPath=data.avatar_url||null;
    if(currentPath){const {data:signed,error:signedError}=await client.storage.from('user-avatars').createSignedUrl(currentPath,3600);if(signedError)throw signedError;showAvatar(signed.signedUrl);}else showAvatar(null);
    say('♡ Профиль загружен. Изменения можно сохранить в любой момент.');
   }catch(error){say('Не удалось загрузить профиль: '+(error.message||'ошибка соединения'),true);}
@@ -1387,7 +1422,7 @@ if(window.splimCurrentUser)syncAccountData(window.splimCurrentUser);
     const {error:uploadError}=await client.storage.from('user-avatars').upload(nextPath,selectedFile,{upsert:true,contentType:selectedFile.type,cacheControl:'3600'});if(uploadError)throw uploadError;}
    say('♡ Сохраняем имя и настройки профиля…');
    const {error}=await client.from('profiles').update({display_name:displayName,avatar_url:nextPath}).eq('id',user.id);if(error)throw error;
-   currentPath=nextPath;selectedFile=null;
+   currentPath=nextPath;selectedFile=null;if(window.splimUpdateGreeting)window.splimUpdateGreeting(displayName);
    if(currentPath){const {data:signed,error:signedError}=await client.storage.from('user-avatars').createSignedUrl(currentPath,3600);if(signedError)throw signedError;showAvatar(signed.signedUrl);}else showAvatar(null);
    say('♡ Готово! Имя и аватар сохранены в твоём личном профиле.');
   }catch(error){say('Не удалось сохранить: '+(error.message||'проверь настройки облачного хранилища'),true);}
@@ -1409,7 +1444,7 @@ if(window.splimCurrentUser)syncAccountData(window.splimCurrentUser);
   }catch(error){say('Не удалось удалить аватар: '+(error.message||'ошибка'),true);}finally{removeButton.disabled=false;}
  });
  byId('profileSave').addEventListener('click',save);
- byId('profileGoAccount').addEventListener('click',()=>showPage('settings'));
+ byId('profileGoAccount').addEventListener('click',()=>{showPage('profile');document.getElementById('accountEmail')?.focus();});
  window.splimProfileRefresh=refresh;
  if(client){client.auth.onAuthStateChange(()=>setTimeout(refresh,0));client.auth.getSession().then(({data})=>{if(data&&data.session){window.splimCurrentUser=data.session.user;refresh();}else refresh();});}
  else{signedOut.hidden=false;signedIn.hidden=true;}
