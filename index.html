@@ -1026,6 +1026,8 @@ $('#newAffirmation').addEventListener('click',()=>{
 function showPage(page){
  const validPage=['home','planner','todo','habits','gratitude','notes','settings'].includes(page)?page:'home';
  document.body.dataset.page=validPage;
+ // Запоминаем раздел отдельно на каждом устройстве — этот ключ не отправляется в облако.
+ try{localStorage.setItem('splimActivePage',validPage);}catch(e){}
  $('#homePage').classList.toggle('hidden',validPage!=='home');
  $('#plannerPage').classList.toggle('hidden',validPage!=='planner');
  $('#todoPage').classList.toggle('hidden',validPage!=='todo');
@@ -1264,6 +1266,10 @@ $('#prev').onclick=()=>{shown=new Date(shown.getFullYear(),shown.getMonth()-1,1)
 $('#next').onclick=()=>{shown=new Date(shown.getFullYear(),shown.getMonth()+1,1);render()};
 $('#todayBtn').onclick=()=>{selected=new Date(today);shown=new Date(today.getFullYear(),today.getMonth(),1);render()};
 render();
+// Возвращаем последний открытый раздел после перезагрузки или получения облачных изменений.
+let savedPage='home';
+try{savedPage=localStorage.getItem('splimActivePage')||'home';}catch(e){}
+showPage(savedPage);
 if(window.splimCurrentUser)syncAccountData(window.splimCurrentUser);
 </script>
 </body>
