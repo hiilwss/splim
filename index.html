@@ -120,28 +120,60 @@ body[data-mode="dark"] h1{color:var(--pink2)}
 <script>
 const $=s=>document.querySelector(s);
 const root=document.documentElement;
-const themeSelect=$('#themeChoice');
+const themeChoice=$('#themeChoice');
 const modeBtn=$('#modeBtn');
-let savedTheme='pink',savedMode='light';
-try{savedTheme=localStorage.getItem('pinkPlannerTheme')||'pink';savedMode=localStorage.getItem('pinkPlannerMode')||'light'}catch(e){}
-root.dataset.theme=savedTheme;root.dataset.mode=savedMode;themeSelect.value=savedTheme;
-function updateModeButton(){modeBtn.textContent=root.dataset.mode==='dark'?'☀️ Светлая тема':'☾ Тёмная тема'}
-updateModeButton();
-themeSelect.addEventListener('change',()=>{root.dataset.theme=themeSelect.value;try{localStorage.setItem('pinkPlannerTheme',themeSelect.value)}catch(e){}});
-modeBtn.addEventListener('click',()=>{root.dataset.mode=root.dataset.mode==='dark'?'light':'dark';try{localStorage.setItem('pinkPlannerMode',root.dataset.mode)}catch(e){}updateModeButton()});
+const paletteSelect=$('#paletteSelect');
+const modeSelect=$('#modeSelect');
 
-
-const paletteSelect=$('#paletteSelect'), modeSelect=$('#modeSelect');
-function applyTheme(palette,mode){
- document.body.dataset.palette=palette;document.body.dataset.mode=mode;
- paletteSelect.value=palette;modeSelect.value=mode;
- try{localStorage.setItem('pinkPlannerTheme',JSON.stringify({palette,mode}))}catch(e){}
+function readThemeSettings(){
+  try{
+    const current=JSON.parse(localStorage.getItem('pinkPlannerSettings')||'null');
+    if(current && typeof current==='object') return current;
+  }catch(e){}
+  let legacyPalette='pink', legacyMode='light';
+  try{
+    const old=localStorage.getItem('pinkPlannerTheme');
+    if(old){
+      try{
+        const parsed=JSON.parse(old);
+        if(typeof parsed==='string') legacyPalette=parsed;
+        else if(parsed && typeof parsed==='object'){
+          legacyPalette=parsed.palette||legacyPalette;
+          legacyMode=parsed.mode||legacyMode;
+        }
+      }catch(e){legacyPalette=old;}
+    }
+    legacyMode=localStorage.getItem('pinkPlannerMode')||legacyMode;
+  }catch(e){}
+  return {palette:legacyPalette,mode:legacyMode};
 }
-let savedTheme={};
-try{savedTheme=JSON.parse(localStorage.getItem('pinkPlannerTheme')||'{}')||{}}catch(e){}
-applyTheme(savedTheme.palette||'pink',savedTheme.mode||'light');
+
+function applyTheme(palette,mode){
+  const validPalettes=['pink','peach','lavender','mint','sky'];
+  if(!validPalettes.includes(palette)) palette='pink';
+  if(mode!=='dark' && mode!=='light') mode='light';
+
+  // Both the root and body are kept in sync for all theme styles.
+  root.dataset.theme=palette;
+  root.dataset.mode=mode;
+  document.body.dataset.palette=palette;
+  document.body.dataset.mode=mode;
+
+  themeChoice.value=palette;
+  paletteSelect.value=palette;
+  modeSelect.value=mode;
+  modeBtn.textContent=mode==='dark'?'☀️ Светлая тема':'☾ Тёмная тема';
+
+  try{localStorage.setItem('pinkPlannerSettings',JSON.stringify({palette,mode}));}catch(e){}
+}
+
+const initialTheme=readThemeSettings();
+applyTheme(initialTheme.palette||'pink',initialTheme.mode||'light');
+
+themeChoice.addEventListener('change',()=>applyTheme(themeChoice.value,modeSelect.value));
 paletteSelect.addEventListener('change',()=>applyTheme(paletteSelect.value,modeSelect.value));
 modeSelect.addEventListener('change',()=>applyTheme(paletteSelect.value,modeSelect.value));
+modeBtn.addEventListener('click',()=>applyTheme(paletteSelect.value,modeSelect.value==='dark'?'light':'dark'));
 
 const today=new Date(); today.setHours(0,0,0,0);
 let shown=new Date(today.getFullYear(),today.getMonth(),1), selected=new Date(today);
