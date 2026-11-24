@@ -717,10 +717,14 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
   if(user){
    try{localStorage.removeItem('splimGuestMode');}catch(e){}
    if(typeof window.splimSetThemeAccess==='function')window.splimSetThemeAccess(true);
+   if(typeof window.splimSetWallpaperAccess==='function')window.splimSetWallpaperAccess(true);
+   if(typeof window.splimUpdatePasswordAccess==='function')window.splimUpdatePasswordAccess(user);
    welcome.textContent='Ты вошла как '+(user.email||'пользователь')+' ♡';
    unlockPlanner();
   }else{
    if(typeof window.splimSetThemeAccess==='function')window.splimSetThemeAccess(false);
+   if(typeof window.splimSetWallpaperAccess==='function')window.splimSetWallpaperAccess(false);
+   if(typeof window.splimUpdatePasswordAccess==='function')window.splimUpdatePasswordAccess(null);
    let guest=false;try{guest=localStorage.getItem('splimGuestMode')==='true';}catch(e){}
    if(guest){if(typeof window.splimApplyGuestTheme==='function')window.splimApplyGuestTheme();unlockPlanner();}else lockPlanner();
   }
@@ -729,6 +733,8 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
  document.getElementById('gateGuest').addEventListener('click',()=>{
   try{localStorage.setItem('splimGuestMode','true');}catch(e){}
   if(typeof window.splimSetThemeAccess==='function')window.splimSetThemeAccess(false);
+  if(typeof window.splimSetWallpaperAccess==='function')window.splimSetWallpaperAccess(false);
+  if(typeof window.splimUpdatePasswordAccess==='function')window.splimUpdatePasswordAccess(null);
   if(typeof window.splimApplyGuestTheme==='function')window.splimApplyGuestTheme();
   unlockPlanner();
  });
@@ -790,12 +796,25 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
   finally{button.disabled=false;button.textContent='Сохранить новый пароль';}
  });
  const changePasswordForm=document.getElementById('accountChangePasswordForm');
+ const passwordStatus=document.getElementById('accountPasswordStatus');
+ window.splimUpdatePasswordAccess=function(user){
+  const verified=!!(user&&(user.email_confirmed_at||user.confirmed_at));
+  changePasswordForm.querySelectorAll('input,button').forEach(control=>control.disabled=!verified);
+  passwordStatus.textContent=verified?'♡ Почта подтверждена. Можно изменить пароль.':'♡ Подтверди электронную почту, чтобы получить возможность изменить пароль.';
+  changePasswordForm.hidden=!user;
+ };
  changePasswordForm.addEventListener('submit',async function(event){
   event.preventDefault();
   const nextPassword=document.getElementById('accountChangePassword').value;
   const confirmPassword=document.getElementById('accountConfirmPassword').value;
-  const passwordStatus=document.getElementById('accountPasswordStatus');
   const button=changePasswordForm.querySelector('button[type="submit"]');
+  try{
+   const {data:authData,error:authError}=await client.auth.getUser();
+   if(authError)throw authError;
+   if(!(authData.user&&(authData.user.email_confirmed_at||authData.user.confirmed_at))){
+    window.splimUpdatePasswordAccess(authData.user);return;
+   }
+  }catch(error){passwordStatus.textContent='Не удалось проверить подтверждение почты: '+(error.message||'ошибка');return;}
   if(nextPassword.length<6){passwordStatus.textContent='Пароль должен содержать не менее 6 символов.';return;}
   if(nextPassword!==confirmPassword){passwordStatus.textContent='Пароли не совпадают. Проверь оба поля.';return;}
   button.disabled=true;button.textContent='Изменяем…';
@@ -998,6 +1017,12 @@ async function uploadWallpaperToCloud(dataUrl,user){
  if(previous&&previous!==path){const removed=await client.storage.from('user-wallpapers').remove([previous]);if(removed.error)console.warn('Не удалось удалить предыдущую версию обоев:',removed.error.message);}
  return path;
 }
+window.splimSetWallpaperAccess=function(isAuthenticated){
+ const allowed=!!isAuthenticated;
+ wallpaperInput.disabled=!allowed;wallpaperBlur.disabled=!allowed;$('#removeWallpaper').disabled=!allowed;
+ const panel=wallpaperInput.closest('.wallpaper-panel');if(panel)panel.classList.toggle('guest-wallpaper-locked',!allowed);
+ if(!allowed){setWallpaper('');wallpaperStatus.textContent='♡ Обои доступны после входа или регистрации.';}
+};
 async function syncWallpaperForUser(user){
  if(!user||!window.splimSupabase)return;
  const client=window.splimSupabase;
@@ -1042,6 +1067,7 @@ function setWallpaperBlur(value){
  try{localStorage.setItem('splimWallpaperBlur',String(blur));}catch(e){}
 }
 wallpaperInput.addEventListener('change',async()=>{
+ if(!window.splimCurrentUser){wallpaperStatus.textContent='♡ Войди в аккаунт, чтобы установить обои.';wallpaperInput.value='';return;}
  const file=wallpaperInput.files&&wallpaperInput.files[0];
  if(!file)return;
  if(!['image/jpeg','image/png','image/webp'].includes(file.type)){wallpaperStatus.textContent='Выбери изображение в формате JPEG, PNG или WebP.';wallpaperInput.value='';return;}
@@ -1061,6 +1087,7 @@ wallpaperInput.addEventListener('change',async()=>{
 });
 wallpaperBlur.addEventListener('input',()=>setWallpaperBlur(wallpaperBlur.value));
 $('#removeWallpaper').addEventListener('click',async()=>{
+ if(!window.splimCurrentUser){wallpaperStatus.textContent='♡ Управление обоями доступно после входа.';return;}
  try{
   const path=localStorage.getItem('splimWallpaperPath');
   if(path&&window.splimCurrentUser){
@@ -1072,8 +1099,11 @@ $('#removeWallpaper').addEventListener('click',async()=>{
  }catch(e){wallpaperStatus.textContent='Не удалось удалить обои из облака: '+(e.message||'ошибка доступа')+'. Локальная копия сохранена.';}
 });
 (async()=>{
- try{const saved=await readWallpaperData();if(saved)setWallpaper(saved);}
- catch(e){wallpaperStatus.textContent='Хранилище фото недоступно в этом браузере.';}
+ try{
+  const guest=localStorage.getItem('splimGuestMode')==='true'&&!window.splimCurrentUser;
+  if(guest){setWallpaper('');wallpaperStatus.textContent='♡ Обои доступны после входа или регистрации.';}
+  else{const saved=await readWallpaperData();if(saved)setWallpaper(saved);}
+ }catch(e){wallpaperStatus.textContent='Хранилище фото недоступно в этом браузере.';}
  let blur=8;try{blur=Number(localStorage.getItem('splimWallpaperBlur')??8);}catch(e){}
  setWallpaperBlur(blur);
 })();
@@ -1111,6 +1141,7 @@ window.splimSetThemeAccess=function(isAuthenticated){
 };
 window.splimApplyGuestTheme=function(){
   try{localStorage.setItem('pinkPlannerSettings',JSON.stringify({palette:'lavender',mode:'light'}));}catch(e){}
+  if(typeof window.splimSetWallpaperAccess==='function')window.splimSetWallpaperAccess(false);
   applyTheme('lavender','light');
 };
 function applyTheme(palette,mode){
