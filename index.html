@@ -159,7 +159,6 @@ applyTheme(initialTheme.palette||'pink',initialTheme.mode||'light');
 
 paletteSelect.addEventListener('change',()=>applyTheme(paletteSelect.value,modeSelect.value));
 modeSelect.addEventListener('change',()=>applyTheme(paletteSelect.value,modeSelect.value));
-modeBtn.addEventListener('click',()=>applyTheme(paletteSelect.value,modeSelect.value==='dark'?'light':'dark'));
 
 const today=new Date(); today.setHours(0,0,0,0);
 let shown=new Date(today.getFullYear(),today.getMonth(),1), selected=new Date(today);
