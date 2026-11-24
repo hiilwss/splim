@@ -770,7 +770,7 @@ const $=s=>document.querySelector(s);
 const root=document.documentElement;
 const SPLIM_SYNC_KEYS=['pinkPlannerTasks','splimNotes','splimGratitudeEntries','splimHabits','splimTodoItems','pinkPlannerSettings','pinkPlannerTheme','pinkPlannerMode','splimWallpaperBlur'];
 const syncStatus=$('#syncStatus');
-let syncUser=null,syncReady=false,syncTimer=null,syncBusy=false;
+let syncUser=null,syncReady=false,syncTimer=null,syncBusy=false,syncQueued=false,syncLoading=false;
 const nativeSetItem=Storage.prototype.setItem;
 Storage.prototype.setItem=function(key,value){
  const result=nativeSetItem.call(this,key,value);
@@ -804,11 +804,11 @@ function queueCloudSave(){
  if(!syncUser||!syncReady)return;
  clearTimeout(syncTimer);
  syncTimer=setTimeout(async()=>{
-  if(syncBusy)return;
+  if(syncBusy){syncQueued=true;return;}
   syncBusy=true;
   try{await writeCloudSnapshot(syncUser);setSyncStatus('♡ Все записи сохранены в облаке. Синхронизация включена.');}
   catch(error){setSyncStatus('Не удалось синхронизировать: '+(error.message||'ошибка соединения')+'. Локальная копия сохранена.',true);}
-  finally{syncBusy=false;}
+  finally{syncBusy=false;if(syncQueued){syncQueued=false;queueCloudSave();}}
  },700);
 }
 async function applyCloudSnapshot(storage){
@@ -822,8 +822,8 @@ async function applyCloudSnapshot(storage){
 }
 async function syncAccountData(user){
  if(!user){syncUser=null;syncReady=false;clearTimeout(syncTimer);setSyncStatus('Войди в аккаунт, чтобы включить синхронизацию.');return;}
- if(syncUser&&syncUser.id===user.id&&syncReady)return;
- syncUser=user;syncReady=false;setSyncStatus('♡ Подключаем личное облачное хранилище…');
+ if(syncUser&&syncUser.id===user.id&&(syncReady||syncLoading))return;
+ syncUser=user;syncReady=false;syncLoading=true;setSyncStatus('♡ Подключаем личное облачное хранилище…');
  const client=window.splimSupabase;if(!client){setSyncStatus('Модуль облака не загрузился. Обнови страницу.',true);return;}
  try{
   const {data:row,error}=await client.from('user_data').select('data,updated_at').eq('user_id',user.id).maybeSingle();
@@ -841,6 +841,7 @@ async function syncAccountData(user){
   if(changed){setSyncStatus('♡ Загружены записи из твоего облачного профиля. Обновляем планер…');setTimeout(()=>location.reload(),150);return;}
   setSyncStatus('♡ Все записи синхронизированы с твоим аккаунтом.');
  }catch(error){syncReady=false;setSyncStatus('Ошибка синхронизации: '+(error.message||'проверь подключение и доступ к user_data')+'. Локальные записи не удалены.',true);}
+ finally{syncLoading=false;}
 }
 window.splimSyncSession=user=>{syncAccountData(user);};
 window.splimSyncNow=()=>queueCloudSave();
