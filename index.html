@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Розовый планер</title>
+<style>
+:root{--pink:#ec78a8;--pink2:#f8c8dc;--pale:#fff5f9;--ink:#593b4a;--muted:#a17d8d;--line:#f1dce5;--white:#fff;--bg1:#fff5f9;--bg2:#fde7f0;--panel:#ffffffd9;--cell:#fffafd;--accentText:#b84f7e}
+:root[data-theme="peach"]{--pink:#e99a72;--pink2:#f6d2bd;--pale:#fff7f1;--ink:#654739;--muted:#a88978;--line:#f1dfd4;--bg1:#fff7f1;--bg2:#fce7d8;--accentText:#bd704c}
+:root[data-theme="lavender"]{--pink:#a98bd9;--pink2:#d8c9ef;--pale:#f8f4ff;--ink:#4e4264;--muted:#9685ad;--line:#e7def2;--bg1:#f8f4ff;--bg2:#ece2fa;--accentText:#8061b2}
+:root[data-theme="mint"]{--pink:#75b9a5;--pink2:#c4e4d8;--pale:#f1fbf7;--ink:#3e5a50;--muted:#7e9f93;--line:#d9eee5;--bg1:#f1fbf7;--bg2:#dff3ea;--accentText:#4b917b}
+:root[data-theme="sky"]{--pink:#78a9d8;--pink2:#c7def3;--pale:#f2f8ff;--ink:#40566c;--muted:#8299ad;--line:#dce9f5;--bg1:#f2f8ff;--bg2:#e0effc;--accentText:#5487bb}
+:root[data-mode="dark"]{--ink:#f4e9ef;--muted:#c2a8b7;--line:#634b59;--bg1:#251d24;--bg2:#382833;--panel:#30252edc;--cell:#392b36;--pale:#30252e;--accentText:var(--pink)}
+:root[data-mode="dark"] body{color:var(--ink)}
+:root[data-mode="dark"] .panel{border-color:#493744;box-shadow:0 12px 35px #00000030}
+:root[data-mode="dark"] .day{background:var(--cell);border-color:var(--line);color:var(--ink)}
+:root[data-mode="dark"] .task{background:var(--cell);border-color:var(--line)}
+:root[data-mode="dark"] input[type=text],:root[data-mode="dark"] input[type=time],:root[data-mode="dark"] select{background:var(--cell);color:var(--ink);border-color:var(--line)}
+:root[data-mode="dark"] .empty{background:var(--cell);color:var(--muted)}
+:root[data-mode="dark"] .ghost,:root[data-mode="dark"] .nav button{background:var(--cell);color:var(--ink);border-color:var(--line)}
+:root[data-mode="dark"] .day.out{opacity:.3}
+
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,var(--bg1),var(--bg2));font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);min-height:100vh;padding:28px;transition:background .25s,color .25s}
+.wrap{max-width:1100px;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px}
+h1{font-size:clamp(25px,4vw,36px);margin:0;color:var(--accentText)}
+.themebar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}.themebar label{font-size:12px;color:var(--muted);font-weight:700}
+.themebar select{border:1px solid var(--line);border-radius:999px;padding:8px 12px;background:var(--panel);color:var(--ink)}
+.themebar .ghost{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:8px 12px;cursor:pointer}.sub{color:var(--muted);margin-top:6px;font-size:14px}
+.pill{border:0;border-radius:999px;padding:11px 17px;background:var(--pink);color:white;font-weight:700;cursor:pointer;box-shadow:0 5px 14px #ec78a833}
+.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,.85fr);gap:20px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:0 12px 35px #c46a9020;transition:background .25s,border .25s}
+.monthbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.monthbar h2{font-size:20px;margin:0;text-transform:capitalize}
+.nav{display:flex;gap:8px}.nav button,.ghost{border:1px solid var(--line);background:white;color:#a64f77;border-radius:12px;padding:8px 12px;cursor:pointer}
+.week,.days{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.week div{text-align:center;color:var(--muted);font-size:12px;padding:8px 0}
+.day{min-height:82px;border:1px solid var(--line);background:var(--cell);border-radius:14px;padding:8px;cursor:pointer;text-align:left;color:var(--ink);position:relative}
+.day:hover{border-color:var(--pink)}.day.out{opacity:.35}.day.selected{background:#ffe5ef;border:2px solid var(--pink);padding:7px}.day.today .num{background:var(--pink);color:white;border-radius:50%;width:25px;height:25px;display:grid;place-items:center}
+.num{font-size:13px;font-weight:700;display:inline-grid;place-items:center;width:25px;height:25px}
+.dots{display:flex;gap:3px;margin-top:8px;flex-wrap:wrap}.dot{width:7px;height:7px;border-radius:50%;background:var(--pink)}
+.sidehead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.sidehead h2{font-size:19px;margin:0}.date-label{font-size:13px;color:var(--muted);margin-top:4px}
+.tasklist{display:flex;flex-direction:column;gap:9px;margin:15px 0}.task{display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--line);border-radius:14px;background:#fffafd}
+.task input{accent-color:var(--pink);margin-top:4px}.task.done .tasktext{text-decoration:line-through;opacity:.5}.tasktext{flex:1}.tasktime{font-size:12px;color:#ba6388;font-weight:700}.taskname{font-size:14px;margin-top:3px;overflow-wrap:anywhere}.delete{border:0;background:transparent;color:#c18a9f;font-size:18px;cursor:pointer}
+.empty{padding:25px 10px;text-align:center;color:#b18b9b;font-size:14px;background:#fff8fb;border-radius:15px}
+form{display:grid;gap:10px;border-top:1px solid var(--line);padding-top:17px;margin-top:16px}label{font-size:12px;color:var(--muted);font-weight:700}input[type=text],input[type=time]{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px;background:#fffafd;color:var(--ink);font:inherit;outline-color:var(--pink)}
+.formrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}.add{border:0;border-radius:13px;background:var(--pink);color:white;padding:12px;font-weight:700;cursor:pointer}
+.footer{font-size:12px;color:#b18b9b;text-align:center;margin-top:18px}
+@media(max-width:760px){body{padding:16px}.layout{grid-template-columns:1fr}.day{min-height:65px;padding:6px}.day.selected{padding:5px}.panel{padding:16px}.top{align-items:flex-start}.pill{padding:10px 13px}.week,.days{gap:4px}}
+
+/* Theme system */
+.top-actions{display:flex;align-items:end;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.theme-control{display:grid;gap:4px}.theme-control label{font-size:11px;color:var(--muted);padding-left:5px}
+.theme-control select{border:1px solid var(--line);border-radius:999px;background:var(--white);color:var(--ink);padding:10px 13px;font:inherit;font-size:13px;outline-color:var(--pink)}
+body[data-palette="pink"]{--pink:#ec78a8;--pink2:#f8c8dc;--pale:#fff5f9;--ink:#593b4a;--muted:#a17d8d;--line:#f1dce5;--white:#fff}
+body[data-palette="peach"]{--pink:#e99a73;--pink2:#f6cbb7;--pale:#fff6f0;--ink:#63483d;--muted:#a7897d;--line:#f0dfd5;--white:#fffdfb}
+body[data-palette="lavender"]{--pink:#a78bd8;--pink2:#d9c9f2;--pale:#f8f5ff;--ink:#4e4264;--muted:#9283a8;--line:#e7def3;--white:#fff}
+body[data-palette="mint"]{--pink:#70b7a5;--pink2:#bce2d7;--pale:#f1fbf7;--ink:#3e5d55;--muted:#829f96;--line:#d9eee7;--white:#fff}
+body[data-palette="sky"]{--pink:#78a9d8;--pink2:#c5def5;--pale:#f2f8ff;--ink:#40566d;--muted:#8298ae;--line:#dce9f5;--white:#fff}
+body[data-mode="light"]{background:linear-gradient(135deg,var(--pale),var(--pink2));color:var(--ink)}
+body[data-mode="light"] .panel{background:color-mix(in srgb,var(--white) 86%,transparent);border-color:var(--white);box-shadow:0 12px 35px color-mix(in srgb,var(--pink) 13%,transparent)}
+body[data-mode="light"] .day,body[data-mode="light"] .task,body[data-mode="light"] .empty{background:color-mix(in srgb,var(--white) 82%,var(--pale));border-color:var(--line);color:var(--ink)}
+body[data-mode="light"] .day.selected{background:color-mix(in srgb,var(--pink2) 65%,var(--white));border-color:var(--pink)}
+body[data-mode="light"] input[type=text],body[data-mode="light"] input[type=time],body[data-mode="light"] #taskColor,body[data-mode="light"] .theme-control select{background:var(--white);color:var(--ink);border-color:var(--line)}
+body[data-mode="light"] .week div,body[data-mode="light"] .sub,body[data-mode="light"] .date-label,body[data-mode="light"] .footer{color:var(--muted)}
+body[data-mode="dark"]{background:radial-gradient(ellipse at top left,color-mix(in srgb,var(--pink) 20%,#24202b),#17151d 70%);color:#f4eaf0;--ink:#f4eaf0;--muted:#c0aeb9;--line:#49404b;--white:#292530;--pale:#24202b}
+body[data-mode="dark"] .panel{background:#26222dcc;border-color:#3b3340;box-shadow:0 12px 35px #0005}
+body[data-mode="dark"] .day,body[data-mode="dark"] .task,body[data-mode="dark"] .empty{background:#302a36;border-color:#49404b;color:#f4eaf0}
+body[data-mode="dark"] .day.selected{background:color-mix(in srgb,var(--pink) 28%,#302a36);border-color:var(--pink)}
+body[data-mode="dark"] input[type=text],body[data-mode="dark"] input[type=time],body[data-mode="dark"] #taskColor,body[data-mode="dark"] .theme-control select{background:#302a36;color:#f4eaf0;border-color:#514653}
+body[data-mode="dark"] .week div,body[data-mode="dark"] .sub,body[data-mode="dark"] .date-label,body[data-mode="dark"] .footer,body[data-mode="dark"] .theme-control label{color:#c0aeb9}
+body[data-mode="dark"] .nav button,body[data-mode="dark"] .ghost{background:#302a36;color:var(--pink2);border-color:#514653}
+body[data-mode="dark"] .tasktime{color:var(--pink2)}
+body[data-mode="dark"] .delete{color:#d7a6bd}
+body[data-mode="dark"] h1{color:var(--pink2)}
+@media(max-width:760px){.top{flex-direction:column}.top-actions{width:100%;justify-content:flex-start}.theme-control select{max-width:145px}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div><h1>♡ Мой планер</h1><div class="sub">Немного порядка и много заботы о себе</div>
+      <div class="themebar" aria-label="Настройки темы">
+        <label for="themeChoice">Цвет темы</label>
+        <select id="themeChoice">
+          <option value="pink">Розовый</option><option value="peach">Персиковый</option>
+          <option value="lavender">Лавандовый</option><option value="mint">Мятный</option>
+          <option value="sky">Голубой</option>
+        </select>
+        <button class="ghost" id="modeBtn" type="button">☾ Тёмная тема</button>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="theme-control"><label for="paletteSelect">Цвет темы</label><select id="paletteSelect" aria-label="Цветовая тема">
+        <option value="pink">Розовая</option><option value="peach">Персиковая</option><option value="lavender">Лавандовая</option><option value="mint">Мятная</option><option value="sky">Небесная</option>
+      </select></div>
+      <div class="theme-control"><label for="modeSelect">Режим</label><select id="modeSelect" aria-label="Светлая или тёмная тема"><option value="light">Светлая ☀</option><option value="dark">Тёмная ☾</option></select></div>
+      <button class="pill" id="todayBtn">Сегодня</button>
+    </div>
+  </header>
+  <main class="layout">
+    <section class="panel">
+      <div class="monthbar"><h2 id="monthTitle"></h2><div class="nav"><button id="prev" aria-label="Предыдущий месяц">←</button><button id="next" aria-label="Следующий месяц">→</button></div></div>
+      <div class="week"><div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div></div>
+      <div class="days" id="calendar"></div>
+    </section>
+    <aside class="panel">
+      <div class="sidehead"><div><h2>Мои планы ✿</h2><div class="date-label" id="selectedLabel"></div></div></div>
+      <div id="taskList" class="tasklist"></div>
+      <form id="taskForm">
+        <div><label for="taskName">Что планируем?</label><input id="taskName" type="text" placeholder="Например, почитать 20 минут" maxlength="100" required></div>
+        <div class="formrow">
+          <div><label for="taskTime">Время</label><input id="taskTime" type="time" value="09:00"></div>
+          <div><label for="taskColor">Цвет</label><select id="taskColor" style="width:100%;padding:11px;border:1px solid var(--line);border-radius:12px;background:#fffafd;color:var(--ink)"><option value="#ec78a8">Розовый</option><option value="#b69be8">Лавандовый</option><option value="#f0ae76">Персиковый</option><option value="#83b9ad">Мятный</option></select></div>
+        </div>
+        <button class="add" type="submit">＋ Добавить план</button>
+      </form>
+    </aside>
+  </main>
+  <div class="footer">Твои планы сохраняются в этом браузере ♡</div>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const root=document.documentElement;
+const themeSelect=$('#themeChoice');
+const modeBtn=$('#modeBtn');
+let savedTheme='pink',savedMode='light';
+try{savedTheme=localStorage.getItem('pinkPlannerTheme')||'pink';savedMode=localStorage.getItem('pinkPlannerMode')||'light'}catch(e){}
+root.dataset.theme=savedTheme;root.dataset.mode=savedMode;themeSelect.value=savedTheme;
+function updateModeButton(){modeBtn.textContent=root.dataset.mode==='dark'?'☀️ Светлая тема':'☾ Тёмная тема'}
+updateModeButton();
+themeSelect.addEventListener('change',()=>{root.dataset.theme=themeSelect.value;try{localStorage.setItem('pinkPlannerTheme',themeSelect.value)}catch(e){}});
+modeBtn.addEventListener('click',()=>{root.dataset.mode=root.dataset.mode==='dark'?'light':'dark';try{localStorage.setItem('pinkPlannerMode',root.dataset.mode)}catch(e){}updateModeButton()});
+
+
+const paletteSelect=$('#paletteSelect'), modeSelect=$('#modeSelect');
+function applyTheme(palette,mode){
+ document.body.dataset.palette=palette;document.body.dataset.mode=mode;
+ paletteSelect.value=palette;modeSelect.value=mode;
+ try{localStorage.setItem('pinkPlannerTheme',JSON.stringify({palette,mode}))}catch(e){}
+}
+let savedTheme={};
+try{savedTheme=JSON.parse(localStorage.getItem('pinkPlannerTheme')||'{}')||{}}catch(e){}
+applyTheme(savedTheme.palette||'pink',savedTheme.mode||'light');
+paletteSelect.addEventListener('change',()=>applyTheme(paletteSelect.value,modeSelect.value));
+modeSelect.addEventListener('change',()=>applyTheme(paletteSelect.value,modeSelect.value));
+
+const today=new Date(); today.setHours(0,0,0,0);
+let shown=new Date(today.getFullYear(),today.getMonth(),1), selected=new Date(today);
+let tasks={};
+try{tasks=JSON.parse(localStorage.getItem('pinkPlannerTasks')||'{}')||{}}catch(e){tasks={}}
+const key=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const same=(a,b)=>key(a)===key(b);
+function save(){localStorage.setItem('pinkPlannerTasks',JSON.stringify(tasks))}
+function render(){
+ $('#monthTitle').textContent=shown.toLocaleDateString('ru-RU',{month:'long',year:'numeric'});
+ $('#calendar').innerHTML='';
+ const first=new Date(shown.getFullYear(),shown.getMonth(),1);
+ const offset=(first.getDay()+6)%7;
+ const start=new Date(first);start.setDate(first.getDate()-offset);
+ for(let i=0;i<42;i++){
+  const d=new Date(start);d.setDate(start.getDate()+i);
+  const b=document.createElement('button');b.className='day'+(d.getMonth()!==shown.getMonth()?' out':'')+(same(d,today)?' today':'')+(same(d,selected)?' selected':'');
+  const count=(tasks[key(d)]||[]).length;
+  b.innerHTML=`<span class="num">${d.getDate()}</span>${count?`<div class="dots">${Array.from({length:Math.min(count,5)},()=>'<i class="dot"></i>').join('')}</div>`:''}`;
+  b.addEventListener('click',()=>{selected=d; if(d.getMonth()!==shown.getMonth())shown=new Date(d.getFullYear(),d.getMonth(),1);render()});
+  $('#calendar').appendChild(b);
+ }
+ $('#selectedLabel').textContent=selected.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ renderTasks();
+}
+function renderTasks(){
+ const list=$('#taskList');list.innerHTML='';
+ const items=(tasks[key(selected)]||[]).slice().sort((a,b)=>a.time.localeCompare(b.time));
+ if(!items.length){list.innerHTML='<div class="empty">На этот день пока ничего нет.<br>Добавь первый план ♡</div>';return}
+ items.forEach((t,i)=>{
+  const el=document.createElement('div');el.className='task'+(t.done?' done':'');
+  const check=document.createElement('input');check.type='checkbox';check.checked=!!t.done;check.setAttribute('aria-label','Выполнено');check.addEventListener('change',()=>{t.done=check.checked;save();renderTasks()});
+  const body=document.createElement('div');body.className='tasktext';
+  const time=document.createElement('div');time.className='tasktime';time.textContent=t.time||'Без времени';
+  const name=document.createElement('div');name.className='taskname';name.textContent=t.name;name.style.borderLeft=`3px solid ${t.color}`;name.style.paddingLeft='8px';
+  body.append(time,name);
+  const del=document.createElement('button');del.className='delete';del.textContent='×';del.setAttribute('aria-label','Удалить план');del.addEventListener('click',()=>{tasks[key(selected)].splice(i,1);if(!tasks[key(selected)].length)delete tasks[key(selected)];save();render()});
+  el.append(check,body,del);list.appendChild(el);
+ });
+}
+$('#taskForm').addEventListener('submit',e=>{e.preventDefault();const name=$('#taskName').value.trim();if(!name)return;const k=key(selected);(tasks[k]??=[]).push({name,time:$('#taskTime').value,color:$('#taskColor').value,done:false});save();$('#taskName').value='';render()});
+$('#prev').onclick=()=>{shown=new Date(shown.getFullYear(),shown.getMonth()-1,1);render()};
+$('#next').onclick=()=>{shown=new Date(shown.getFullYear(),shown.getMonth()+1,1);render()};
+$('#todayBtn').onclick=()=>{selected=new Date(today);shown=new Date(today.getFullYear(),today.getMonth(),1);render()};
+render();
+</script>
+</body>
+</html>
