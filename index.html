@@ -393,6 +393,12 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
 body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#403644}
 </style>
 
+
+<style>
+.activity-panel{margin-bottom:16px}.activity-section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}.activity-section-heading h2{margin:5px 0 0;font-size:21px;color:var(--ink)}.activity-steps-summary{display:flex;align-items:baseline;gap:8px;margin:19px 0 12px;flex-wrap:wrap}.activity-steps-summary strong{font-size:clamp(38px,9vw,54px);line-height:1;color:var(--accentText);font-variant-numeric:tabular-nums}.activity-steps-summary span{font-size:14px;color:var(--muted)}.activity-steps-summary small{margin-left:auto;color:var(--muted);font-size:12px}.activity-step-inputs,.activity-workout-form{display:grid;gap:9px;margin-top:18px}.activity-step-inputs label,.activity-workout-form label{font-size:13px;font-weight:700;color:var(--ink)}.activity-inline-input{display:flex;gap:8px;align-items:center}.activity-inline-input input,.activity-workout-form input,.activity-workout-form select{min-width:0;width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--cell);color:var(--ink);font:inherit}.activity-inline-input button{flex:0 0 auto;white-space:nowrap}.secondary-button{padding:10px 13px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--accentText);font:inherit;font-size:12px;font-weight:700;cursor:pointer}.activity-workout-form{padding:16px;border-radius:16px;background:var(--cell);border:1px solid var(--line)}.activity-workout-heading{display:flex;justify-content:space-between;align-items:center;margin:20px 0 10px}.activity-workout-heading h3{margin:0;font-size:15px;color:var(--ink)}.activity-workout-heading>span{font-size:12px;color:var(--muted)}.activity-workout-list{display:grid;gap:8px}.activity-workout-item{display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--line);border-radius:13px;background:var(--cell)}.activity-workout-item .activity-workout-icon{font-size:24px}.activity-workout-copy{flex:1;min-width:0}.activity-workout-copy strong{display:block;color:var(--ink);font-size:13px}.activity-workout-copy small{display:block;color:var(--muted);font-size:11px;overflow-wrap:anywhere}.activity-workout-delete{border:0;background:transparent;color:var(--muted);font-size:20px;cursor:pointer}.activity-empty{padding:16px;text-align:center;color:var(--muted);font-size:12px;border:1px dashed var(--line);border-radius:13px}.activity-moods{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:14px}.activity-moods button{display:grid;justify-items:center;gap:6px;min-width:0;padding:12px 5px;border:1px solid var(--line);border-radius:14px;background:var(--cell);color:var(--muted);cursor:pointer}.activity-moods button span{font-size:26px}.activity-moods button small{font-size:10px;line-height:1.3}.activity-moods button.is-selected{border-color:var(--pink);background:color-mix(in srgb,var(--pink2) 28%,var(--panel));color:var(--ink)}.activity-week-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:18px 0 12px}.activity-week-nav strong{font-size:13px;text-align:center;color:var(--ink)}.activity-week-nav button{width:34px;height:34px;border:1px solid var(--line);border-radius:11px;background:var(--cell);color:var(--accentText);font-size:17px;cursor:pointer}.activity-week-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}.activity-day{min-width:0;padding:9px 2px;border:1px solid var(--line);border-radius:12px;background:var(--cell);text-align:center;color:var(--muted)}.activity-day strong{display:block;color:var(--ink);font-size:14px}.activity-day small{display:block;margin-top:4px;font-size:9px}.activity-day.is-today{border-color:var(--pink)}.activity-day.has-activity{background:color-mix(in srgb,var(--pink2) 24%,var(--panel))}.activity-week-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:15px}.activity-week-stats>div{padding:13px;border-radius:14px;background:var(--cell);border:1px solid var(--line)}.activity-week-stats strong{display:block;color:var(--accentText);font-size:23px;font-variant-numeric:tabular-nums}.activity-week-stats span{display:block;color:var(--muted);font-size:11px}.activity-panel .care-progress-track{margin-top:0}
+@media(max-width:430px){.activity-inline-input{align-items:stretch}.activity-inline-input button{font-size:11px;padding:9px}.activity-moods{grid-template-columns:repeat(2,minmax(0,1fr))}.activity-week-grid{gap:4px}.activity-day{padding:8px 1px}}
+</style>
+
 </head>
 <body class="auth-pending">
 <div id="wallpaperLayer" aria-hidden="true"></div>
@@ -673,6 +679,7 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
       <div class="care-subsections">
         <button class="section-card" type="button" data-open-page="water"><span class="section-card-icon">💧</span><span class="section-card-copy"><strong>Трекер воды</strong><small>Отмечай стаканчики и наблюдай за своим водным балансом.</small></span><span class="section-card-arrow">→</span></button>
         <button class="section-card" type="button" data-open-page="sleep"><span class="section-card-icon">🌙</span><span class="section-card-copy"><strong>Мой сон</strong><small>Записывай продолжительность сна и подбирай удобный ритм отдыха.</small></span><span class="section-card-arrow">→</span></button>
+        <button class="section-card" type="button" data-open-page="activity"><span class="section-card-icon">👟</span><span class="section-card-copy"><strong>Моё движение</strong><small>Шаги, тренировки и маленькие победы твоего тела.</small></span><span class="section-card-arrow">→</span></button>
       </div>
       <p class="care-footer-note">Здесь будут появляться новые способы заботиться о себе. ♡</p>
     </section>
@@ -710,6 +717,61 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
         <div class="care-tip"><strong>🌙 Небольшая рекомендация</strong><p>Для большинства взрослых ориентир — примерно 7–9 часов сна. Время отхода ко сну помогает прикинуть время пробуждения, но индивидуальная потребность зависит в том числе от возраста и самочувствия.</p></div>
         <div class="care-tip"><strong>☁️ Мягкий вечерний ритуал</strong><p>Попробуй приглушить свет, отложить телефон и дать себе немного спокойного времени перед сном. Даже небольшой повторяющийся ритуал может помочь настроиться на отдых.</p></div>
       </section>
+    </section>
+
+    
+    <section class="page hidden" id="activityPage">
+      <header class="settings-heading"><button class="care-back" type="button" data-open-page="care">← Забота о себе</button><div class="eyebrow">ДВИЖЕНИЕ В ТВОЁМ РИТМЕ</div><h1>Моё движение 👟</h1><p>Любое движение имеет значение. Здесь можно отмечать шаги, записывать тренировки и замечать, как ты себя чувствуешь.</p></header>
+      <section class="panel care-panel activity-panel">
+        <div class="activity-section-heading"><div><div class="eyebrow">ТВОЯ ЦЕЛЬ НА СЕГОДНЯ</div><h2>Шаги за день</h2></div><span class="care-big-emoji">🌷</span></div>
+        <div class="activity-steps-summary"><strong id="activityStepsValue">0</strong><span>шагов</span><small id="activityStepsGoalText">из 6 000 шагов</small></div>
+        <div class="care-progress-track"><div id="activityStepsBar"></div></div>
+        <div class="activity-step-inputs">
+          <label for="activityStepsInput">Сколько шагов ты прошла сегодня?</label>
+          <div class="activity-inline-input"><input id="activityStepsInput" type="number" min="0" max="100000" step="1" placeholder="Например, 5420"><button class="add" id="activityStepsSave" type="button">Сохранить</button></div>
+          <label for="activityGoalInput">Моя дневная цель, шагов</label>
+          <div class="activity-inline-input"><input id="activityGoalInput" type="number" min="500" max="50000" step="500" placeholder="6000"><button class="secondary-button" id="activityGoalSave" type="button">Изменить цель</button></div>
+          <p class="care-soft-note" id="activityStepsMessage" aria-live="polite">Любое количество шагов — уже движение в сторону заботы о себе ♡</p>
+        </div>
+      </section>
+      <section class="panel care-panel activity-panel">
+        <div class="activity-section-heading"><div><div class="eyebrow">ТВОЯ АКТИВНОСТЬ</div><h2>Тренировки</h2></div><span class="care-big-emoji">🧘‍♀️</span></div>
+        <form id="activityWorkoutForm" class="activity-workout-form">
+          <label for="activityType">Что ты делала?</label>
+          <select id="activityType"><option>Прогулка</option><option>Йога</option><option>Растяжка</option><option>Бег</option><option>Танцы</option><option>Велосипед</option><option>Силовая тренировка</option><option>Плавание</option><option>Другое</option></select>
+          <label for="activityDuration">Продолжительность, минут</label>
+          <input id="activityDuration" type="number" min="1" max="1440" step="1" placeholder="Например, 30" required>
+          <label for="activityWorkoutNote">Заметка <span class="care-optional">необязательно</span></label>
+          <input id="activityWorkoutNote" type="text" maxlength="180" placeholder="Например, прогулка в парке">
+          <button class="add" type="submit">＋ Добавить тренировку</button>
+        </form>
+        <div class="activity-workout-heading"><h3>Сегодняшние занятия</h3><span id="activityWorkoutCount">0</span></div>
+        <div id="activityWorkoutList" class="activity-workout-list"></div>
+      </section>
+      <section class="panel care-panel activity-panel">
+        <div class="activity-section-heading"><div><div class="eyebrow">ПРИСЛУШАЙСЯ К СЕБЕ</div><h2>Как ты себя чувствуешь?</h2></div><span class="care-big-emoji">💗</span></div>
+        <p class="care-soft-note">Выбери то, что лучше всего описывает твоё состояние после движения. Здесь нет неправильных ответов.</p>
+        <div class="activity-moods" id="activityMoodChoices">
+          <button type="button" data-mood="Отлично!" aria-pressed="false"><span>😊</span><small>Отлично!</small></button>
+          <button type="button" data-mood="Хорошо"><span>🌿</span><small>Хорошо</small></button>
+          <button type="button" data-mood="Немного устала"><span>😌</span><small>Устала</small></button>
+          <button type="button" data-mood="Рада, что подвигалась"><span>🩷</span><small>Рада, что подвигалась</small></button>
+        </div>
+        <p class="care-soft-note" id="activityMoodSaved" aria-live="polite">Твоё самочувствие можно отметить в любой момент дня ♡</p>
+      </section>
+      <section class="panel care-panel activity-panel">
+        <div class="activity-section-heading"><div><div class="eyebrow">ТВОЙ РИТМ</div><h2>Календарь и статистика</h2></div><span class="care-big-emoji">📅</span></div>
+        <div class="activity-week-nav"><button type="button" id="activityPrevWeek" aria-label="Предыдущая неделя">←</button><strong id="activityWeekTitle"></strong><button type="button" id="activityNextWeek" aria-label="Следующая неделя">→</button></div>
+        <div class="activity-week-grid" id="activityWeekGrid"></div>
+        <div class="activity-week-stats">
+          <div><strong id="activityWeekSteps">0</strong><span>шагов за неделю</span></div>
+          <div><strong id="activityWeekMinutes">0</strong><span>минут активности</span></div>
+          <div><strong id="activityWeekWorkouts">0</strong><span>тренировок</span></div>
+          <div><strong id="activityWeekActiveDays">0</strong><span>активных дней</span></div>
+        </div>
+        <p class="care-soft-note">Недельная статистика учитывает только дни, которые уже наступили. Можно возвращаться к прошлым неделям и просматривать свои записи ♡</p>
+      </section>
+      <div class="care-tip"><strong>🌸 Маленькое напоминание</strong><p>Необязательно каждый день выполнять одну и ту же норму. Прогулка, растяжка или несколько минут движения тоже имеют значение. Отдых — такая же важная часть заботы о себе.</p></div>
     </section>
 
     <section class="page todo-page hidden" id="todoPage">
@@ -937,7 +999,7 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
 
 const $=s=>document.querySelector(s);
 const root=document.documentElement;
-const SPLIM_SYNC_KEYS=['pinkPlannerTasks','splimNotes','splimGratitudeEntries','splimHabits','splimTodoItems','splimHomeLayout','splimWaterTracker','splimSleepTracker','pinkPlannerSettings','pinkPlannerTheme','pinkPlannerMode','splimWallpaperBlur','splimWallpaperPath'];
+const SPLIM_SYNC_KEYS=['pinkPlannerTasks','splimNotes','splimGratitudeEntries','splimHabits','splimTodoItems','splimHomeLayout','splimWaterTracker','splimSleepTracker','splimActivityTracker','pinkPlannerSettings','pinkPlannerTheme','pinkPlannerMode','splimWallpaperBlur','splimWallpaperPath'];
 const syncStatus=$('#syncStatus');
 let syncUser=null,syncReady=false,syncTimer=null,syncBusy=false,syncQueued=false,syncLoading=false;
 let syncChannel=null;
@@ -958,7 +1020,7 @@ function readLocalSnapshot(){
 }
 function hasUsefulLocalData(snapshot){
  const st=snapshot.storage||{};
- return ['pinkPlannerTasks','splimNotes','splimGratitudeEntries','splimHabits','splimTodoItems','splimWaterTracker','splimSleepTracker'].some(key=>{
+ return ['pinkPlannerTasks','splimNotes','splimGratitudeEntries','splimHabits','splimTodoItems','splimWaterTracker','splimSleepTracker','splimActivityTracker'].some(key=>{
   if(!st[key])return false;
   try{const value=JSON.parse(st[key]);return Array.isArray(value)?value.length>0:(value&&typeof value==='object'&&Object.keys(value).length>0);}catch(e){return !!st[key];}
  });
@@ -1386,7 +1448,7 @@ homeEditorSections.addEventListener('pointerup',finishHomeDrag);
 homeEditorSections.addEventListener('pointercancel',finishHomeDrag);
 applyHomeLayout();
 function showPage(page){
- const validPage=['home','profile','planner','todo','habits','gratitude','notes','settings','care','water','sleep'].includes(page)?page:'home';
+ const validPage=['home','profile','planner','todo','habits','gratitude','notes','settings','care','water','sleep','activity'].includes(page)?page:'home';
  document.body.dataset.page=validPage;
  // Запоминаем раздел отдельно на каждом устройстве — этот ключ не отправляется в облако.
  try{localStorage.setItem('splimActivePage',validPage);}catch(e){}
@@ -1398,6 +1460,7 @@ function showPage(page){
  $('#carePage').classList.toggle('hidden',validPage!=='care');
  $('#waterPage').classList.toggle('hidden',validPage!=='water');
  $('#sleepPage').classList.toggle('hidden',validPage!=='sleep');
+ $('#activityPage').classList.toggle('hidden',validPage!=='activity');
  $('#gratitudePage').classList.toggle('hidden',validPage!=='gratitude');
  $('#notesPage').classList.toggle('hidden',validPage!=='notes');
  $('#settingsPage').classList.toggle('hidden',validPage!=='settings');
@@ -1408,6 +1471,7 @@ function showPage(page){
  if(validPage==='habits') renderHabits();
  if(validPage==='water') renderWaterTracker();
  if(validPage==='sleep') renderSleepTracker();
+ if(validPage==='activity') renderActivityTracker();
  if(validPage==='gratitude') renderGratitude();
  if(validPage==='notes') renderNotes();
  window.scrollTo({top:0,behavior:'smooth'});
@@ -1618,6 +1682,94 @@ document.getElementById('sleepSave').addEventListener('click',()=>{
  if(input.value.trim()===''||!Number.isFinite(value)||value<0||value>24){document.getElementById('sleepSaved').textContent='Укажи количество часов от 0 до 24.';return;}
  sleepStore.days[todayKey()]={hours:Math.round(value*100)/100,savedAt:new Date().toISOString()};saveSleepStore();renderSleepTracker();
 });
+
+
+const ACTIVITY_KEY='splimActivityTracker';
+let activityStore={goal:6000,days:{}};
+try{activityStore=JSON.parse(localStorage.getItem(ACTIVITY_KEY)||'null')||activityStore;}catch(e){}
+if(!activityStore.days||typeof activityStore.days!=='object')activityStore.days={};
+if(!Number.isFinite(Number(activityStore.goal)))activityStore.goal=6000;
+let activityWeekOffset=0;
+const activityToday=()=>key(new Date());
+const activityDateForOffset=offset=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+offset);return d;};
+const activityDay=(dateKey)=>activityStore.days[dateKey]||(activityStore.days[dateKey]={steps:0,workouts:[],mood:''});
+function saveActivityStore(){localStorage.setItem(ACTIVITY_KEY,JSON.stringify(activityStore));}
+function activityWorkoutIcon(type){return ({'Прогулка':'🚶‍♀️','Йога':'🧘‍♀️','Растяжка':'🌷','Бег':'🏃‍♀️','Танцы':'💃','Велосипед':'🚲','Силовая тренировка':'🏋️‍♀️','Плавание':'🏊‍♀️','Другое':'💗'})[type]||'💗';}
+function activityWeekStart(offset=0){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-(d.getDay()+6)%7+offset*7);return d;}
+function renderActivityTracker(){
+ const today=activityDay(activityToday()),goal=Math.max(500,Number(activityStore.goal)||6000),steps=Math.max(0,Number(today.steps)||0);
+ const stepsInput=document.getElementById('activityStepsInput'),goalInput=document.getElementById('activityGoalInput');
+ if(document.activeElement!==stepsInput)stepsInput.value=today.steps||'';
+ if(document.activeElement!==goalInput)goalInput.value=goal;
+ document.getElementById('activityStepsValue').textContent=steps.toLocaleString('ru-RU');
+ document.getElementById('activityStepsGoalText').textContent='из '+goal.toLocaleString('ru-RU')+' шагов';
+ document.getElementById('activityStepsBar').style.width=Math.min(100,steps/goal*100)+'%';
+ document.getElementById('activityStepsMessage').textContent=steps>=goal?'Ты достигла своей цели! Позволь себе порадоваться этому моменту ♡':steps?'Уже '+Math.round(steps/goal*100)+'% твоего ориентира. Каждый шаг считается ♡':'Любое количество шагов — уже движение в сторону заботы о себе ♡';
+ const list=document.getElementById('activityWorkoutList');list.innerHTML='';
+ const workouts=Array.isArray(today.workouts)?today.workouts:[];
+ document.getElementById('activityWorkoutCount').textContent=String(workouts.length);
+ if(!workouts.length){const empty=document.createElement('div');empty.className='activity-empty';empty.textContent='Пока нет записей. Даже короткая прогулка достойна места здесь ♡';list.appendChild(empty);}
+ workouts.forEach(workout=>{
+  const item=document.createElement('div');item.className='activity-workout-item';
+  const icon=document.createElement('span');icon.className='activity-workout-icon';icon.textContent=activityWorkoutIcon(workout.type);
+  const copy=document.createElement('div');copy.className='activity-workout-copy';
+  const title=document.createElement('strong');title.textContent=workout.type+' · '+workout.minutes+' мин';
+  const note=document.createElement('small');note.textContent=workout.note||'Записано сегодня';
+  copy.append(title,note);
+  const remove=document.createElement('button');remove.type='button';remove.className='activity-workout-delete';remove.textContent='×';remove.setAttribute('aria-label','Удалить тренировку');
+  remove.addEventListener('click',()=>{today.workouts=today.workouts.filter(entry=>entry.id!==workout.id);saveActivityStore();renderActivityTracker();});
+  item.append(icon,copy,remove);list.appendChild(item);
+ });
+ document.querySelectorAll('#activityMoodChoices [data-mood]').forEach(button=>{const selected=today.mood===button.dataset.mood;button.classList.toggle('is-selected',selected);button.setAttribute('aria-pressed',String(selected));});
+ document.getElementById('activityMoodSaved').textContent=today.mood?'Самочувствие за сегодня: '+today.mood+' ♡':'Твоё самочувствие можно отметить в любой момент дня ♡';
+ renderActivityWeek();
+}
+function renderActivityWeek(){
+ const start=activityWeekStart(activityWeekOffset),end=new Date(start);end.setDate(end.getDate()+6);
+ document.getElementById('activityWeekTitle').textContent=start.toLocaleDateString('ru-RU',{day:'numeric',month:'short'})+' — '+end.toLocaleDateString('ru-RU',{day:'numeric',month:'short'});
+ const grid=document.getElementById('activityWeekGrid');grid.innerHTML='';
+ const weekday=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+ let totalSteps=0,totalMinutes=0,totalWorkouts=0,activeDays=0;
+ const now=new Date();now.setHours(23,59,59,999);
+ for(let i=0;i<7;i++){
+  const date=new Date(start);date.setDate(start.getDate()+i);const dateKey=key(date),record=activityStore.days[dateKey]||{steps:0,workouts:[]};
+  const future=date>now,steps=Math.max(0,Number(record.steps)||0),workouts=Array.isArray(record.workouts)?record.workouts:[];
+  const minutes=workouts.reduce((sum,w)=>sum+Math.max(0,Number(w.minutes)||0),0);
+  if(!future){totalSteps+=steps;totalMinutes+=minutes;totalWorkouts+=workouts.length;if(steps>0||workouts.length)activeDays++;}
+  const cell=document.createElement('div');cell.className='activity-day'+(key(new Date())===dateKey?' is-today':'')+((steps>0||workouts.length)?' has-activity':'');
+  const day=document.createElement('small');day.textContent=weekday[i];
+  const num=document.createElement('strong');num.textContent=date.getDate();
+  const info=document.createElement('small');info.textContent=future?'·':(steps>0||workouts.length?'♥':'—');
+  cell.append(day,num,info);grid.appendChild(cell);
+ }
+ document.getElementById('activityWeekSteps').textContent=totalSteps.toLocaleString('ru-RU');
+ document.getElementById('activityWeekMinutes').textContent=totalMinutes.toLocaleString('ru-RU');
+ document.getElementById('activityWeekWorkouts').textContent=String(totalWorkouts);
+ document.getElementById('activityWeekActiveDays').textContent=String(activeDays);
+}
+document.getElementById('activityStepsSave').addEventListener('click',()=>{
+ const input=document.getElementById('activityStepsInput'),raw=input.value.trim(),value=Number(raw);
+ if(!raw||!Number.isInteger(value)||value<0||value>100000){document.getElementById('activityStepsMessage').textContent='Введи целое число шагов от 0 до 100 000.';return;}
+ activityDay(activityToday()).steps=value;saveActivityStore();renderActivityTracker();
+});
+document.getElementById('activityGoalSave').addEventListener('click',()=>{
+ const input=document.getElementById('activityGoalInput'),raw=input.value.trim(),value=Number(raw);
+ if(!raw||!Number.isInteger(value)||value<500||value>50000){document.getElementById('activityStepsMessage').textContent='Цель должна быть от 500 до 50 000 шагов.';return;}
+ activityStore.goal=value;saveActivityStore();renderActivityTracker();
+});
+document.getElementById('activityWorkoutForm').addEventListener('submit',event=>{
+ event.preventDefault();const minutes=Number(document.getElementById('activityDuration').value);
+ if(!Number.isInteger(minutes)||minutes<1||minutes>1440)return;
+ const record=activityDay(activityToday());record.workouts=Array.isArray(record.workouts)?record.workouts:[];
+ record.workouts.push({id:Date.now()+'-'+Math.random().toString(16).slice(2),type:document.getElementById('activityType').value,minutes,note:document.getElementById('activityWorkoutNote').value.trim(),createdAt:new Date().toISOString()});
+ saveActivityStore();document.getElementById('activityDuration').value='';document.getElementById('activityWorkoutNote').value='';renderActivityTracker();
+});
+document.getElementById('activityMoodChoices').addEventListener('click',event=>{
+ const button=event.target.closest('[data-mood]');if(!button)return;
+ activityDay(activityToday()).mood=button.dataset.mood;saveActivityStore();renderActivityTracker();
+});
+document.getElementById('activityPrevWeek').addEventListener('click',()=>{activityWeekOffset--;renderActivityWeek();});
+document.getElementById('activityNextWeek').addEventListener('click',()=>{if(activityWeekOffset<0){activityWeekOffset++;renderActivityWeek();}});
 
 // Weekly habit tracker
 const habitsStorageKey='splimHabits';
