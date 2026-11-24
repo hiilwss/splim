@@ -383,6 +383,16 @@ body.auth-pending #wallpaperLayer,body.gate-locked #wallpaperLayer{filter:blur(1
 body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#302936);border-color:#493d4b}body[data-mode="dark"] .profile-card{background:#26222dcc;border-color:#49404b}body[data-mode="dark"] .profile-guest{background:#302a36}
 @media(max-width:520px){.profile-avatar-row{align-items:flex-start;gap:14px}.profile-avatar{width:88px;height:88px;flex-basis:88px;border-radius:29px;font-size:36px}.profile-actions>*{width:100%}}
 </style>
+
+<style>
+.care-subsections{display:grid;gap:13px;max-width:850px}.care-footer-note{margin:20px 0;text-align:center;color:var(--muted);font-size:13px}
+.care-panel{max-width:850px;padding:clamp(18px,3vw,28px)}.care-progress-heading{display:flex;align-items:center;justify-content:space-between;gap:14px}.care-progress-heading h2{margin:5px 0 0;color:var(--ink);font-size:clamp(21px,4vw,28px)}.care-big-emoji{font-size:38px}
+.water-cups{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:24px 0}.water-cup{min-height:96px;border:1px solid var(--line);border-radius:17px;background:var(--cell);color:var(--muted);display:grid;place-items:center;gap:4px;padding:9px;cursor:pointer;transition:transform .18s,border-color .18s,background .18s}.water-cup span{font-size:34px;filter:grayscale(1);opacity:.48;transition:filter .18s,opacity .18s}.water-cup small{font-size:11px}.water-cup.is-filled{background:color-mix(in srgb,var(--pink2) 30%,var(--panel));border-color:var(--pink)}.water-cup.is-filled span{filter:none;opacity:1}.water-cup:active{transform:scale(.96)}
+.care-progress-track{height:10px;border-radius:99px;background:var(--line);overflow:hidden}.care-progress-track>div{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--pink),var(--pink2));transition:width .25s}.care-soft-note{color:var(--muted);font-size:13px;line-height:1.55}.care-settings-box{display:grid;gap:10px;margin-top:22px;padding:18px;border:1px solid var(--line);border-radius:18px;background:var(--cell)}.care-settings-box h3{margin:0;color:var(--ink);font-size:16px}.care-settings-box>p{margin:0 0 5px;color:var(--muted);font-size:12px;line-height:1.55}.care-settings-box label{font-size:13px;font-weight:700;color:var(--ink)}.care-settings-box input{width:100%;max-width:260px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);font:inherit}.care-optional{font-size:11px;font-weight:400;color:var(--muted)}.care-target-result{padding:11px 13px;border-radius:12px;background:color-mix(in srgb,var(--pink2) 25%,var(--panel));color:var(--ink);font-size:13px;line-height:1.5}.care-tip{margin-top:16px;padding:15px 17px;border-radius:16px;background:var(--pale);color:var(--ink)}.care-tip strong{font-size:13px}.care-tip p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.6}.care-back{display:inline-block;margin:0 0 15px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--accentText);font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+@media(max-width:480px){.water-cups{gap:8px}.water-cup{min-height:82px;padding:7px}.water-cup span{font-size:29px}}
+body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#403644}
+</style>
+
 </head>
 <body class="auth-pending">
 <div id="wallpaperLayer" aria-hidden="true"></div>
@@ -421,6 +431,7 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
       <button class="side-link" data-page="planner"><span class="side-icon">▦</span><span>Календарь и планы</span></button>
       <button class="side-link" data-page="todo"><span class="side-icon">☑</span><span>Список дел</span></button>
       <button class="side-link" data-page="habits"><span class="side-icon">✿</span><span>Трекер привычек</span></button>
+      <button class="side-link" data-page="care"><span class="side-icon">♡</span><span>Забота о себе</span></button>
       <button class="side-link" data-page="gratitude"><span class="side-icon">♡</span><span>Благодарности</span></button>
       <button class="side-link" data-page="notes"><span class="side-icon">✎</span><span>Заметки</span></button>
       <button class="side-link" data-page="settings"><span class="side-icon">⚙</span><span>Настройки</span></button>
@@ -459,6 +470,7 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
       <button class="section-card" type="button" data-open-page="habits"><span class="section-card-icon">✿</span><span class="section-card-copy"><strong>Трекер привычек</strong><small>Отмечай маленькие полезные привычки и наблюдай за своим ритмом.</small></span><span class="section-card-arrow">→</span></button>
       <button class="section-card" type="button" data-open-page="gratitude"><span class="section-card-icon">♡</span><span class="section-card-copy"><strong>Моменты благодарности</strong><small>Остановись на минутку, прислушайся к себе и сохрани тёплые моменты дня.</small></span><span class="section-card-arrow">→</span></button>
       <button class="section-card" type="button" data-open-page="notes"><span class="section-card-icon">✎</span><span class="section-card-copy"><strong>Заметки</strong><small>Личное место для мыслей, идей и любых записей.</small></span><span class="section-card-arrow">→</span></button>
+      <button class="section-card" type="button" data-open-page="care"><span class="section-card-icon">🌷</span><span class="section-card-copy"><strong>Забота о себе</strong><small>Вода, сон и маленькие ежедневные ритуалы внимания к себе.</small></span><span class="section-card-arrow">→</span></button>
       </div>
       <div class="home-footnote">Здесь можно планировать не только дела, но и заботу о себе. ♡</div>
       <button class="home-customize-button" id="homeCustomizeButton" type="button" aria-expanded="false">⚙ Настроить главную страницу</button>
@@ -655,6 +667,51 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
         <p class="habits-note" id="habitsProgress" aria-live="polite"></p>
       </section>
     </section>
+    
+    <section class="page hidden" id="carePage">
+      <header class="settings-heading"><div class="eyebrow">НЕЖНОСТЬ К СЕБЕ — ЭТО ТОЖЕ ПЛАН</div><h1>Забота о себе 🌷</h1><p>Небольшие ежедневные ритуалы, которые помогают прислушиваться к своим потребностям. Выбери подраздел, чтобы открыть его полностью.</p></header>
+      <div class="care-subsections">
+        <button class="section-card" type="button" data-open-page="water"><span class="section-card-icon">💧</span><span class="section-card-copy"><strong>Трекер воды</strong><small>Отмечай стаканчики и наблюдай за своим водным балансом.</small></span><span class="section-card-arrow">→</span></button>
+        <button class="section-card" type="button" data-open-page="sleep"><span class="section-card-icon">🌙</span><span class="section-card-copy"><strong>Мой сон</strong><small>Записывай продолжительность сна и подбирай удобный ритм отдыха.</small></span><span class="section-card-arrow">→</span></button>
+      </div>
+      <p class="care-footer-note">Здесь будут появляться новые способы заботиться о себе. ♡</p>
+    </section>
+    <section class="page hidden" id="waterPage">
+      <header class="settings-heading"><button class="care-back" type="button" data-open-page="care">← Забота о себе</button><div class="eyebrow">МАЛЕНЬКИЙ ГЛОТОК ЗАБОТЫ</div><h1>Трекер воды 💧</h1><p>Каждый стаканчик — маленькое напоминание сделать паузу и позаботиться о себе.</p></header>
+      <section class="panel care-panel">
+        <div class="care-progress-heading"><div><div class="eyebrow">ТВОЙ ПРОГРЕСС СЕГОДНЯ</div><h2 id="waterProgressText">0 из 8 стаканов</h2></div><span class="care-big-emoji">💗</span></div>
+        <div class="water-cups" id="waterCups" aria-label="Стаканчики воды"></div>
+        <div class="care-progress-track"><div id="waterProgressBar"></div></div>
+        <p class="care-soft-note" id="waterEncouragement" aria-live="polite">Начни с одного стаканчика — спешить не нужно ♡</p>
+        <div class="care-settings-box">
+          <h3>Подстроим ориентир под тебя</h3>
+          <p>Можно оставить базовую цель в 8 стаканов по 250 мл или рассчитать примерный объём по весу.</p>
+          <label for="waterWeight">Твой вес, кг <span class="care-optional">необязательно</span></label>
+          <input id="waterWeight" type="number" min="25" max="250" step="0.5" placeholder="Например, 60">
+          <div class="care-target-result" id="waterTargetResult">Ориентир: 8 стаканов (около 2 л) в день.</div>
+          <button class="add" id="waterSaveSettings" type="button">Сохранить ориентир ♡</button>
+        </div>
+        <div class="care-tip"><strong>💡 Маленькая подсказка</strong><p id="waterTip">Вода помогает поддерживать нормальную работу организма и регулировать температуру тела. Пей небольшими порциями в течение дня.</p></div>
+      </section>
+    </section>
+    <section class="page hidden" id="sleepPage">
+      <header class="settings-heading"><button class="care-back" type="button" data-open-page="care">← Забота о себе</button><div class="eyebrow">ВРЕМЯ ВОССТАНОВИТЬСЯ</div><h1>Мой сон 🌙</h1><p>Отдых — не награда за продуктивность, а важная часть заботы о себе.</p></header>
+      <section class="panel care-panel">
+        <div class="care-progress-heading"><div><div class="eyebrow">ТВОЙ СОН СЕГОДНЯ</div><h2 id="sleepTodayText">Запиши, сколько ты спала</h2></div><span class="care-big-emoji">☁️</span></div>
+        <div class="care-settings-box">
+          <label for="sleepBedtime">Во сколько обычно ложишься спать?</label>
+          <input id="sleepBedtime" type="time" value="23:00">
+          <div class="care-target-result" id="sleepTargetResult">Если поспать около 8 часов, можно проснуться примерно в 07:00.</div>
+          <label for="sleepHours">Сколько часов ты спала сегодня?</label>
+          <input id="sleepHours" type="number" min="0" max="24" step="0.25" placeholder="Например, 7.5">
+          <button class="add" id="sleepSave" type="button">Сохранить сон ♡</button>
+          <p class="care-soft-note" id="sleepSaved" aria-live="polite">Можно записать данные позже — ничего страшного, если пока не хочется.</p>
+        </div>
+        <div class="care-tip"><strong>🌙 Небольшая рекомендация</strong><p>Для большинства взрослых ориентир — примерно 7–9 часов сна. Время отхода ко сну помогает прикинуть время пробуждения, но индивидуальная потребность зависит в том числе от возраста и самочувствия.</p></div>
+        <div class="care-tip"><strong>☁️ Мягкий вечерний ритуал</strong><p>Попробуй приглушить свет, отложить телефон и дать себе немного спокойного времени перед сном. Даже небольшой повторяющийся ритуал может помочь настроиться на отдых.</p></div>
+      </section>
+    </section>
+
     <section class="page todo-page hidden" id="todoPage">
       <header class="settings-heading"><div class="eyebrow">МАЛЕНЬКИЕ ШАГИ</div><h1>Список дел ♡</h1><p>Все дела, которые хочется держать под рукой.</p></header>
       <section class="panel settings-panel">
@@ -880,7 +937,7 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
 
 const $=s=>document.querySelector(s);
 const root=document.documentElement;
-const SPLIM_SYNC_KEYS=['pinkPlannerTasks','splimNotes','splimGratitudeEntries','splimHabits','splimTodoItems','splimHomeLayout','pinkPlannerSettings','pinkPlannerTheme','pinkPlannerMode','splimWallpaperBlur','splimWallpaperPath'];
+const SPLIM_SYNC_KEYS=['pinkPlannerTasks','splimNotes','splimGratitudeEntries','splimHabits','splimTodoItems','splimHomeLayout','splimWaterTracker','splimSleepTracker','pinkPlannerSettings','pinkPlannerTheme','pinkPlannerMode','splimWallpaperBlur','splimWallpaperPath'];
 const syncStatus=$('#syncStatus');
 let syncUser=null,syncReady=false,syncTimer=null,syncBusy=false,syncQueued=false,syncLoading=false;
 let syncChannel=null;
@@ -1227,7 +1284,7 @@ $('#newAffirmation').addEventListener('click',()=>{
  const choices=affirmations.filter(item=>item!==current);
  $('.affirmation-quote').textContent=choices[Math.floor(Math.random()*choices.length)];
 });
-const HOME_SECTIONS=[{id:'profile',title:'Мой профиль'},{id:'planner',title:'Календарь и планы'},{id:'todo',title:'Список дел'},{id:'habits',title:'Трекер привычек'},{id:'gratitude',title:'Моменты благодарности'},{id:'notes',title:'Заметки'}];
+const HOME_SECTIONS=[{id:'profile',title:'Мой профиль'},{id:'planner',title:'Календарь и планы'},{id:'todo',title:'Список дел'},{id:'habits',title:'Трекер привычек'},{id:'gratitude',title:'Моменты благодарности'},{id:'notes',title:'Заметки'},{id:'care',title:'Забота о себе'}];
 const HOME_LAYOUT_KEY='splimHomeLayout';
 function defaultHomeLayout(){return {version:1,affirmation:true,visible:HOME_SECTIONS.map(item=>item.id),sections:HOME_SECTIONS.map(item=>item.id)};}
 function readHomeLayout(){
@@ -1329,7 +1386,7 @@ homeEditorSections.addEventListener('pointerup',finishHomeDrag);
 homeEditorSections.addEventListener('pointercancel',finishHomeDrag);
 applyHomeLayout();
 function showPage(page){
- const validPage=['home','profile','planner','todo','habits','gratitude','notes','settings'].includes(page)?page:'home';
+ const validPage=['home','profile','planner','todo','habits','gratitude','notes','settings','care','water','sleep'].includes(page)?page:'home';
  document.body.dataset.page=validPage;
  // Запоминаем раздел отдельно на каждом устройстве — этот ключ не отправляется в облако.
  try{localStorage.setItem('splimActivePage',validPage);}catch(e){}
@@ -1338,6 +1395,9 @@ function showPage(page){
  $('#plannerPage').classList.toggle('hidden',validPage!=='planner');
  $('#todoPage').classList.toggle('hidden',validPage!=='todo');
  $('#habitsPage').classList.toggle('hidden',validPage!=='habits');
+ $('#carePage').classList.toggle('hidden',validPage!=='care');
+ $('#waterPage').classList.toggle('hidden',validPage!=='water');
+ $('#sleepPage').classList.toggle('hidden',validPage!=='sleep');
  $('#gratitudePage').classList.toggle('hidden',validPage!=='gratitude');
  $('#notesPage').classList.toggle('hidden',validPage!=='notes');
  $('#settingsPage').classList.toggle('hidden',validPage!=='settings');
@@ -1346,6 +1406,8 @@ function showPage(page){
  if(validPage==='planner') render();
  if(validPage==='todo') renderTodo();
  if(validPage==='habits') renderHabits();
+ if(validPage==='water') renderWaterTracker();
+ if(validPage==='sleep') renderSleepTracker();
  if(validPage==='gratitude') renderGratitude();
  if(validPage==='notes') renderNotes();
  window.scrollTo({top:0,behavior:'smooth'});
@@ -1502,6 +1564,61 @@ $('#gratitudeForm').addEventListener('submit',e=>{
  localStorage.setItem(gratitudeStorageKey,JSON.stringify(gratitudeEntries));
  $('#gratitudeSaved').textContent='Твой сегодняшний день бережно сохранён ♡';
 });
+
+// Self-care trackers: date-based daily records, synced with the private user_data snapshot.
+const WATER_KEY='splimWaterTracker',SLEEP_KEY='splimSleepTracker';
+const todayKey=()=>key(new Date());
+function readCareStore(storageKey,fallback){try{return JSON.parse(localStorage.getItem(storageKey)||'null')||fallback;}catch(e){return fallback;}}
+let waterStore=readCareStore(WATER_KEY,{weight:null,days:{}});
+let sleepStore=readCareStore(SLEEP_KEY,{bedtime:'23:00',days:{}});
+function saveWaterStore(){localStorage.setItem(WATER_KEY,JSON.stringify(waterStore));}
+function saveSleepStore(){localStorage.setItem(SLEEP_KEY,JSON.stringify(sleepStore));}
+function waterGoal(){
+ const weight=Number(waterStore.weight);
+ if(Number.isFinite(weight)&&weight>=25&&weight<=250)return Math.max(1,Math.min(16,Math.round(weight*30/250)));
+ return 8;
+}
+function renderWaterTracker(){
+ const count=Math.max(0,Number(waterStore.days[todayKey()]||0)),goal=waterGoal();
+ const cups=document.getElementById('waterCups');if(!cups)return;cups.innerHTML='';
+ for(let i=0;i<goal;i++){
+  const cup=document.createElement('button');cup.type='button';cup.className='water-cup'+(i<count?' is-filled':'');cup.setAttribute('aria-label',(i<count?'Убрать отметку':'Отметить')+' стакан '+(i+1));
+  cup.innerHTML='<span>🥛</span><small>Стакан '+(i+1)+'</small>';
+  cup.addEventListener('click',()=>{waterStore.days[todayKey()]=i<count?i:i+1;saveWaterStore();renderWaterTracker();});
+  cups.appendChild(cup);
+ }
+ const percent=Math.min(100,count/goal*100);
+ document.getElementById('waterProgressText').textContent=count+' из '+goal+' стаканов';
+ document.getElementById('waterProgressBar').style.width=percent+'%';
+ document.getElementById('waterEncouragement').textContent=count===0?'Начни с одного стаканчика — спешить не нужно ♡':count>=goal?'Ты достигла своего ориентира на сегодня. Молодец, что прислушиваешься к себе! ♡':'Уже '+count+' маленьких шагов заботы. Продолжай в своём ритме ♡';
+ const weightInput=document.getElementById('waterWeight');if(document.activeElement!==weightInput)weightInput.value=waterStore.weight||'';
+ const result=document.getElementById('waterTargetResult');
+ result.textContent=waterStore.weight?'При весе '+waterStore.weight+' кг ориентир — около '+(Number(waterStore.weight)*30/1000).toFixed(1)+' л в день, то есть '+goal+' стаканов по 250 мл.':'Ориентир: 8 стаканов по 250 мл (около 2 л) в день.';
+}
+document.getElementById('waterSaveSettings').addEventListener('click',()=>{
+ const raw=document.getElementById('waterWeight').value.trim(),weight=raw?Number(raw):null;
+ if(raw&&(!Number.isFinite(weight)||weight<25||weight>250)){document.getElementById('waterTargetResult').textContent='Введи вес от 25 до 250 кг или оставь поле пустым для базовой нормы.';return;}
+ waterStore.weight=weight;saveWaterStore();renderWaterTracker();
+});
+function renderSleepTracker(){
+ const bedtime=sleepStore.bedtime||'23:00',input=document.getElementById('sleepBedtime');
+ if(document.activeElement!==input)input.value=bedtime;
+ const [hours,minutes]=bedtime.split(':').map(Number),wake=(hours*60+minutes+480)%(24*60);
+ const wakeText=String(Math.floor(wake/60)).padStart(2,'0')+':'+String(wake%60).padStart(2,'0');
+ document.getElementById('sleepTargetResult').textContent='Если ориентироваться примерно на 8 часов сна, можно проснуться около '+wakeText+'. Это пример, а не строгая норма.';
+ const record=sleepStore.days[todayKey()];
+ const hoursInput=document.getElementById('sleepHours');
+ if(document.activeElement!==hoursInput)hoursInput.value=record&&record.hours!==undefined?record.hours:'';
+ document.getElementById('sleepTodayText').textContent=record?'Сегодня записано: '+record.hours+' ч сна':'Запиши, сколько ты спала';
+ document.getElementById('sleepSaved').textContent=record?'Запись за сегодня сохранена ♡':'Можно записать данные позже — ничего страшного, если пока не хочется.';
+}
+document.getElementById('sleepBedtime').addEventListener('change',event=>{if(/^([01]\\d|2[0-3]):[0-5]\\d$/.test(event.target.value)){sleepStore.bedtime=event.target.value;saveSleepStore();renderSleepTracker();}});
+document.getElementById('sleepSave').addEventListener('click',()=>{
+ const input=document.getElementById('sleepHours'),value=Number(input.value);
+ if(input.value.trim()===''||!Number.isFinite(value)||value<0||value>24){document.getElementById('sleepSaved').textContent='Укажи количество часов от 0 до 24.';return;}
+ sleepStore.days[todayKey()]={hours:Math.round(value*100)/100,savedAt:new Date().toISOString()};saveSleepStore();renderSleepTracker();
+});
+
 // Weekly habit tracker
 const habitsStorageKey='splimHabits';
 let habits=[];
