@@ -41,7 +41,31 @@ body.has-wallpaper{background:linear-gradient(135deg,color-mix(in srgb,var(--bg1
 .home-title h1{font-size:clamp(26px,4vw,36px);font-weight:750;letter-spacing:-.035em}
 .home-title-flower{width:62px;height:62px;flex:0 0 62px;padding:5px;border-radius:20px;background:color-mix(in srgb,var(--pink2) 55%,var(--white));color:var(--pink);transform:rotate(6deg)}
 .planner-tools{display:flex;justify-content:flex-end;margin-bottom:18px}
-.settings-page,.todo-page{max-width:850px}
+.settings-page,.todo-page,.habits-page{max-width:900px}
+.habits-panel{overflow:hidden}
+.habits-weekbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;text-align:center}
+.habits-weekbar h2{margin:0;font-size:20px;text-transform:capitalize}
+.habits-weekbar .ghost{font-size:25px;min-width:42px}
+.habits-today{border:0;background:none;color:var(--pink);font:inherit;font-size:13px;margin-top:5px;cursor:pointer}
+.habits-table-wrap{overflow-x:auto;padding-bottom:5px}
+.habits-grid{display:grid;grid-template-columns:minmax(130px,1.5fr) repeat(7,minmax(44px,1fr));gap:7px;min-width:500px}
+.habits-head{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:8px 2px;color:var(--muted);font-size:12px}
+.habits-head strong{font-size:15px;color:var(--ink)}
+.habits-head.today strong{background:var(--pink);color:white;border-radius:50%;width:28px;height:28px;display:grid;place-items:center}
+.habits-name-head{justify-content:flex-end;align-items:flex-start;padding-left:10px;font-weight:700}
+.habit-label{display:flex;align-items:center;min-height:62px;padding:9px 10px;border-radius:14px;background:var(--cell);border:1px solid var(--line);font-weight:600;overflow-wrap:anywhere}
+.habit-cell{display:grid;place-items:center;min-height:62px;border-radius:14px;background:var(--cell);border:1px solid var(--line)}
+.habit-check{appearance:none;width:30px;height:30px;border-radius:11px;border:1.5px solid var(--line);background:var(--panel);display:grid;place-items:center;cursor:pointer;transition:transform .15s,background .15s,border .15s}
+.habit-check:before{content:"";width:12px;height:7px;border-left:2.5px solid white;border-bottom:2.5px solid white;transform:rotate(-45deg) scale(0);margin-top:-3px;transition:transform .15s}
+.habit-check:checked{background:var(--pink);border-color:var(--pink);box-shadow:0 3px 10px color-mix(in srgb,var(--pink) 35%,transparent)}
+.habit-check:checked:before{transform:rotate(-45deg) scale(1)}
+.habit-check:focus-visible{outline:3px solid var(--pink2);outline-offset:3px}
+.habit-delete{border:0;background:none;color:var(--muted);font-size:18px;cursor:pointer;margin-left:auto;padding:0 3px}
+.habit-form{display:flex;align-items:end;gap:12px;flex-wrap:wrap;margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+.habit-form>div{flex:1;min-width:190px}
+.habit-form input{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--cell);color:var(--ink);font:inherit}
+.habits-note{color:var(--muted);font-size:13px;margin:16px 0 0}
+@media(max-width:600px){.habits-panel{padding:14px}.habits-grid{gap:5px;grid-template-columns:minmax(112px,1.45fr) repeat(7,minmax(38px,1fr));min-width:390px}.habit-label{font-size:12px;padding:7px}.habit-cell{min-height:56px}.habit-check{width:27px;height:27px}.habits-head{font-size:10px}}
 .repeat-row{margin-top:12px}
 .todo-form{display:flex;align-items:end;gap:12px;flex-wrap:wrap}
 .todo-form>div{flex:1;min-width:190px}
@@ -277,6 +301,7 @@ body[data-mode="light"] #taskRepeat option{
       <button class="side-link active" data-page="home"><span class="side-icon">⌂</span><span>Главная</span></button>
       <button class="side-link" data-page="planner"><span class="side-icon">▦</span><span>Календарь и планы</span></button>
       <button class="side-link" data-page="todo"><span class="side-icon">☑</span><span>Список дел</span></button>
+      <button class="side-link" data-page="habits"><span class="side-icon">✿</span><span>Трекер привычек</span></button>
       <button class="side-link" data-page="settings"><span class="side-icon">⚙</span><span>Настройки</span></button>
     </nav>
     <div class="sidebar-note"><span>♡</span><p>Маленькие шаги — тоже движение вперёд.</p></div>
@@ -305,13 +330,14 @@ body[data-mode="light"] #taskRepeat option{
         <div class="affirmation-bottom"><span>бережно к себе, каждый день</span><button id="newAffirmation" class="affirmation-refresh" type="button">↻ Другая мысль</button></div>
         <span class="affirmation-sparkle">✧</span>
       </section>
-      <div class="section-heading"><div><div class="eyebrow">ТВОИ ИНСТРУМЕНТЫ</div><h2>Разделы</h2></div><span class="section-count">02</span></div>
+      <div class="section-heading"><div><div class="eyebrow">ТВОИ ИНСТРУМЕНТЫ</div><h2>Разделы</h2></div><span class="section-count">03</span></div>
       <button class="section-card" type="button" data-open-page="planner">
         <span class="section-card-icon">▦</span><span class="section-card-copy"><strong>Календарь и планы</strong><small>Расставляй задачи, выбирай даты и отмечай маленькие победы.</small></span><span class="section-card-arrow">→</span>
       </button>
       <button class="section-card" type="button" data-open-page="todo">
         <span class="section-card-icon">☑</span><span class="section-card-copy"><strong>Список дел</strong><small>Собирай повседневные дела в одном месте и отмечай выполненное.</small></span><span class="section-card-arrow">→</span>
       </button>
+      <button class="section-card" type="button" data-open-page="habits"><span class="section-card-icon">✿</span><span class="section-card-copy"><strong>Трекер привычек</strong><small>Отмечай маленькие полезные привычки и наблюдай за своим ритмом.</small></span><span class="section-card-arrow">→</span></button>
       <div class="home-footnote">Здесь можно планировать не только дела, но и заботу о себе. ♡</div>
     </section>
     <section class="page planner-page hidden" id="plannerPage">
@@ -367,6 +393,24 @@ body[data-mode="light"] #taskRepeat option{
           <input id="wallpaperBlur" type="range" min="0" max="20" step="1" value="8">
         </div>
         <p class="wallpaper-hint" id="wallpaperStatus" aria-live="polite">Можно выбрать любое изображение из галереи.</p>
+      </section>
+    </section>
+    <section class="page habits-page hidden" id="habitsPage">
+      <header class="settings-heading"><div class="eyebrow">МАЛЕНЬКИЕ ШАГИ К БОЛЬШОМУ</div><h1>Трекер привычек ✿</h1><p>Отмечай свои маленькие победы каждый день. Не обязательно быть идеальной — важно продолжать.</p></header>
+      <section class="panel habits-panel">
+        <div class="habits-weekbar">
+          <button class="ghost" id="habitsPrevWeek" type="button" aria-label="Предыдущая неделя">‹</button>
+          <div><h2 id="habitsWeekTitle">Эта неделя</h2><button class="habits-today" id="habitsThisWeek" type="button">К текущей неделе</button></div>
+          <button class="ghost" id="habitsNextWeek" type="button" aria-label="Следующая неделя">›</button>
+        </div>
+        <div class="habits-table-wrap">
+          <div class="habits-grid" id="habitsGrid"></div>
+        </div>
+        <form id="habitForm" class="habit-form">
+          <div><label for="habitName">Новая привычка</label><input id="habitName" type="text" maxlength="70" placeholder="Например, выпить стакан воды" required></div>
+          <button class="add" type="submit">＋ Добавить привычку</button>
+        </form>
+        <p class="habits-note" id="habitsProgress" aria-live="polite"></p>
       </section>
     </section>
     <section class="page todo-page hidden" id="todoPage">
@@ -529,15 +573,17 @@ $('#newAffirmation').addEventListener('click',()=>{
  $('.affirmation-quote').textContent=choices[Math.floor(Math.random()*choices.length)];
 });
 function showPage(page){
- const validPage=['home','planner','todo','settings'].includes(page)?page:'home';
+ const validPage=['home','planner','todo','habits','settings'].includes(page)?page:'home';
  document.body.dataset.page=validPage;
  $('#homePage').classList.toggle('hidden',validPage!=='home');
  $('#plannerPage').classList.toggle('hidden',validPage!=='planner');
  $('#todoPage').classList.toggle('hidden',validPage!=='todo');
+ $('#habitsPage').classList.toggle('hidden',validPage!=='habits');
  $('#settingsPage').classList.toggle('hidden',validPage!=='settings');
  document.querySelectorAll('.side-link').forEach(button=>button.classList.toggle('active',button.dataset.page===validPage));
  if(validPage==='planner') render();
  if(validPage==='todo') renderTodo();
+ if(validPage==='habits') renderHabits();
  window.scrollTo({top:0,behavior:'smooth'});
 }
 document.querySelectorAll('.side-link').forEach(button=>button.addEventListener('click',()=>showPage(button.dataset.page)));
@@ -642,6 +688,54 @@ $('#taskForm').addEventListener('submit',e=>{
  const k=key(selected);(tasks[k]??=[]).push({name,time:$('#taskTime').value,color:$('#taskColor').value,done:false,repeat:$('#taskRepeat').value,until:$('#taskRepeatUntil').value||''});
  save();$('#taskName').value='';$('#taskRepeat').value='none';$('#taskRepeatUntil').value='';render();
 });
+// Weekly habit tracker
+const habitsStorageKey='splimHabits';
+let habits=[];
+try{habits=JSON.parse(localStorage.getItem(habitsStorageKey)||'[]')||[]}catch(e){habits=[]}
+let habitsWeekOffset=0;
+const saveHabits=()=>localStorage.setItem(habitsStorageKey,JSON.stringify(habits));
+function weekStart(offset=0){
+ const now=new Date();now.setHours(0,0,0,0);
+ const monday=new Date(now);monday.setDate(now.getDate()-(now.getDay()+6)%7+offset*7);return monday;
+}
+function renderHabits(){
+ const grid=$('#habitsGrid');if(!grid)return;grid.innerHTML='';
+ const start=weekStart(habitsWeekOffset);
+ const end=new Date(start);end.setDate(start.getDate()+6);
+ $('#habitsWeekTitle').textContent=start.toLocaleDateString('ru-RU',{day:'numeric',month:'long'})+' — '+end.toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});
+ const weekdays=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+ const nameHead=document.createElement('div');nameHead.className='habits-head habits-name-head';nameHead.textContent='Привычка';grid.appendChild(nameHead);
+ const dates=[];
+ for(let i=0;i<7;i++){
+  const date=new Date(start);date.setDate(start.getDate()+i);dates.push(date);
+  const head=document.createElement('div');head.className='habits-head'+(key(date)===key(today)?' today':'');
+  const day=document.createElement('span');day.textContent=weekdays[i];
+  const num=document.createElement('strong');num.textContent=date.getDate();
+  head.append(day,num);grid.appendChild(head);
+ }
+ let completed=0,total=0;
+ habits.forEach(habit=>{
+  const label=document.createElement('div');label.className='habit-label';label.textContent=habit.name;
+  const remove=document.createElement('button');remove.className='habit-delete';remove.type='button';remove.textContent='×';remove.setAttribute('aria-label','Удалить привычку');
+  remove.addEventListener('click',()=>{if(!confirm('Удалить привычку «'+habit.name+'» и её отметки?'))return;habits=habits.filter(x=>x.id!==habit.id);saveHabits();renderHabits()});
+  label.appendChild(remove);grid.appendChild(label);
+  dates.forEach(date=>{
+   const dateKey=key(date),cell=document.createElement('div');cell.className='habit-cell';
+   const check=document.createElement('input');check.type='checkbox';check.className='habit-check';check.checked=!!(habit.done&&habit.done[dateKey]);check.setAttribute('aria-label',habit.name+', '+date.toLocaleDateString('ru-RU'));
+   total++;if(check.checked)completed++;
+   check.addEventListener('change',()=>{habit.done=habit.done||{};if(check.checked)habit.done[dateKey]=true;else delete habit.done[dateKey];saveHabits();renderHabits()});
+   cell.appendChild(check);grid.appendChild(cell);
+  });
+ });
+ if(!habits.length){
+  const empty=document.createElement('div');empty.className='todo-empty';empty.style.gridColumn='1 / -1';empty.textContent='Пока здесь нет привычек. Добавь первую маленькую цель ♡';grid.appendChild(empty);
+ }
+ $('#habitsProgress').textContent=habits.length?'Отмечено '+completed+' из '+total+' привычек за эту неделю ♡':'Каждая маленькая отметка — уже забота о себе ♡';
+}
+$('#habitForm').addEventListener('submit',e=>{e.preventDefault();const input=$('#habitName');const name=input.value.trim();if(!name)return;habits.push({id:Date.now()+'-'+Math.random().toString(16).slice(2),name,done:{}});saveHabits();input.value='';renderHabits()});
+$('#habitsPrevWeek').addEventListener('click',()=>{habitsWeekOffset--;renderHabits()});
+$('#habitsNextWeek').addEventListener('click',()=>{habitsWeekOffset++;renderHabits()});
+$('#habitsThisWeek').addEventListener('click',()=>{habitsWeekOffset=0;renderHabits()});
 let todoItems=[];
 try{todoItems=JSON.parse(localStorage.getItem('splimTodoItems')||'[]')||[]}catch(e){todoItems=[]}
 function saveTodo(){localStorage.setItem('splimTodoItems',JSON.stringify(todoItems))}
