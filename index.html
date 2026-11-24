@@ -22,6 +22,11 @@
 
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,var(--bg1),var(--bg2));font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);min-height:100vh;padding:28px;transition:background .25s,color .25s}
 .wrap{max-width:1100px;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px}
+.home-title{justify-content:flex-start;align-items:center;gap:15px;margin:8px 0 24px}
+.home-title h1{font-size:clamp(26px,4vw,36px);font-weight:750;letter-spacing:-.035em}
+.home-title-flower{width:62px;height:62px;flex:0 0 62px;padding:5px;border-radius:20px;background:color-mix(in srgb,var(--pink2) 55%,var(--white));color:var(--pink);transform:rotate(6deg)}
+.planner-tools{display:flex;justify-content:flex-end;margin-bottom:18px}
+@media(max-width:600px){.home-title{margin-top:4px;margin-bottom:20px}.home-title-flower{width:54px;height:54px;flex-basis:54px}.planner-tools{justify-content:flex-start}}
 h1{font-size:clamp(25px,4vw,36px);margin:0;color:var(--accentText)}
 .themebar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}.themebar label{font-size:12px;color:var(--muted);font-weight:700}
 .themebar select{border:1px solid var(--line);border-radius:999px;padding:8px 12px;background:var(--panel);color:var(--ink)}
@@ -196,18 +201,9 @@ body[data-page="home"] #todayBtn{display:none}
   </aside>
   <div class="app-main">
    <div class="wrap">
-    <header class="top">
-      <div><h1>Твоё пространство</h1><div class="sub">Немного порядка и много заботы о себе</div></div>
-      <div class="top-actions">
-        <div class="theme-control"><label for="paletteSelect">Цвет темы</label><select id="paletteSelect" aria-label="Цветовая тема">
-          <option value="pink">Розовая</option><option value="peach">Персиковая</option><option value="lavender">Лавандовая</option><option value="mint">Мятная</option><option value="sky">Небесная</option>
-        </select></div>
-        <div class="theme-control"><label for="modeSelect">Режим</label><select id="modeSelect" aria-label="Светлая или тёмная тема"><option value="light">Светлая ☀</option><option value="dark">Тёмная ☾</option></select></div>
-        <button class="pill" id="todayBtn">Сегодня</button>
-      </div>
-    </header>
-    <section class="page home-page" id="homePage">
-      <div class="welcome-row"><div><div class="eyebrow">ТВОЙ МЯГКИЙ СТАРТ</div><h2>Привет! Рада тебя видеть ♡</h2><p>Пусть сегодня будет день, в котором найдётся место и делам, и тебе.</p></div><div class="welcome-flower"><svg class="splim-symbol" viewBox="0 0 100 100" role="img" aria-label="Цветочек из блокнота" xmlns="http://www.w3.org/2000/svg">
+    <header class="top home-title">
+      <h1>Твоё пространство♡</h1>
+      <div class="home-title-flower"><svg class="splim-symbol" viewBox="0 0 100 100" role="img" aria-label="Цветочек из блокнота" xmlns="http://www.w3.org/2000/svg">
   <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
     <path d="M50 49 C49 59 49 64 50 71" stroke-width="4"/>
     <path d="M49 64 C40 55 34 58 33 65 C40 69 46 68 49 64Z" fill="currentColor" stroke-width="1.5"/>
@@ -218,7 +214,9 @@ body[data-page="home"] #todayBtn{display:none}
     <path d="M50 8 C46 1 39 6 42 13 C34 9 30 17 37 21 C29 25 35 33 43 29 C43 38 53 38 54 29 C62 34 68 26 61 21 C68 15 62 8 55 13 C57 5 50 2 50 8Z" fill="currentColor" stroke-width="2"/>
     <circle cx="50" cy="21" r="4" fill="white" stroke="none"/>
   </g>
-</svg></div></div>
+</svg></div>
+    </header>der>
+    <section class="page home-page" id="homePage">
       <section class="affirmation-card">
         <div class="affirmation-kicker">АФФИРМАЦИЯ ДНЯ</div>
         <div class="affirmation-quote">«Мне не нужно спешить. Я могу двигаться в своём темпе и всё равно приходить к важному».</div>
@@ -232,6 +230,15 @@ body[data-page="home"] #todayBtn{display:none}
       <div class="home-footnote">Здесь можно планировать не только дела, но и заботу о себе. ♡</div>
     </section>
     <section class="page planner-page hidden" id="plannerPage">
+  <div class="planner-tools">
+    <div class="top-actions">
+      <div class="theme-control"><label for="paletteSelect">Цвет темы</label><select id="paletteSelect" aria-label="Цветовая тема">
+        <option value="pink">Розовая</option><option value="peach">Персиковая</option><option value="lavender">Лавандовая</option><option value="mint">Мятная</option><option value="sky">Небесная</option>
+      </select></div>
+      <div class="theme-control"><label for="modeSelect">Режим</label><select id="modeSelect" aria-label="Светлая или тёмная тема"><option value="light">Светлая ☀</option><option value="dark">Тёмная ☾</option></select></div>
+      <button class="pill" id="todayBtn">Сегодня</button>
+    </div>
+  </div>
   <main class="layout">
     <section class="panel">
       <div class="monthbar"><h2 id="monthTitle"></h2><div class="nav"><button id="prev" aria-label="Предыдущий месяц">←</button><button id="next" aria-label="Следующий месяц">→</button></div></div>
