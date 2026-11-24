@@ -1459,6 +1459,7 @@ if(window.splimCurrentUser)syncAccountData(window.splimCurrentUser);
  function showAvatar(url){if(url){avatarImage.src=url;avatar.classList.add('has-image');removeButton.hidden=false;}else{avatarImage.removeAttribute('src');avatar.classList.remove('has-image');removeButton.hidden=true;}}
  async function refresh(){
   const user=window.splimCurrentUser;signedOut.hidden=!!user;signedIn.hidden=!user;
+  if(window.splimUpdatePasswordAccess)window.splimUpdatePasswordAccess(user);
   if(!user){profileUserId=null;currentPath=null;selectedFile=null;showAvatar(null);if(window.splimUpdateGreeting)window.splimUpdateGreeting('');return;}
   if(profileUserId===user.id&&status.textContent.includes('сохранены'))return;
   profileUserId=user.id;selectedFile=null;fileInput.value='';say('♡ Загружаем профиль…');
