@@ -1439,7 +1439,7 @@ function readHomeLayout(){
   const saved=JSON.parse(localStorage.getItem(HOME_LAYOUT_KEY)||'null');if(!saved||typeof saved!=='object')return defaultHomeLayout();
   const normalize=(value)=>Array.isArray(value)?value.filter((id,index,array)=>HOME_SECTIONS.some(item=>item.id===id)&&array.indexOf(id)===index):[];
   const sections=normalize(saved.sections);HOME_SECTIONS.forEach(item=>{if(!sections.includes(item.id))sections.push(item.id);});
-  const visible=normalize(saved.visible);if(!visible.includes('progress'))visible.unshift('progress');return {version:1,affirmation:saved.affirmation!==false,visible,sections};
+  const visible=normalize(saved.visible);return {version:1,affirmation:saved.affirmation!==false,visible,sections};
  }catch(e){return defaultHomeLayout();}
 }
 let homeLayout=readHomeLayout();
@@ -1537,8 +1537,8 @@ applyHomeLayout();
 let progressPeriod='week',progressOffset=0,progressCategory='habits';
 const progressDefinitions=[
  {id:'habits',title:'Трекер привычек',icon:'✿',description:'Регулярность твоих маленьких привычек.',hint:'Отметки привычек',stats:(a)=>[['Отметки',a.done],['Дней с отметками',a.active],['Привычки',a.items]],series:a=>a.daily},
- {id:'planner',title:'Календарь и планы',icon:'▦',description:'Запланированные дела и выполненные планы.',hint:'Выполненные планы',stats:a=>[['Выполнено',a.done],['Всего запланировано',a.total],['Доля выполнения',a.rate+'%']],series:a=>a.daily},
- {id:'todo',title:'Список дел',icon:'☑',description:'Твои завершённые дела из личного списка.',hint:'Завершённые дела',stats:a=>[['Выполнено',a.done],['Всего дел',a.total],['Доля выполнения',a.rate+'%']],series:a=>a.daily},
+ {id:'planner',title:'Календарь и планы',icon:'▦',description:'Запланированные дела и выполненные планы.',hint:'Выполненные планы',stats:a=>[['Выполнено',a.done],['Запланировано',a.total],['Дней с выполнением',a.active]],series:a=>a.daily},
+ {id:'todo',title:'Список дел',icon:'☑',description:'Твои завершённые дела из личного списка.',hint:'Завершённые дела',stats:a=>[['Выполнено за период',a.done],['Всего в списке',a.total],['Без даты завершения',a.legacy]],series:a=>a.daily},
  {id:'water',title:'Вода',icon:'♡',description:'Небольшие напоминания о заботе о себе.',hint:'Стаканы воды',stats:a=>[['Стаканов',a.total],['Дней с записями',a.active],['Среднее за день',a.average]],series:a=>a.daily},
  {id:'sleep',title:'Сон',icon:'☾',description:'Как часто ты записывала продолжительность сна.',hint:'Часы сна',stats:a=>[['Среднее',a.average+' ч'],['Записей',a.active],['Всего часов',a.total+' ч']],series:a=>a.daily},
  {id:'activity',title:'Моё движение',icon:'⌁',description:'Шаги, тренировки и потраченные калории.',hint:'Шаги',stats:a=>[['Шаги',a.steps.toLocaleString('ru-RU')],['Тренировки',a.workouts],['Потрачено ккал',a.calories.toLocaleString('ru-RU')]],series:a=>a.daily},
@@ -1558,10 +1558,23 @@ function progressDays(){
  return days;
 }
 function progressDateLabel(d,opts={day:'numeric',month:'short'}){return d.toLocaleDateString('ru-RU',opts);}
+function progressPlannerDoneForDate(date){
+ const dateKey=progressDateKey(date);let count=0;
+ Object.entries(tasks).forEach(([sourceKey,items])=>(items||[]).forEach(task=>{
+  if(task.repeat&&task.repeat!=='none'){
+   if((task.doneDates||[]).includes(dateKey)&&!(task.skippedDates||[]).includes(dateKey))count++;
+  }else if(task.done){
+   const completedDate=task.completedAt?String(task.completedAt).slice(0,10):sourceKey;
+   if(completedDate===dateKey)count++;
+  }
+ }));
+ return count;
+}
 function progressPlannerData(days){
- let total=0,done=0;
- const daily=days.map(d=>{const k=progressDateKey(d),items=getTasksForDate(d);total+=items.length;const count=items.filter(x=>{const t=x.task;if(t.repeat&&t.repeat!=='none')return (t.doneDates||[]).includes(k);if(t.completedAt)return String(t.completedAt).slice(0,10)===k;return !!t.done&&x.sourceKey===k;}).length;done+=count;return count;});
- return {total,done,rate:total?Math.round(done/total*100):0,daily};
+ let total=0;
+ days.forEach(d=>{total+=getTasksForDate(d).length;});
+ const daily=days.map(progressPlannerDoneForDate),done=daily.reduce((a,b)=>a+b,0);
+ return {total,done,active:daily.filter(x=>x>0).length,daily};
 }
 function progressTodoData(days){
  const keys=new Set(days.map(progressDateKey));const dated=todoItems.filter(x=>x.done&&x.completedAt&&keys.has(String(x.completedAt).slice(0,10)));const total=todoItems.length,legacy=todoItems.filter(x=>x.done&&!x.completedAt).length;const daily=days.map(d=>todoItems.filter(x=>x.done&&x.completedAt&&String(x.completedAt).slice(0,10)===progressDateKey(d)).length);return {done:dated.length,total,rate:total?Math.round(todoItems.filter(x=>x.done).length/total*100):0,daily,legacy};
@@ -1579,22 +1592,28 @@ function progressCategoryData(id,days){
  if(id==='notes'){const inRange=notes.filter(x=>{const d=new Date(x.createdAt);return d>=progressRange().start&&d<=progressRange().end;});const daily=days.map(d=>notes.filter(x=>{const n=new Date(x.createdAt);return progressDateKey(n)===progressDateKey(d);}).length);return {total:inRange.length,active:daily.filter(x=>x>0).length,all:notes.length,daily};}
  return {total:0,active:0,daily:days.map(()=>0)};
 }
+function progressDailyActivityCount(date){
+ const k=progressDateKey(date);
+ const habitMarks=habits.reduce((n,h)=>n+(h.done&&h.done[k]?1:0),0);
+ const plannerMarks=progressPlannerDoneForDate(date);
+ const todoMarks=todoItems.filter(x=>x.done&&x.completedAt&&String(x.completedAt).slice(0,10)===k).length;
+ const waterMark=Number(waterStore.days[k])>0?1:0;
+ const sleepMark=sleepStore.days[k]&&Number(sleepStore.days[k].hours)>0?1:0;
+ const activity=activityStore.days[k]||{};
+ const activityMark=Number(activity.steps)>0||(Array.isArray(activity.workouts)&&activity.workouts.length>0)||Number(activity.calories)>0?1:0;
+ const moodMark=moodStore.entries[k]?1:0,gratitudeMark=gratitudeEntries[k]?1:0;
+ const noteMarks=notes.filter(x=>progressDateKey(new Date(x.createdAt))===k).length;
+ return habitMarks+plannerMarks+todoMarks+waterMark+sleepMark+activityMark+moodMark+gratitudeMark+noteMarks;
+}
 function progressAggregate(days){
- const ids=['habits','planner','todo','water','sleep','activity','mood','gratitude','notes'],data=ids.map(id=>progressCategoryData(id,days));
- const active=new Set();ids.forEach(id=>days.forEach(d=>{const k=progressDateKey(d);let yes=false;
-  if(id==='habits')yes=habits.some(h=>h.done&&h.done[k]);
-  else if(id==='planner')yes=getTasksForDate(d).some(x=>x.done);
-  else if(id==='todo')yes=todoItems.some(x=>x.done&&x.completedAt&&String(x.completedAt).slice(0,10)===k);
-  else if(id==='water')yes=Number(waterStore.days[k])>0;
-  else if(id==='sleep')yes=!!sleepStore.days[k];
-  else if(id==='activity'){const a=activityStore.days[k]||{};yes=Number(a.steps)>0||(a.workouts||[]).length>0||Number(a.calories)>0;}
-  else if(id==='mood')yes=!!moodStore.entries[k];
-  else if(id==='gratitude')yes=!!gratitudeEntries[k];
-  else if(id==='notes')yes=notes.some(x=>progressDateKey(new Date(x.createdAt))===k);
-  if(yes)active.add(k);
- }));
- const total=days.reduce((n,d)=>n+getTasksForDate(d).filter(x=>x.done).length,0)+data[0].done+data[2].done+data[6].total+data[7].total;
- return {active:active.size,total,notes:data[8].total,workouts:data[5].workouts,water:data[3].total,sleep:data[4].average};
+ const data={
+  habits:progressCategoryData('habits',days),planner:progressPlannerData(days),todo:progressTodoData(days),
+  water:progressCategoryData('water',days),sleep:progressCategoryData('sleep',days),
+  activity:progressCategoryData('activity',days),mood:progressCategoryData('mood',days),
+  gratitude:progressCategoryData('gratitude',days),notes:progressCategoryData('notes',days)
+ };
+ const daily=days.map(progressDailyActivityCount),active=daily.filter(x=>x>0).length,total=daily.reduce((a,b)=>a+b,0);
+ return {active,total,notes:data.notes.total,workouts:data.activity.workouts,water:data.water.total,sleep:data.sleep.average};
 }
 function progressRenderBars(container,values,days){
  container.innerHTML='';let bars=values.map((value,i)=>({value,day:days[i],label:progressDateLabel(days[i],{weekday:'short',day:'numeric'}).replace('.','')}));
@@ -1623,12 +1642,12 @@ function renderProgress(){
  const title=document.getElementById('progressPeriodTitle'),subtitle=document.getElementById('progressPeriodSubtitle');
  if(progressPeriod==='week'){const end=new Date(range.start);end.setDate(end.getDate()+6);title.textContent=isCurrent?'Эта неделя':progressDateLabel(range.start,{day:'numeric',month:'short'})+' — '+progressDateLabel(end,{day:'numeric',month:'short'});subtitle.textContent=range.start.toLocaleDateString('ru-RU',{month:'long',year:'numeric'});}
  else{title.textContent=range.start.toLocaleDateString('ru-RU',{month:'long',year:'numeric'});subtitle.textContent=isCurrent?'Текущий месяц':'Архив месяца';}
- document.getElementById('progressPrev').disabled=false;document.getElementById('progressNext').disabled=progressOffset>=0;document.getElementById('progressNext').style.opacity=progressOffset>=0?'.35':'1';
+ document.getElementById('progressPrev').disabled=false;document.getElementById('progressNext').disabled=progressOffset>=0;document.getElementById('progressNext').style.opacity=progressOffset>=0?'.35':'1';document.getElementById('progressNext').setAttribute('aria-disabled',String(progressOffset>=0));
  const agg=progressAggregate(days),summary=document.getElementById('progressSummary');summary.innerHTML='';
  [['✧',agg.active,'Активных дней','Дни, когда ты что-то отмечала'],['♡',agg.total,'Маленьких побед','Выполненные дела, привычки и записи'],['⌁',agg.workouts,'Тренировок','Записи о движении'],['✎',agg.notes,'Новых заметок','Мысли, сохранённые за период']].forEach(([icon,value,label,hint])=>{const card=document.createElement('div');card.className='progress-stat-card';const mark=document.createElement('div');mark.className='progress-stat-icon';mark.textContent=icon;const val=document.createElement('div');val.className='progress-stat-value';val.textContent=Number(value).toLocaleString('ru-RU');const name=document.createElement('div');name.className='progress-stat-label';name.textContent=label;const small=document.createElement('div');small.className='progress-stat-hint';small.textContent=hint;card.append(mark,val,name,small);summary.append(card);});
  document.getElementById('progressHeroText').textContent=agg.active?'За этот период у тебя уже '+agg.active+' '+(agg.active===1?'активный день':'активных дней')+'. Продолжай в своём темпе — это здорово!':'Здесь соберутся твои записи, привычки и маленькие достижения. Начни с любого небольшого шага.';
- const overview=days.map(d=>{const k=progressDateKey(d);return (habits.reduce((n,h)=>n+(h.done&&h.done[k]?1:0),0))+(getTasksForDate(d).filter(x=>x.done).length)+(todoItems.filter(x=>x.done&&x.completedAt&&String(x.completedAt).slice(0,10)===k).length)+(moodStore.entries[k]?1:0)+(gratitudeEntries[k]?1:0);});
- progressRenderBars(document.getElementById('progressOverviewChart'),overview,days);document.getElementById('progressChartCaption').textContent=progressPeriod==='week'?'Количество отметок и завершённых дел по дням недели':'Количество отметок и завершённых дел по дням месяца';
+ const overview=days.map(progressDailyActivityCount);
+ progressRenderBars(document.getElementById('progressOverviewChart'),overview,days);document.getElementById('progressChartCaption').textContent=progressPeriod==='week'?'Количество отметок и записей по дням недели':'Количество отметок и записей по дням месяца';
  const categories=document.getElementById('progressCategories');categories.innerHTML='';
  progressDefinitions.forEach(def=>{const data=progressCategoryData(def.id,days),value=def.id==='activity'?data.steps.toLocaleString('ru-RU'):def.id==='sleep'?data.average+' ч':def.id==='water'?data.total+' стак.':def.id==='habits'||def.id==='planner'||def.id==='todo'?data.done+' выполнено':data.total+' записей';
  const b=document.createElement('button');b.type='button';b.className='progress-category-card'+(def.id===progressCategory?' is-selected':'');b.dataset.progressCategory=def.id;const icon=document.createElement('span');icon.className='progress-category-icon';icon.textContent=def.icon;const copy=document.createElement('span');copy.className='progress-category-copy';const strong=document.createElement('strong');strong.textContent=def.title;const small=document.createElement('small');small.textContent=value;copy.append(strong,small);const arrow=document.createElement('span');arrow.className='progress-category-arrow';arrow.textContent='›';b.append(icon,copy,arrow);b.addEventListener('click',()=>{progressCategory=def.id;progressRenderDetail(days);document.getElementById('progressDetail').scrollIntoView({behavior:'smooth',block:'start'});});categories.append(b);});
