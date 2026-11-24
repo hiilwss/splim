@@ -716,16 +716,20 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
   signedIn.hidden=!user;
   if(user){
    try{localStorage.removeItem('splimGuestMode');}catch(e){}
+   if(typeof window.splimSetThemeAccess==='function')window.splimSetThemeAccess(true);
    welcome.textContent='Ты вошла как '+(user.email||'пользователь')+' ♡';
    unlockPlanner();
   }else{
+   if(typeof window.splimSetThemeAccess==='function')window.splimSetThemeAccess(false);
    let guest=false;try{guest=localStorage.getItem('splimGuestMode')==='true';}catch(e){}
-   if(guest)unlockPlanner();else lockPlanner();
+   if(guest){if(typeof window.splimApplyGuestTheme==='function')window.splimApplyGuestTheme();unlockPlanner();}else lockPlanner();
   }
  }
  function showRecovery(){signedOut.hidden=true;signedIn.hidden=true;recovery.hidden=false;}
  document.getElementById('gateGuest').addEventListener('click',()=>{
   try{localStorage.setItem('splimGuestMode','true');}catch(e){}
+  if(typeof window.splimSetThemeAccess==='function')window.splimSetThemeAccess(false);
+  if(typeof window.splimApplyGuestTheme==='function')window.splimApplyGuestTheme();
   unlockPlanner();
  });
  if(!client){
@@ -1099,7 +1103,19 @@ function readThemeSettings(){
   return {palette:legacyPalette,mode:legacyMode};
 }
 
+window.splimSetThemeAccess=function(isAuthenticated){
+  paletteSelect.disabled=!isAuthenticated;
+  modeSelect.disabled=!isAuthenticated;
+  const panel=paletteSelect.closest('.settings-panel');
+  if(panel)panel.classList.toggle('guest-theme-locked',!isAuthenticated);
+};
+window.splimApplyGuestTheme=function(){
+  try{localStorage.setItem('pinkPlannerSettings',JSON.stringify({palette:'lavender',mode:'light'}));}catch(e){}
+  applyTheme('lavender','light');
+};
 function applyTheme(palette,mode){
+  const isGuest=(()=>{try{return localStorage.getItem('splimGuestMode')==='true'&&!window.splimCurrentUser;}catch(e){return false;}})();
+  if(isGuest){palette='lavender';mode='light';}
   const validPalettes=['pink','peach','lavender','mint','sky','chocolate','beige'];
   if(!validPalettes.includes(palette)) palette='pink';
   if(mode!=='dark' && mode!=='light') mode='light';
@@ -1118,9 +1134,12 @@ function applyTheme(palette,mode){
 
 const initialTheme=readThemeSettings();
 applyTheme(initialTheme.palette||'pink',initialTheme.mode||'light');
+window.splimSetThemeAccess(!!window.splimCurrentUser);
+let initiallyGuest=false;try{initiallyGuest=localStorage.getItem('splimGuestMode')==='true';}catch(e){}
+if(initiallyGuest&&!window.splimCurrentUser)window.splimApplyGuestTheme();
 
-paletteSelect.addEventListener('change',()=>applyTheme(paletteSelect.value,modeSelect.value));
-modeSelect.addEventListener('change',()=>applyTheme(paletteSelect.value,modeSelect.value));
+paletteSelect.addEventListener('change',()=>{if(!paletteSelect.disabled)applyTheme(paletteSelect.value,modeSelect.value);});
+modeSelect.addEventListener('change',()=>{if(!modeSelect.disabled)applyTheme(paletteSelect.value,modeSelect.value);});
 
 
 const affirmations=[
