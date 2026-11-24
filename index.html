@@ -325,9 +325,27 @@ body[data-mode="light"] #taskRepeat option{
   background:var(--white);
   color:var(--ink);
 }
+
+/* Guest welcome gate */
+body.auth-pending .app-shell,body.gate-locked .app-shell{filter:blur(7px);transform:scale(1.008);transform-origin:center;pointer-events:none;user-select:none}
+body.auth-pending #wallpaperLayer,body.gate-locked #wallpaperLayer{filter:blur(12px)}
+.gate-overlay{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;padding:22px;background:rgba(255,239,246,.30);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.gate-card{width:min(100%,470px);padding:clamp(24px,5vw,38px);border:1px solid #f0cfdd;border-radius:28px;background:rgba(255,250,252,.96);box-shadow:0 24px 80px rgba(142,73,103,.22);text-align:center;color:#80516a}
+.gate-flower{width:62px;height:62px;margin:0 auto 14px;border-radius:22px;display:grid;place-items:center;background:#fae6ef;color:#c16e93;font-size:34px}
+.gate-card h2{margin:0;color:#a65379;font-size:clamp(24px,5vw,30px)}
+.gate-card p{margin:12px 0 22px;color:#946b7e;line-height:1.65;font-size:14px}
+.gate-actions{display:grid;gap:10px}
+.gate-button{width:100%;border:0;border-radius:15px;padding:14px 18px;font:inherit;font-weight:750;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.gate-button:hover{transform:translateY(-1px)}
+.gate-button.primary{background:#d98eae;color:white;box-shadow:0 7px 18px #d98eae55}
+.gate-button.secondary{background:#f8eaf0;color:#a65379;border:1px solid #efd3df}
+.gate-button.guest{background:transparent;color:#a56c85;text-decoration:underline;text-underline-offset:4px;font-size:13px;padding:10px}
+.gate-footnote{display:block;margin-top:14px;color:#ae8a9b;font-size:11px;line-height:1.5}
+@media(max-width:480px){.gate-overlay{padding:16px}.gate-card{border-radius:23px}}
+
 </style>
 </head>
-<body>
+<body class="auth-pending">
 <div id="wallpaperLayer" aria-hidden="true"></div>
 <div class="splash" id="splashScreen" aria-label="Загрузка splim">
   <div class="splash-mark"><svg class="splim-symbol" viewBox="0 0 100 100" role="img" aria-label="Цветочек из блокнота" xmlns="http://www.w3.org/2000/svg">
@@ -578,6 +596,20 @@ body[data-mode="light"] #taskRepeat option{
    </div>
   </div>
 </div>
+<div class="gate-overlay" id="guestGate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+  <section class="gate-card">
+    <div class="gate-flower" aria-hidden="true">♡</div>
+    <h2 id="gateTitle">Добро пожаловать в splim ♡</h2>
+    <p>Создай личный аккаунт, чтобы в будущем хранить свои планы и заметки в одном месте и пользоваться ими на разных устройствах.</p>
+    <div class="gate-actions">
+      <button class="gate-button primary" id="gateCreate" type="button">Создать аккаунт</button>
+      <button class="gate-button secondary" id="gateLogin" type="button">У меня уже есть аккаунт</button>
+      <button class="gate-button guest" id="gateGuest" type="button">Продолжить как гость</button>
+    </div>
+    <small class="gate-footnote">Гостевые записи пока сохраняются только в этом браузере. Облачная синхронизация будет подключена отдельно ♡</small>
+  </section>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* splim account authentication */
@@ -618,11 +650,35 @@ body[data-mode="light"] #taskRepeat option{
   reset.hidden=mode!=='login';
   say(mode==='login'?'♡ Войди в свой аккаунт splim.':'♡ После регистрации мы отправим письмо для подтверждения почты.');
  }
+ const gate=document.getElementById('guestGate');
+ function unlockPlanner(){
+  document.body.classList.remove('auth-pending','gate-locked');
+  if(gate)gate.hidden=true;
+ }
+ function lockPlanner(){
+  document.body.classList.remove('auth-pending');
+  document.body.classList.add('gate-locked');
+  if(gate)gate.hidden=false;
+ }
+ function openAccount(nextMode){
+  try{localStorage.removeItem('splimGuestMode');}catch(e){}
+  unlockPlanner();
+  if(typeof showPage==='function')showPage('settings');
+  setMode(nextMode);
+  email.focus();
+ }
  function showSession(session){
   const user=session&&session.user;
   signedOut.hidden=!!user;
   signedIn.hidden=!user;
-  if(user) welcome.textContent='Ты вошла как '+(user.email||'пользователь')+' ♡';
+  if(user){
+   try{localStorage.removeItem('splimGuestMode');}catch(e){}
+   welcome.textContent='Ты вошла как '+(user.email||'пользователь')+' ♡';
+   unlockPlanner();
+  }else{
+   let guest=false;try{guest=localStorage.getItem('splimGuestMode')==='true';}catch(e){}
+   if(guest)unlockPlanner();else lockPlanner();
+  }
  }
  function showRecovery(){signedOut.hidden=true;signedIn.hidden=true;recovery.hidden=false;}
  if(!client){
@@ -630,6 +686,12 @@ body[data-mode="light"] #taskRepeat option{
   submit.disabled=true;
   return;
  }
+ document.getElementById('gateCreate').addEventListener('click',()=>openAccount('signup'));
+ document.getElementById('gateLogin').addEventListener('click',()=>openAccount('login'));
+ document.getElementById('gateGuest').addEventListener('click',()=>{
+  try{localStorage.setItem('splimGuestMode','true');}catch(e){}
+  unlockPlanner();
+ });
  loginTab.addEventListener('click',()=>setMode('login'));
  signupTab.addEventListener('click',()=>setMode('signup'));
  form.addEventListener('submit',async function(event){
@@ -681,6 +743,7 @@ body[data-mode="light"] #taskRepeat option{
   finally{button.disabled=false;button.textContent='Сохранить новый пароль';}
  });
  document.getElementById('accountSignOut').addEventListener('click',async function(){
+  try{localStorage.removeItem('splimGuestMode');}catch(e){}
   const result=await client.auth.signOut();
   if(result.error){welcome.textContent='Не удалось выйти: '+result.error.message;return;}
   showSession(null);
