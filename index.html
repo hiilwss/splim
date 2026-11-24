@@ -255,6 +255,23 @@ body.ready .app-shell{opacity:1}
 .section-card-copy{display:grid;gap:5px;flex:1}.section-card-copy strong{font-size:16px}.section-card-copy small{color:var(--muted);font-size:12px;line-height:1.5}
 .section-card-arrow{font-size:23px;color:var(--accentText)}
 .home-footnote{margin-top:22px;text-align:center;color:var(--muted);font-size:12px}
+.home-section-list{display:grid;gap:12px}
+.home-customize-button{display:block;margin:22px auto 0;padding:12px 20px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--accentText);font:inherit;font-weight:750;cursor:pointer;box-shadow:0 5px 18px color-mix(in srgb,var(--pink) 8%,transparent)}
+.home-editor{margin-top:16px;padding:clamp(17px,3vw,25px);border:1px solid var(--line);border-radius:21px;background:var(--panel)}
+.home-editor[hidden]{display:none}
+.home-editor-heading h2{margin:0;color:var(--ink);font-size:21px}
+.home-editor-heading p{margin:7px 0 0;color:var(--muted);font-size:13px;line-height:1.55}
+.home-editor-affirmation{display:flex;align-items:center;gap:10px;margin:19px 0;padding:13px 14px;border-radius:13px;background:var(--pale);color:var(--ink);font-size:14px;font-weight:650}
+.home-editor-affirmation input,.home-editor-row input{width:18px;height:18px;accent-color:var(--pink)}
+.home-editor-list-heading{margin:18px 0 10px;color:var(--ink);font-size:14px;font-weight:800}
+.home-editor-sections{display:grid;gap:8px}
+.home-editor-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:13px;background:var(--cell)}
+.home-editor-row label{display:flex;align-items:center;gap:9px;flex:1;min-width:0;color:var(--ink);font-size:13px;font-weight:650}
+.home-editor-move{width:34px;height:34px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);font-size:16px;cursor:pointer}
+.home-editor-move:disabled{opacity:.3;cursor:default}
+.home-editor-done{display:block;margin:18px 0 0 auto;padding:11px 22px;border:1px solid var(--line);border-radius:999px;background:var(--pink);color:white;font:inherit;font-weight:750;cursor:pointer}
+@media(max-width:520px){.home-editor-row{gap:6px;padding:9px}.home-editor-move{width:31px;height:31px;flex:0 0 31px}.home-editor-row label{font-size:12px}}
+
 body[data-mode="dark"] .sidebar{background:#211d27;border-color:#403644}
 body[data-mode="dark"] .side-link.active{background:#493444;color:var(--pink2)}
 body[data-mode="dark"] .sidebar-note,body[data-mode="dark"] .section-card{background:#292430;border-color:#403644}
@@ -426,18 +443,24 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
         <div class="affirmation-bottom"><span>бережно к себе, каждый день</span><button id="newAffirmation" class="affirmation-refresh" type="button">↻ Другая мысль</button></div>
         <span class="affirmation-sparkle">✧</span>
       </section>
-      <div class="section-heading"><div><div class="eyebrow">ТВОИ ИНСТРУМЕНТЫ</div><h2>Разделы</h2></div><span class="section-count">05</span></div>
+      <div class="section-heading"><div><div class="eyebrow">ТВОИ ИНСТРУМЕНТЫ</div><h2>Разделы</h2></div><span class="section-count" id="homeSectionCount">6</span></div>
+      <div class="home-section-list" id="homeSectionList">
       <button class="section-card" type="button" data-open-page="profile"><span class="section-card-icon">♡</span><span class="section-card-copy"><strong>Мой профиль</strong><small>Добавь аватар и имя, чтобы сделать своё пространство по-настоящему личным.</small></span><span class="section-card-arrow">→</span></button>
-      <button class="section-card" type="button" data-open-page="planner">
-        <span class="section-card-icon">▦</span><span class="section-card-copy"><strong>Календарь и планы</strong><small>Расставляй задачи, выбирай даты и отмечай маленькие победы.</small></span><span class="section-card-arrow">→</span>
-      </button>
-      <button class="section-card" type="button" data-open-page="todo">
-        <span class="section-card-icon">☑</span><span class="section-card-copy"><strong>Список дел</strong><small>Собирай повседневные дела в одном месте и отмечай выполненное.</small></span><span class="section-card-arrow">→</span>
-      </button>
+      <button class="section-card" type="button" data-open-page="planner"><span class="section-card-icon">▦</span><span class="section-card-copy"><strong>Календарь и планы</strong><small>Расставляй задачи, выбирай даты и отмечай маленькие победы.</small></span><span class="section-card-arrow">→</span></button>
+      <button class="section-card" type="button" data-open-page="todo"><span class="section-card-icon">☑</span><span class="section-card-copy"><strong>Список дел</strong><small>Собирай повседневные дела в одном месте и отмечай выполненное.</small></span><span class="section-card-arrow">→</span></button>
       <button class="section-card" type="button" data-open-page="habits"><span class="section-card-icon">✿</span><span class="section-card-copy"><strong>Трекер привычек</strong><small>Отмечай маленькие полезные привычки и наблюдай за своим ритмом.</small></span><span class="section-card-arrow">→</span></button>
       <button class="section-card" type="button" data-open-page="gratitude"><span class="section-card-icon">♡</span><span class="section-card-copy"><strong>Моменты благодарности</strong><small>Остановись на минутку, прислушайся к себе и сохрани тёплые моменты дня.</small></span><span class="section-card-arrow">→</span></button>
       <button class="section-card" type="button" data-open-page="notes"><span class="section-card-icon">✎</span><span class="section-card-copy"><strong>Заметки</strong><small>Личное место для мыслей, идей и любых записей.</small></span><span class="section-card-arrow">→</span></button>
+      </div>
       <div class="home-footnote">Здесь можно планировать не только дела, но и заботу о себе. ♡</div>
+      <button class="home-customize-button" id="homeCustomizeButton" type="button" aria-expanded="false">⚙ Настроить главную страницу</button>
+      <section class="home-editor panel" id="homeEditor" hidden>
+        <div class="home-editor-heading"><div class="eyebrow">ТВОЁ ПРОСТРАНСТВО</div><h2>Настрой главную ♡</h2><p>Выбирай, что показывать, и располагай разделы в удобном порядке.</p></div>
+        <label class="home-editor-affirmation"><input type="checkbox" id="homeAffirmationToggle" checked> Показывать аффирмацию дня</label>
+        <div class="home-editor-list-heading">Разделы главной страницы</div>
+        <div id="homeEditorSections" class="home-editor-sections"></div>
+        <button class="home-editor-done" id="homeEditorDone" type="button">Готово ♡</button>
+      </section>
     </section>
     <section class="page planner-page hidden" id="plannerPage">
   <div class="planner-tools"><button class="pill" id="todayBtn">Сегодня</button></div>
@@ -849,7 +872,7 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
 
 const $=s=>document.querySelector(s);
 const root=document.documentElement;
-const SPLIM_SYNC_KEYS=['pinkPlannerTasks','splimNotes','splimGratitudeEntries','splimHabits','splimTodoItems','pinkPlannerSettings','pinkPlannerTheme','pinkPlannerMode','splimWallpaperBlur','splimWallpaperPath'];
+const SPLIM_SYNC_KEYS=['pinkPlannerTasks','splimNotes','splimGratitudeEntries','splimHabits','splimTodoItems','splimHomeLayout','pinkPlannerSettings','pinkPlannerTheme','pinkPlannerMode','splimWallpaperBlur','splimWallpaperPath'];
 const syncStatus=$('#syncStatus');
 let syncUser=null,syncReady=false,syncTimer=null,syncBusy=false,syncQueued=false,syncLoading=false;
 let syncChannel=null;
@@ -1196,6 +1219,58 @@ $('#newAffirmation').addEventListener('click',()=>{
  const choices=affirmations.filter(item=>item!==current);
  $('.affirmation-quote').textContent=choices[Math.floor(Math.random()*choices.length)];
 });
+const HOME_SECTIONS=[{id:'profile',title:'Мой профиль'},{id:'planner',title:'Календарь и планы'},{id:'todo',title:'Список дел'},{id:'habits',title:'Трекер привычек'},{id:'gratitude',title:'Моменты благодарности'},{id:'notes',title:'Заметки'}];
+const HOME_LAYOUT_KEY='splimHomeLayout';
+function defaultHomeLayout(){return {version:1,affirmation:true,visible:HOME_SECTIONS.map(item=>item.id),sections:HOME_SECTIONS.map(item=>item.id)};}
+function readHomeLayout(){
+ try{
+  const saved=JSON.parse(localStorage.getItem(HOME_LAYOUT_KEY)||'null');if(!saved||typeof saved!=='object')return defaultHomeLayout();
+  const normalize=(value)=>Array.isArray(value)?value.filter((id,index,array)=>HOME_SECTIONS.some(item=>item.id===id)&&array.indexOf(id)===index):[];
+  const sections=normalize(saved.sections);HOME_SECTIONS.forEach(item=>{if(!sections.includes(item.id))sections.push(item.id);});
+  const visible=normalize(saved.visible);return {version:1,affirmation:saved.affirmation!==false,visible:visible.length?visible:[],sections};
+ }catch(e){return defaultHomeLayout();}
+}
+let homeLayout=readHomeLayout();
+function saveHomeLayout(){try{localStorage.setItem(HOME_LAYOUT_KEY,JSON.stringify(homeLayout));}catch(e){}}
+function applyHomeLayout(){
+ const list=document.getElementById('homeSectionList'),count=document.getElementById('homeSectionCount');if(!list)return;
+ homeLayout.sections.forEach(id=>{const card=list.querySelector('[data-open-page="'+id+'"]');if(card)list.appendChild(card);});
+ list.querySelectorAll('.section-card').forEach(card=>{card.hidden=!homeLayout.visible.includes(card.dataset.openPage);});
+ const visibleCount=homeLayout.visible.length;if(count)count.textContent=String(visibleCount);
+ const heading=list.previousElementSibling;if(heading)heading.hidden=visibleCount===0;
+ const affirmation=document.querySelector('.affirmation-card');if(affirmation)affirmation.hidden=!homeLayout.affirmation;
+}
+function renderHomeEditor(){
+ const target=document.getElementById('homeEditorSections');if(!target)return;target.innerHTML='';
+ homeLayout.sections.forEach((id,index)=>{
+  const item=HOME_SECTIONS.find(entry=>entry.id===id);if(!item)return;
+  const row=document.createElement('div');row.className='home-editor-row';const label=document.createElement('label');
+  const checkbox=document.createElement('input');checkbox.type='checkbox';checkbox.checked=homeLayout.visible.includes(id);checkbox.dataset.homeSectionToggle=id;
+  const title=document.createElement('span');title.textContent=item.title;label.append(checkbox,title);
+  const up=document.createElement('button');up.type='button';up.className='home-editor-move';up.textContent='↑';up.title='Переместить выше';up.setAttribute('aria-label','Переместить '+item.title+' выше');up.disabled=index===0;up.dataset.homeMove='up';up.dataset.homeSection=id;
+  const down=document.createElement('button');down.type='button';down.className='home-editor-move';down.textContent='↓';down.title='Переместить ниже';down.setAttribute('aria-label','Переместить '+item.title+' ниже');down.disabled=index===homeLayout.sections.length-1;down.dataset.homeMove='down';down.dataset.homeSection=id;
+  row.append(label,up,down);target.append(row);
+ });
+}
+function refreshHomeEditor(){const toggle=document.getElementById('homeAffirmationToggle');if(toggle)toggle.checked=homeLayout.affirmation;renderHomeEditor();applyHomeLayout();}
+const homeEditor=document.getElementById('homeEditor'),homeCustomizeButton=document.getElementById('homeCustomizeButton');
+homeCustomizeButton.addEventListener('click',()=>{const opening=homeEditor.hidden;homeEditor.hidden=!opening;homeCustomizeButton.setAttribute('aria-expanded',String(opening));homeCustomizeButton.textContent=opening?'⚙ Скрыть редактор':'⚙ Настроить главную страницу';if(opening)refreshHomeEditor();});
+document.getElementById('homeEditorDone').addEventListener('click',()=>{homeEditor.hidden=true;homeCustomizeButton.setAttribute('aria-expanded','false');homeCustomizeButton.textContent='⚙ Настроить главную страницу';});
+document.getElementById('homeAffirmationToggle').addEventListener('change',event=>{homeLayout.affirmation=event.target.checked;saveHomeLayout();applyHomeLayout();});
+document.getElementById('homeEditorSections').addEventListener('change',event=>{
+ const id=event.target.dataset.homeSectionToggle;if(!id)return;
+ if(event.target.checked){if(!homeLayout.visible.includes(id))homeLayout.visible.push(id);}
+ else homeLayout.visible=homeLayout.visible.filter(sectionId=>sectionId!==id);
+ saveHomeLayout();applyHomeLayout();
+});
+document.getElementById('homeEditorSections').addEventListener('click',event=>{
+ const button=event.target.closest('[data-home-move]');if(!button)return;
+ const index=homeLayout.sections.indexOf(button.dataset.homeSection),next=index+(button.dataset.homeMove==='up'?-1:1);
+ if(index<0||next<0||next>=homeLayout.sections.length)return;
+ [homeLayout.sections[index],homeLayout.sections[next]]=[homeLayout.sections[next],homeLayout.sections[index]];
+ saveHomeLayout();refreshHomeEditor();
+});
+applyHomeLayout();
 function showPage(page){
  const validPage=['home','profile','planner','todo','habits','gratitude','notes','settings'].includes(page)?page:'home';
  document.body.dataset.page=validPage;
