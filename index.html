@@ -1391,13 +1391,15 @@ if(window.splimCurrentUser)syncAccountData(window.splimCurrentUser);
  const fileInput=byId('profileAvatarFile'),avatar=byId('profileAvatar'),avatarImage=byId('profileAvatarImage');
  const removeButton=byId('profileRemoveAvatar'),status=byId('profileStatus');
  let currentPath=null,selectedFile=null,profileUserId=null;
+ let homeGreetingName='';
  window.splimUpdateGreeting=function(name){
+  if(typeof name==='string')homeGreetingName=name.trim();
   const heading=byId('homeGreeting');if(!heading)return;
   const hour=new Date().getHours();
   const greeting=hour>=5&&hour<12?'Доброе утро':hour>=12&&hour<18?'Добрый день':hour>=18&&hour<23?'Добрый вечер':'Доброй ночи';
-  const cleanName=String(name||'').trim();
-  heading.textContent=cleanName?greeting+', '+cleanName+'! ♡':'Твоё пространство♡';
+  heading.textContent=homeGreetingName?greeting+', '+homeGreetingName+'! ♡':'Твоё пространство♡';
  };
+ setInterval(()=>window.splimUpdateGreeting(),60000);
  function say(message,error=false){if(!status)return;status.textContent=message;status.classList.toggle('error',!!error);}
  function showAvatar(url){if(url){avatarImage.src=url;avatar.classList.add('has-image');removeButton.hidden=false;}else{avatarImage.removeAttribute('src');avatar.classList.remove('has-image');removeButton.hidden=true;}}
  async function refresh(){
