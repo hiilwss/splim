@@ -821,10 +821,10 @@ async function applyCloudSnapshot(storage){
  return changed;
 }
 async function syncAccountData(user){
- if(!user){syncUser=null;syncReady=false;clearTimeout(syncTimer);setSyncStatus('Войди в аккаунт, чтобы включить синхронизацию.');return;}
+ if(!user){syncUser=null;syncReady=false;syncLoading=false;clearTimeout(syncTimer);setSyncStatus('Войди в аккаунт, чтобы включить синхронизацию.');return;}
  if(syncUser&&syncUser.id===user.id&&(syncReady||syncLoading))return;
  syncUser=user;syncReady=false;syncLoading=true;setSyncStatus('♡ Подключаем личное облачное хранилище…');
- const client=window.splimSupabase;if(!client){setSyncStatus('Модуль облака не загрузился. Обнови страницу.',true);return;}
+ const client=window.splimSupabase;if(!client){syncLoading=false;setSyncStatus('Модуль облака не загрузился. Обнови страницу.',true);return;}
  try{
   const {data:row,error}=await client.from('user_data').select('data,updated_at').eq('user_id',user.id).maybeSingle();
   if(error)throw error;
