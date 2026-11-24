@@ -1,0 +1,20 @@
+{
+  "id": "./",
+  "name": "splim — твой нежный планер",
+  "short_name": "splim",
+  "description": "Личное пространство для планов, привычек, учёбы и заботы о себе.",
+  "lang": "ru",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fff5f9",
+  "theme_color": "#f8c8dc",
+  "icons": [
+    {
+      "src": "./icons/splim-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
