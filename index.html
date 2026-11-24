@@ -382,6 +382,12 @@ body.auth-pending #wallpaperLayer,body.gate-locked #wallpaperLayer{filter:blur(1
 .profile-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}.profile-primary,.profile-secondary{border:0;border-radius:999px;padding:12px 19px;font:inherit;font-size:13px;font-weight:750;cursor:pointer}.profile-primary{background:var(--pink);color:white;box-shadow:0 5px 14px #ec78a833}.profile-secondary{background:var(--pale);color:var(--accentText);border:1px solid var(--line)}.profile-primary:disabled,.profile-secondary:disabled{opacity:.55;cursor:wait}.profile-status{min-height:20px;margin:15px 0 0;color:var(--muted);font-size:13px;line-height:1.5}.profile-status.error{color:#c04d70}.profile-guest{padding:20px;border-radius:16px;background:var(--pale);color:var(--muted);line-height:1.6}.profile-guest button{margin-top:12px}
 body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#302936);border-color:#493d4b}body[data-mode="dark"] .profile-card{background:#26222dcc;border-color:#49404b}body[data-mode="dark"] .profile-guest{background:#302a36}
 @media(max-width:520px){.profile-avatar-row{align-items:flex-start;gap:14px}.profile-avatar{width:88px;height:88px;flex-basis:88px;border-radius:29px;font-size:36px}.profile-actions>*{width:100%}}
+
+/* Soft Line icon system: strokes inherit the selected palette */
+.ui-icon{width:1.35em;height:1.35em;display:block;fill:none;stroke:currentColor;stroke-width:1.55;stroke-linecap:round;stroke-linejoin:round}
+.side-icon .ui-icon{width:21px;height:21px}.section-card-icon .ui-icon{width:25px;height:25px}.care-big-emoji{display:grid;place-items:center;color:var(--pink)}.care-big-emoji .ui-icon{width:34px;height:34px;stroke-width:1.45}
+.splash-mark,.brand-mark{background:color-mix(in srgb,var(--pink2) 32%,var(--panel));color:var(--pink);box-shadow:0 8px 22px color-mix(in srgb,var(--pink) 12%,transparent);border:1px solid color-mix(in srgb,var(--pink) 24%,var(--line))}
+.splash-mark{animation:none}.splim-symbol{fill:none;stroke:currentColor;stroke-width:1.45;stroke-linecap:round;stroke-linejoin:round}.section-card-icon{background:color-mix(in srgb,var(--pink2) 25%,var(--panel))}
 </style>
 
 <style>
@@ -400,47 +406,25 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
 </style>
 
 </head>
-<body class="auth-pending">
+<body class="auth-pending"><svg aria-hidden="true" width="0" height="0" style="position:absolute;overflow:hidden"><symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 2.8c1.2 4.8 3.4 7 8.2 8.2-4.8 1.2-7 3.4-8.2 8.2-1.2-4.8-3.4-7-8.2-8.2 4.8-1.2 7-3.4 8.2-8.2Z"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1Z"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M7.5 3v4M16.5 3v4M3.5 10h17M8 14h2m4 0h2M8 17h2"/></symbol><symbol id="i-checklist" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="17" rx="2.5"/><path d="m7.5 9 1.5 1.5L12 7.5M14 9h3M7.5 16l1.5 1.5 3-3M14 16h3"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20.5 3.5C10 3 4 7 4 14a6.5 6.5 0 0 0 6.5 6.5c7 0 10-7 10-17Z"/><path d="M3 21c4-6 8-9 14-13"/></symbol><symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.5 8.5c0 5-8.5 11-8.5 11s-8.5-6-8.5-11A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 8.5 2.5Z"/></symbol><symbol id="i-note" viewBox="0 0 24 24"><path d="M6 3.5h9l4 4V21H6a2 2 0 0 1-2-2V5.5a2 2 0 0 1 2-2Z"/><path d="M14.5 3.5V8H19M8 12h8M8 16h8"/></symbol><symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M19 13.5 21 15l-2 3.5-2.5-.5-2 1-.5 2h-4l-.5-2-2-1-2.5.5L3 15l2-1.5v-3L3 9l2-3.5 2.5.5 2-1 .5-2h4l.5 2 2 1 2.5-.5L21 9l-2 1.5Z"/></symbol><symbol id="i-water" viewBox="0 0 24 24"><path d="M12 2.8S5 11 5 15.5a7 7 0 0 0 14 0C19 11 12 2.8 12 2.8Z"/><path d="M9 16a3 3 0 0 0 3 3"/></symbol><symbol id="i-moon" viewBox="0 0 24 24"><path d="M19.5 15.5A8.5 8.5 0 0 1 8.5 4.5 8.5 8.5 0 1 0 19.5 15.5Z"/></symbol><symbol id="i-shoe" viewBox="0 0 24 24"><path d="M3 15.5c3.5 0 5-2 6-6l2 1c1.5 2 3 3 5 3.5l4 1.5c1 .4 1.5 1.2 1.5 2.2V20H3Z"/><path d="M9 10l2 2m2-.5 2 2M3 17h18"/></symbol><symbol id="i-flame" viewBox="0 0 24 24"><path d="M13 2.5c1 5-3 6-2 9 1-1 2-2 2-3.5 4 3 6 6 5 9.5a6 6 0 0 1-12 0c0-3 1.5-5 4-7.5-.2 3 1 4 1 4 2-3 2-7 2-11.5Z"/></symbol><symbol id="i-yoga" viewBox="0 0 24 24"><circle cx="12" cy="4.5" r="2"/><path d="M12 7v5m0-3-5 3m5-3 5 3M12 12l-4 5m4-5 4 5M4 20h16"/></symbol></svg><link id="splimFavicon" rel="icon" type="image/svg+xml">
 <div id="wallpaperLayer" aria-hidden="true"></div>
 <div class="splash" id="splashScreen" aria-label="Загрузка splim">
-  <div class="splash-mark"><svg class="splim-symbol" viewBox="0 0 100 100" role="img" aria-label="Цветочек из блокнота" xmlns="http://www.w3.org/2000/svg">
-  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M50 49 C49 59 49 64 50 71" stroke-width="4"/>
-    <path d="M49 64 C40 55 34 58 33 65 C40 69 46 68 49 64Z" fill="currentColor" stroke-width="1.5"/>
-    <path d="M51 61 C58 52 66 54 67 61 C62 67 56 67 51 61Z" fill="currentColor" stroke-width="1.5"/>
-    <path d="M50 73 C37 65 20 68 13 78 L13 89 C25 82 39 84 50 94 C61 84 75 82 87 89 L87 78 C80 68 63 65 50 73Z" fill="currentColor" stroke-width="2.5"/>
-    <path d="M50 73 L50 94" stroke-width="2.5"/>
-    <path d="M19 79 C29 76 39 79 46 85 M81 79 C71 76 61 79 54 85" stroke="white" stroke-opacity=".75" stroke-width="2"/>
-    <path d="M50 8 C46 1 39 6 42 13 C34 9 30 17 37 21 C29 25 35 33 43 29 C43 38 53 38 54 29 C62 34 68 26 61 21 C68 15 62 8 55 13 C57 5 50 2 50 8Z" fill="currentColor" stroke-width="2"/>
-    <circle cx="50" cy="21" r="4" fill="white" stroke="none"/>
-  </g>
-</svg></div><div class="splash-name">splim</div><div class="splash-dots"><i></i><i></i><i></i></div>
+  <div class="splash-mark"><svg class="splim-symbol" viewBox="0 0 24 24" role="img" aria-label="splim" xmlns="http://www.w3.org/2000/svg"><use href="#i-sparkle"/></svg></div><div class="splash-name">splim</div><div class="splash-dots"><i></i><i></i><i></i></div>
 </div>
 <div class="app-shell" id="appShell">
   <aside class="sidebar">
-    <div class="brand"><span class="brand-mark"><svg class="splim-symbol" viewBox="0 0 100 100" role="img" aria-label="Цветочек из блокнота" xmlns="http://www.w3.org/2000/svg">
-  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M50 49 C49 59 49 64 50 71" stroke-width="4"/>
-    <path d="M49 64 C40 55 34 58 33 65 C40 69 46 68 49 64Z" fill="currentColor" stroke-width="1.5"/>
-    <path d="M51 61 C58 52 66 54 67 61 C62 67 56 67 51 61Z" fill="currentColor" stroke-width="1.5"/>
-    <path d="M50 73 C37 65 20 68 13 78 L13 89 C25 82 39 84 50 94 C61 84 75 82 87 89 L87 78 C80 68 63 65 50 73Z" fill="currentColor" stroke-width="2.5"/>
-    <path d="M50 73 L50 94" stroke-width="2.5"/>
-    <path d="M19 79 C29 76 39 79 46 85 M81 79 C71 76 61 79 54 85" stroke="white" stroke-opacity=".75" stroke-width="2"/>
-    <path d="M50 8 C46 1 39 6 42 13 C34 9 30 17 37 21 C29 25 35 33 43 29 C43 38 53 38 54 29 C62 34 68 26 61 21 C68 15 62 8 55 13 C57 5 50 2 50 8Z" fill="currentColor" stroke-width="2"/>
-    <circle cx="50" cy="21" r="4" fill="white" stroke="none"/>
-  </g>
-</svg></span><span>splim</span></div>
+    <div class="brand"><span class="brand-mark"><svg class="splim-symbol" viewBox="0 0 24 24" role="img" aria-label="splim" xmlns="http://www.w3.org/2000/svg"><use href="#i-sparkle"/></svg></span><span>splim</span></div>
     <div class="sidebar-caption">ТВОЁ ПРОСТРАНСТВО</div>
     <nav class="side-nav" aria-label="Основная навигация">
-      <button class="side-link active" data-page="home"><span class="side-icon">⌂</span><span>Главная</span></button>
-      <button class="side-link" data-page="profile"><span class="side-icon">♡</span><span>Мой профиль</span></button>
-      <button class="side-link" data-page="planner"><span class="side-icon">▦</span><span>Календарь и планы</span></button>
-      <button class="side-link" data-page="todo"><span class="side-icon">☑</span><span>Список дел</span></button>
-      <button class="side-link" data-page="habits"><span class="side-icon">✿</span><span>Трекер привычек</span></button>
-      <button class="side-link" data-page="care"><span class="side-icon">♡</span><span>Забота о себе</span></button>
-      <button class="side-link" data-page="gratitude"><span class="side-icon">♡</span><span>Благодарности</span></button>
-      <button class="side-link" data-page="notes"><span class="side-icon">✎</span><span>Заметки</span></button>
-      <button class="side-link" data-page="settings"><span class="side-icon">⚙</span><span>Настройки</span></button>
+      <button class="side-link active" data-page="home"><span class="side-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-home"></use></svg></span><span>Главная</span></button>
+      <button class="side-link" data-page="profile"><span class="side-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-user"></use></svg></span><span>Мой профиль</span></button>
+      <button class="side-link" data-page="planner"><span class="side-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-calendar"></use></svg></span><span>Календарь и планы</span></button>
+      <button class="side-link" data-page="todo"><span class="side-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-checklist"></use></svg></span><span>Список дел</span></button>
+      <button class="side-link" data-page="habits"><span class="side-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-leaf"></use></svg></span><span>Трекер привычек</span></button>
+      <button class="side-link" data-page="care"><span class="side-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-user"></use></svg></span><span>Забота о себе</span></button>
+      <button class="side-link" data-page="gratitude"><span class="side-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-user"></use></svg></span><span>Благодарности</span></button>
+      <button class="side-link" data-page="notes"><span class="side-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-note"></use></svg></span><span>Заметки</span></button>
+      <button class="side-link" data-page="settings"><span class="side-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-settings"></use></svg></span><span>Настройки</span></button>
     </nav>
     <div class="sidebar-note"><span>♡</span><p>Маленькие шаги — тоже движение вперёд.</p></div>
   </aside>
@@ -448,18 +432,7 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
    <div class="wrap">
     <header class="top home-title">
       <h1 id="homeGreeting">Твоё пространство♡</h1>
-      <div class="home-title-flower"><svg class="splim-symbol" viewBox="0 0 100 100" role="img" aria-label="Цветочек из блокнота" xmlns="http://www.w3.org/2000/svg">
-  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M50 49 C49 59 49 64 50 71" stroke-width="4"/>
-    <path d="M49 64 C40 55 34 58 33 65 C40 69 46 68 49 64Z" fill="currentColor" stroke-width="1.5"/>
-    <path d="M51 61 C58 52 66 54 67 61 C62 67 56 67 51 61Z" fill="currentColor" stroke-width="1.5"/>
-    <path d="M50 73 C37 65 20 68 13 78 L13 89 C25 82 39 84 50 94 C61 84 75 82 87 89 L87 78 C80 68 63 65 50 73Z" fill="currentColor" stroke-width="2.5"/>
-    <path d="M50 73 L50 94" stroke-width="2.5"/>
-    <path d="M19 79 C29 76 39 79 46 85 M81 79 C71 76 61 79 54 85" stroke="white" stroke-opacity=".75" stroke-width="2"/>
-    <path d="M50 8 C46 1 39 6 42 13 C34 9 30 17 37 21 C29 25 35 33 43 29 C43 38 53 38 54 29 C62 34 68 26 61 21 C68 15 62 8 55 13 C57 5 50 2 50 8Z" fill="currentColor" stroke-width="2"/>
-    <circle cx="50" cy="21" r="4" fill="white" stroke="none"/>
-  </g>
-</svg></div>
+      <div class="home-title-flower"><svg class="splim-symbol" viewBox="0 0 24 24" role="img" aria-label="splim" xmlns="http://www.w3.org/2000/svg"><use href="#i-sparkle"/></svg></div>
     </header>
     <section class="page home-page" id="homePage">
       <section class="affirmation-card">
@@ -470,13 +443,13 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
       </section>
       <div class="section-heading"><div><div class="eyebrow">ТВОИ ИНСТРУМЕНТЫ</div><h2>Разделы</h2></div><span class="section-count" id="homeSectionCount">6</span></div>
       <div class="home-section-list" id="homeSectionList">
-      <button class="section-card" type="button" data-open-page="profile"><span class="section-card-icon">♡</span><span class="section-card-copy"><strong>Мой профиль</strong><small>Добавь аватар и имя, чтобы сделать своё пространство по-настоящему личным.</small></span><span class="section-card-arrow">→</span></button>
-      <button class="section-card" type="button" data-open-page="planner"><span class="section-card-icon">▦</span><span class="section-card-copy"><strong>Календарь и планы</strong><small>Расставляй задачи, выбирай даты и отмечай маленькие победы.</small></span><span class="section-card-arrow">→</span></button>
-      <button class="section-card" type="button" data-open-page="todo"><span class="section-card-icon">☑</span><span class="section-card-copy"><strong>Список дел</strong><small>Собирай повседневные дела в одном месте и отмечай выполненное.</small></span><span class="section-card-arrow">→</span></button>
-      <button class="section-card" type="button" data-open-page="habits"><span class="section-card-icon">✿</span><span class="section-card-copy"><strong>Трекер привычек</strong><small>Отмечай маленькие полезные привычки и наблюдай за своим ритмом.</small></span><span class="section-card-arrow">→</span></button>
-      <button class="section-card" type="button" data-open-page="gratitude"><span class="section-card-icon">♡</span><span class="section-card-copy"><strong>Моменты благодарности</strong><small>Остановись на минутку, прислушайся к себе и сохрани тёплые моменты дня.</small></span><span class="section-card-arrow">→</span></button>
-      <button class="section-card" type="button" data-open-page="notes"><span class="section-card-icon">✎</span><span class="section-card-copy"><strong>Заметки</strong><small>Личное место для мыслей, идей и любых записей.</small></span><span class="section-card-arrow">→</span></button>
-      <button class="section-card" type="button" data-open-page="care"><span class="section-card-icon">🌷</span><span class="section-card-copy"><strong>Забота о себе</strong><small>Вода, сон и маленькие ежедневные ритуалы внимания к себе.</small></span><span class="section-card-arrow">→</span></button>
+      <button class="section-card" type="button" data-open-page="profile"><span class="section-card-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-user"></use></svg></span><span class="section-card-copy"><strong>Мой профиль</strong><small>Добавь аватар и имя, чтобы сделать своё пространство по-настоящему личным.</small></span><span class="section-card-arrow">→</span></button>
+      <button class="section-card" type="button" data-open-page="planner"><span class="section-card-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-calendar"></use></svg></span><span class="section-card-copy"><strong>Календарь и планы</strong><small>Расставляй задачи, выбирай даты и отмечай маленькие победы.</small></span><span class="section-card-arrow">→</span></button>
+      <button class="section-card" type="button" data-open-page="todo"><span class="section-card-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-checklist"></use></svg></span><span class="section-card-copy"><strong>Список дел</strong><small>Собирай повседневные дела в одном месте и отмечай выполненное.</small></span><span class="section-card-arrow">→</span></button>
+      <button class="section-card" type="button" data-open-page="habits"><span class="section-card-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-leaf"></use></svg></span><span class="section-card-copy"><strong>Трекер привычек</strong><small>Отмечай маленькие полезные привычки и наблюдай за своим ритмом.</small></span><span class="section-card-arrow">→</span></button>
+      <button class="section-card" type="button" data-open-page="gratitude"><span class="section-card-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-user"></use></svg></span><span class="section-card-copy"><strong>Моменты благодарности</strong><small>Остановись на минутку, прислушайся к себе и сохрани тёплые моменты дня.</small></span><span class="section-card-arrow">→</span></button>
+      <button class="section-card" type="button" data-open-page="notes"><span class="section-card-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-note"></use></svg></span><span class="section-card-copy"><strong>Заметки</strong><small>Личное место для мыслей, идей и любых записей.</small></span><span class="section-card-arrow">→</span></button>
+      <button class="section-card" type="button" data-open-page="care"><span class="section-card-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-heart"></use></svg></span><span class="section-card-copy"><strong>Забота о себе</strong><small>Вода, сон и маленькие ежедневные ритуалы внимания к себе.</small></span><span class="section-card-arrow">→</span></button>
       </div>
       <div class="home-footnote">Здесь можно планировать не только дела, но и заботу о себе. ♡</div>
       <button class="home-customize-button" id="homeCustomizeButton" type="button" aria-expanded="false">⚙ Настроить главную страницу</button>
@@ -677,16 +650,16 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
     <section class="page hidden" id="carePage">
       <header class="settings-heading"><div class="eyebrow">НЕЖНОСТЬ К СЕБЕ — ЭТО ТОЖЕ ПЛАН</div><h1>Забота о себе 🌷</h1><p>Небольшие ежедневные ритуалы, которые помогают прислушиваться к своим потребностям. Выбери подраздел, чтобы открыть его полностью.</p></header>
       <div class="care-subsections">
-        <button class="section-card" type="button" data-open-page="water"><span class="section-card-icon">💧</span><span class="section-card-copy"><strong>Трекер воды</strong><small>Отмечай стаканчики и наблюдай за своим водным балансом.</small></span><span class="section-card-arrow">→</span></button>
-        <button class="section-card" type="button" data-open-page="sleep"><span class="section-card-icon">🌙</span><span class="section-card-copy"><strong>Мой сон</strong><small>Записывай продолжительность сна и подбирай удобный ритм отдыха.</small></span><span class="section-card-arrow">→</span></button>
-        <button class="section-card" type="button" data-open-page="activity"><span class="section-card-icon">👟</span><span class="section-card-copy"><strong>Моё движение</strong><small>Шаги, тренировки и маленькие победы твоего тела.</small></span><span class="section-card-arrow">→</span></button>
+        <button class="section-card" type="button" data-open-page="water"><span class="section-card-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-water"></use></svg></span><span class="section-card-copy"><strong>Трекер воды</strong><small>Отмечай стаканчики и наблюдай за своим водным балансом.</small></span><span class="section-card-arrow">→</span></button>
+        <button class="section-card" type="button" data-open-page="sleep"><span class="section-card-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-moon"></use></svg></span><span class="section-card-copy"><strong>Мой сон</strong><small>Записывай продолжительность сна и подбирай удобный ритм отдыха.</small></span><span class="section-card-arrow">→</span></button>
+        <button class="section-card" type="button" data-open-page="activity"><span class="section-card-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shoe"></use></svg></span><span class="section-card-copy"><strong>Моё движение</strong><small>Шаги, тренировки и маленькие победы твоего тела.</small></span><span class="section-card-arrow">→</span></button>
       </div>
       <p class="care-footer-note">Здесь будут появляться новые способы заботиться о себе. ♡</p>
     </section>
     <section class="page hidden" id="waterPage">
       <header class="settings-heading"><button class="care-back" type="button" data-open-page="care">← Забота о себе</button><div class="eyebrow">МАЛЕНЬКИЙ ГЛОТОК ЗАБОТЫ</div><h1>Трекер воды 💧</h1><p>Каждый стаканчик — маленькое напоминание сделать паузу и позаботиться о себе.</p></header>
       <section class="panel care-panel">
-        <div class="care-progress-heading"><div><div class="eyebrow">ТВОЙ ПРОГРЕСС СЕГОДНЯ</div><h2 id="waterProgressText">0 из 8 стаканов</h2></div><span class="care-big-emoji">💗</span></div>
+        <div class="care-progress-heading"><div><div class="eyebrow">ТВОЙ ПРОГРЕСС СЕГОДНЯ</div><h2 id="waterProgressText">0 из 8 стаканов</h2></div><span class="care-big-emoji"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-heart"></use></svg></span></div>
         <div class="water-cups" id="waterCups" aria-label="Стаканчики воды"></div>
         <div class="care-progress-track"><div id="waterProgressBar"></div></div>
         <p class="care-soft-note" id="waterEncouragement" aria-live="polite">Начни с одного стаканчика — спешить не нужно ♡</p>
@@ -704,7 +677,7 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
     <section class="page hidden" id="sleepPage">
       <header class="settings-heading"><button class="care-back" type="button" data-open-page="care">← Забота о себе</button><div class="eyebrow">ВРЕМЯ ВОССТАНОВИТЬСЯ</div><h1>Мой сон 🌙</h1><p>Отдых — не награда за продуктивность, а важная часть заботы о себе.</p></header>
       <section class="panel care-panel">
-        <div class="care-progress-heading"><div><div class="eyebrow">ТВОЙ СОН СЕГОДНЯ</div><h2 id="sleepTodayText">Запиши, сколько ты спала</h2></div><span class="care-big-emoji">☁️</span></div>
+        <div class="care-progress-heading"><div><div class="eyebrow">ТВОЙ СОН СЕГОДНЯ</div><h2 id="sleepTodayText">Запиши, сколько ты спала</h2></div><span class="care-big-emoji"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-moon"></use></svg></span></div>
         <div class="care-settings-box">
           <label for="sleepBedtime">Во сколько обычно ложишься спать?</label>
           <input id="sleepBedtime" type="time" value="23:00">
@@ -723,7 +696,7 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
     <section class="page hidden" id="activityPage">
       <header class="settings-heading"><button class="care-back" type="button" data-open-page="care">← Забота о себе</button><div class="eyebrow">ДВИЖЕНИЕ В ТВОЁМ РИТМЕ</div><h1>Моё движение 👟</h1><p>Любое движение имеет значение. Здесь можно отмечать шаги, записывать тренировки и замечать, как ты себя чувствуешь.</p></header>
       <section class="panel care-panel activity-panel">
-        <div class="activity-section-heading"><div><div class="eyebrow">ТВОЯ ЦЕЛЬ НА СЕГОДНЯ</div><h2>Шаги за день</h2></div><span class="care-big-emoji">🌷</span></div>
+        <div class="activity-section-heading"><div><div class="eyebrow">ТВОЯ ЦЕЛЬ НА СЕГОДНЯ</div><h2>Шаги за день</h2></div><span class="care-big-emoji"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shoe"></use></svg></span></div>
         <div class="activity-steps-summary"><strong id="activityStepsValue">0</strong><span>шагов</span><small id="activityStepsGoalText">из 6 000 шагов</small></div>
         <div class="care-progress-track"><div id="activityStepsBar"></div></div>
         <div class="activity-step-inputs">
@@ -735,7 +708,7 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
         </div>
       </section>
       <section class="panel care-panel activity-panel">
-        <div class="activity-section-heading"><div><div class="eyebrow">ТВОЯ АКТИВНОСТЬ</div><h2>Потраченные калории</h2></div><span class="care-big-emoji">🔥</span></div>
+        <div class="activity-section-heading"><div><div class="eyebrow">ТВОЯ АКТИВНОСТЬ</div><h2>Потраченные калории</h2></div><span class="care-big-emoji"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-flame"></use></svg></span></div>
         <div class="activity-steps-summary"><strong id="activityCaloriesValue">0</strong><span>ккал за день</span></div>
         <div class="activity-step-inputs">
           <label for="activityCaloriesInput">Сколько калорий ты потратила за выбранный день?</label>
@@ -744,7 +717,7 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
         </div>
       </section>
       <section class="panel care-panel activity-panel">
-        <div class="activity-section-heading"><div><div class="eyebrow">ТВОЯ АКТИВНОСТЬ</div><h2>Тренировки</h2></div><span class="care-big-emoji">🧘‍♀️</span></div>
+        <div class="activity-section-heading"><div><div class="eyebrow">ТВОЯ АКТИВНОСТЬ</div><h2>Тренировки</h2></div><span class="care-big-emoji"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-yoga"></use></svg></span></div>
         <form id="activityWorkoutForm" class="activity-workout-form">
           <label for="activityType">Что ты делала?</label>
           <select id="activityType"><option>Прогулка</option><option>Йога</option><option>Растяжка</option><option>Бег</option><option>Танцы</option><option>Велосипед</option><option>Силовая тренировка</option><option>Плавание</option><option>Другое</option></select>
@@ -758,18 +731,18 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
         <div id="activityWorkoutList" class="activity-workout-list"></div>
       </section>
       <section class="panel care-panel activity-panel">
-        <div class="activity-section-heading"><div><div class="eyebrow">ПРИСЛУШАЙСЯ К СЕБЕ</div><h2>Как ты себя чувствуешь?</h2></div><span class="care-big-emoji">💗</span></div>
+        <div class="activity-section-heading"><div><div class="eyebrow">ПРИСЛУШАЙСЯ К СЕБЕ</div><h2>Как ты себя чувствуешь?</h2></div><span class="care-big-emoji"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-heart"></use></svg></span></div>
         <p class="care-soft-note">Выбери то, что лучше всего описывает твоё состояние после движения. Здесь нет неправильных ответов.</p>
         <div class="activity-moods" id="activityMoodChoices">
-          <button type="button" data-mood="Отлично!" aria-pressed="false"><span>😊</span><small>Отлично!</small></button>
-          <button type="button" data-mood="Хорошо"><span>🌿</span><small>Хорошо</small></button>
-          <button type="button" data-mood="Немного устала"><span>😌</span><small>Устала</small></button>
-          <button type="button" data-mood="Рада, что подвигалась"><span>🩷</span><small>Рада, что подвигалась</small></button>
+          <button type="button" data-mood="Отлично!" aria-pressed="false"><span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sparkle"></use></svg></span><small>Отлично!</small></button>
+          <button type="button" data-mood="Хорошо"><span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-leaf"></use></svg></span><small>Хорошо</small></button>
+          <button type="button" data-mood="Немного устала"><span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-moon"></use></svg></span><small>Устала</small></button>
+          <button type="button" data-mood="Рада, что подвигалась"><span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-heart"></use></svg></span><small>Рада, что подвигалась</small></button>
         </div>
         <p class="care-soft-note" id="activityMoodSaved" aria-live="polite">Твоё самочувствие можно отметить в любой момент дня ♡</p>
       </section>
       <section class="panel care-panel activity-panel">
-        <div class="activity-section-heading"><div><div class="eyebrow">ТВОЙ РИТМ</div><h2>Календарь и статистика</h2></div><span class="care-big-emoji">📅</span></div>
+        <div class="activity-section-heading"><div><div class="eyebrow">ТВОЙ РИТМ</div><h2>Календарь и статистика</h2></div><span class="care-big-emoji"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-calendar"></use></svg></span></div>
         <div class="activity-week-nav"><button type="button" id="activityPrevWeek" aria-label="Предыдущая неделя">←</button><strong id="activityWeekTitle"></strong><button type="button" id="activityNextWeek" aria-label="Следующая неделя">→</button></div>
         <div class="activity-week-grid" id="activityWeekGrid"></div>
         <div class="activity-week-stats">
@@ -1329,6 +1302,8 @@ function applyTheme(palette,mode){
 
   paletteSelect.value=palette;
   modeSelect.value=mode;
+  const favicon=document.getElementById('splimFavicon');
+  if(favicon){const iconColor=getComputedStyle(root).getPropertyValue('--pink').trim()||'#ec78a8';const iconBg=mode==='dark'?'#24202b':'#fffafd';const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="3" y="3" width="58" height="58" rx="18" fill="'+iconBg+'" stroke="'+iconColor+'" stroke-opacity=".28"/><path d="M32 13c2.8 8.5 6.5 11.2 15 14-8.5 2.8-12.2 5.5-15 14-2.8-8.5-6.5-11.2-15-14 8.5-2.8 12.2-5.5 15-14Z" fill="none" stroke="'+iconColor+'" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';favicon.href='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);}
 
   try{localStorage.setItem('pinkPlannerSettings',JSON.stringify({palette,mode}));}catch(e){}
 }
@@ -1706,7 +1681,7 @@ function activityDateFromKey(dateKey){const parts=dateKey.split('-').map(Number)
 const activityDateForOffset=offset=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+offset);return d;};
 const activityDay=(dateKey)=>activityStore.days[dateKey]||(activityStore.days[dateKey]={steps:0,workouts:[],mood:''});
 function saveActivityStore(){localStorage.setItem(ACTIVITY_KEY,JSON.stringify(activityStore));}
-function activityWorkoutIcon(type){return ({'Прогулка':'🚶‍♀️','Йога':'🧘‍♀️','Растяжка':'🌷','Бег':'🏃‍♀️','Танцы':'💃','Велосипед':'🚲','Силовая тренировка':'🏋️‍♀️','Плавание':'🏊‍♀️','Другое':'💗'})[type]||'💗';}
+function activityWorkoutIcon(type){const names={'Прогулка':'shoe','Йога':'yoga','Растяжка':'leaf','Бег':'shoe','Танцы':'sparkle','Велосипед':'shoe','Силовая тренировка':'heart','Плавание':'water','Другое':'heart'};return '<svg class=\"ui-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><use href=\"#i-'+(names[type]||'heart')+'\"></use></svg>';}
 function activityWeekStart(offset=0){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-(d.getDay()+6)%7+offset*7);return d;}
 function renderActivityTracker(){
  const selectedDate=activityDateFromKey(activitySelectedDateKey),selectedIsToday=activitySelectedDateKey===activityToday();
