@@ -41,7 +41,31 @@ body.has-wallpaper{background:linear-gradient(135deg,color-mix(in srgb,var(--bg1
 .home-title h1{font-size:clamp(26px,4vw,36px);font-weight:750;letter-spacing:-.035em}
 .home-title-flower{width:62px;height:62px;flex:0 0 62px;padding:5px;border-radius:20px;background:color-mix(in srgb,var(--pink2) 55%,var(--white));color:var(--pink);transform:rotate(6deg)}
 .planner-tools{display:flex;justify-content:flex-end;margin-bottom:18px}
-.settings-page,.todo-page,.habits-page{max-width:900px}
+.settings-page,.todo-page,.habits-page,.gratitude-page{max-width:900px}
+.gratitude-panel{padding:clamp(18px,4vw,30px)}
+.gratitude-date{color:var(--muted);font-size:13px;margin-bottom:18px;text-transform:capitalize}
+.gratitude-intro{position:relative;padding:20px;border-radius:18px;background:color-mix(in srgb,var(--pink2) 17%,var(--panel));margin-bottom:22px;overflow:hidden}
+.gratitude-intro strong{font-size:20px}.gratitude-intro p,.gratitude-write p{color:var(--muted);font-size:14px;line-height:1.6;margin:8px 0 0}
+.gratitude-sparkle{position:absolute;right:18px;top:0;font-size:64px;color:var(--pink);opacity:.25}
+.gratitude-question{border:0;border-top:1px solid var(--line);padding:20px 0;margin:0;min-width:0}
+.gratitude-question legend{font-weight:700;padding:0 0 14px;line-height:1.5}
+.gratitude-options{display:flex;gap:9px;flex-wrap:wrap}
+.gratitude-options label{cursor:pointer}
+.gratitude-options input{position:absolute;opacity:0;pointer-events:none}
+.mood-options{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.mood-options label span{min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);border-radius:14px;background:var(--cell);font-size:25px;transition:.15s}
+.mood-options small{font-size:11px;color:var(--muted)}
+.gratitude-options input:checked+span{border:2px solid var(--pink);background:color-mix(in srgb,var(--pink) 16%,var(--cell))}
+.gratitude-options input:focus-visible+span{outline:3px solid var(--pink2);outline-offset:2px}
+.text-options{display:grid;grid-template-columns:1fr 1fr}
+.text-options label span{display:block;padding:12px 14px;border:1px solid var(--line);border-radius:13px;background:var(--cell);font-size:13px;line-height:1.45;height:100%}
+.gratitude-question textarea,.gratitude-write textarea{width:100%;resize:vertical;padding:13px;border:1px solid var(--line);border-radius:13px;background:var(--cell);color:var(--ink);font:inherit;line-height:1.5}
+.gratitude-write{border-top:1px solid var(--line);padding-top:22px;margin-top:4px}
+.gratitude-write h2{font-size:22px;margin:8px 0}
+.gratitude-write label{display:block;font-size:13px;font-weight:650;margin:18px 0 8px}
+.gratitude-save{width:100%;margin-top:22px}
+.gratitude-saved{text-align:center;color:var(--muted);font-size:12px;margin:12px 0 0}
+@media(max-width:520px){.mood-options{gap:4px}.mood-options label span{min-height:68px;border-radius:11px;font-size:21px}.mood-options small{font-size:9px}.text-options{grid-template-columns:1fr}.gratitude-panel{padding:16px}}
 .habits-panel{overflow:hidden}
 .habits-weekbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;text-align:center}
 .habits-weekbar h2{margin:0;font-size:20px;text-transform:capitalize}
@@ -302,6 +326,7 @@ body[data-mode="light"] #taskRepeat option{
       <button class="side-link" data-page="planner"><span class="side-icon">▦</span><span>Календарь и планы</span></button>
       <button class="side-link" data-page="todo"><span class="side-icon">☑</span><span>Список дел</span></button>
       <button class="side-link" data-page="habits"><span class="side-icon">✿</span><span>Трекер привычек</span></button>
+      <button class="side-link" data-page="gratitude"><span class="side-icon">♡</span><span>Благодарности</span></button>
       <button class="side-link" data-page="settings"><span class="side-icon">⚙</span><span>Настройки</span></button>
     </nav>
     <div class="sidebar-note"><span>♡</span><p>Маленькие шаги — тоже движение вперёд.</p></div>
@@ -330,7 +355,7 @@ body[data-mode="light"] #taskRepeat option{
         <div class="affirmation-bottom"><span>бережно к себе, каждый день</span><button id="newAffirmation" class="affirmation-refresh" type="button">↻ Другая мысль</button></div>
         <span class="affirmation-sparkle">✧</span>
       </section>
-      <div class="section-heading"><div><div class="eyebrow">ТВОИ ИНСТРУМЕНТЫ</div><h2>Разделы</h2></div><span class="section-count">03</span></div>
+      <div class="section-heading"><div><div class="eyebrow">ТВОИ ИНСТРУМЕНТЫ</div><h2>Разделы</h2></div><span class="section-count">04</span></div>
       <button class="section-card" type="button" data-open-page="planner">
         <span class="section-card-icon">▦</span><span class="section-card-copy"><strong>Календарь и планы</strong><small>Расставляй задачи, выбирай даты и отмечай маленькие победы.</small></span><span class="section-card-arrow">→</span>
       </button>
@@ -338,6 +363,7 @@ body[data-mode="light"] #taskRepeat option{
         <span class="section-card-icon">☑</span><span class="section-card-copy"><strong>Список дел</strong><small>Собирай повседневные дела в одном месте и отмечай выполненное.</small></span><span class="section-card-arrow">→</span>
       </button>
       <button class="section-card" type="button" data-open-page="habits"><span class="section-card-icon">✿</span><span class="section-card-copy"><strong>Трекер привычек</strong><small>Отмечай маленькие полезные привычки и наблюдай за своим ритмом.</small></span><span class="section-card-arrow">→</span></button>
+      <button class="section-card" type="button" data-open-page="gratitude"><span class="section-card-icon">♡</span><span class="section-card-copy"><strong>Моменты благодарности</strong><small>Остановись на минутку, прислушайся к себе и сохрани тёплые моменты дня.</small></span><span class="section-card-arrow">→</span></button>
       <div class="home-footnote">Здесь можно планировать не только дела, но и заботу о себе. ♡</div>
     </section>
     <section class="page planner-page hidden" id="plannerPage">
@@ -393,6 +419,42 @@ body[data-mode="light"] #taskRepeat option{
           <input id="wallpaperBlur" type="range" min="0" max="20" step="1" value="8">
         </div>
         <p class="wallpaper-hint" id="wallpaperStatus" aria-live="polite">Можно выбрать любое изображение из галереи.</p>
+      </section>
+    </section>
+    <section class="page gratitude-page hidden" id="gratitudePage">
+      <header class="settings-heading"><div class="eyebrow">НЕЖНОЕ ВНИМАНИЕ К СЕБЕ</div><h1>Моменты благодарности ♡</h1><p>Небольшая пауза, чтобы заметить, как ты себя чувствуешь, и сохранить то хорошее, что было сегодня. Здесь нет правильных ответов.</p></header>
+      <section class="panel gratitude-panel">
+        <div class="gratitude-date" id="gratitudeDate"></div>
+        <div class="gratitude-intro"><span class="gratitude-sparkle">✧</span><strong>Как ты сегодня?</strong><p>Отвечай так, как откликается именно сейчас. Можно пропустить любой вопрос.</p></div>
+        <form id="gratitudeForm">
+          <fieldset class="gratitude-question"><legend>1. Как ты в целом себя чувствуешь?</legend><div class="gratitude-options mood-options">
+            <label><input type="radio" name="mood" value="Тяжело"><span>😔<small>Тяжело</small></span></label>
+            <label><input type="radio" name="mood" value="Не очень"><span>🌧️<small>Не очень</small></span></label>
+            <label><input type="radio" name="mood" value="Нормально"><span>🌿<small>Нормально</small></span></label>
+            <label><input type="radio" name="mood" value="Хорошо"><span>🌷<small>Хорошо</small></span></label>
+            <label><input type="radio" name="mood" value="Прекрасно"><span>☀️<small>Прекрасно</small></span></label>
+          </div></fieldset>
+          <fieldset class="gratitude-question"><legend>2. Было ли сегодня что-то, что вызвало у тебя радость, спокойствие или улыбку?</legend><div class="gratitude-options text-options">
+            <label><input type="radio" name="positive" value="Да, несколько моментов"><span>Да, несколько моментов</span></label>
+            <label><input type="radio" name="positive" value="Да, хотя бы один"><span>Да, хотя бы один</span></label>
+            <label><input type="radio" name="positive" value="Пока не заметила"><span>Пока не заметила</span></label>
+            <label><input type="radio" name="positive" value="Сегодня было непросто"><span>Сегодня было непросто</span></label>
+          </div></fieldset>
+          <fieldset class="gratitude-question"><legend>3. Удалось ли тебе сегодня позаботиться о себе?</legend><div class="gratitude-options text-options">
+            <label><input type="radio" name="selfcare" value="Да, я уделила себе время"><span>Да, я уделила себе время</span></label>
+            <label><input type="radio" name="selfcare" value="Немного, и это уже хорошо"><span>Немного, и это уже хорошо</span></label>
+            <label><input type="radio" name="selfcare" value="Пока нет, но я могу попробовать сейчас"><span>Пока нет, но я могу попробовать сейчас</span></label>
+          </div></fieldset>
+          <fieldset class="gratitude-question"><legend>4. Что сегодня получилось, даже если это была совсем маленькая вещь?</legend><textarea id="gratitudeWin" rows="2" maxlength="400" placeholder="Например, я встала, хотя очень хотелось остаться в кровати..."></textarea></fieldset>
+          <div class="gratitude-write">
+            <div class="eyebrow">ТЁПЛЫЙ ФИНАЛ ДНЯ</div><h2>За что ты благодарна сегодня? ♡</h2><p>Это могут быть люди, события, случайные мелочи или что-то хорошее, что ты сделала для себя.</p>
+            <label for="gratitudeOne">Сегодня я благодарна за...</label><textarea id="gratitudeOne" rows="2" maxlength="500" placeholder="Первый маленький повод для благодарности..."></textarea>
+            <label for="gratitudeTwo">Ещё один тёплый момент...</label><textarea id="gratitudeTwo" rows="2" maxlength="500" placeholder="Что ещё хочется сохранить в памяти?"></textarea>
+            <label for="gratitudeThree">И напоследок...</label><textarea id="gratitudeThree" rows="2" maxlength="500" placeholder="Любая мысль, человек или мелочь ♡"></textarea>
+          </div>
+          <button class="add gratitude-save" type="submit">♡ Сохранить мой день</button>
+          <p class="gratitude-saved" id="gratitudeSaved" aria-live="polite">Записи сохраняются только в этом браузере.</p>
+        </form>
       </section>
     </section>
     <section class="page habits-page hidden" id="habitsPage">
@@ -573,17 +635,19 @@ $('#newAffirmation').addEventListener('click',()=>{
  $('.affirmation-quote').textContent=choices[Math.floor(Math.random()*choices.length)];
 });
 function showPage(page){
- const validPage=['home','planner','todo','habits','settings'].includes(page)?page:'home';
+ const validPage=['home','planner','todo','habits','gratitude','settings'].includes(page)?page:'home';
  document.body.dataset.page=validPage;
  $('#homePage').classList.toggle('hidden',validPage!=='home');
  $('#plannerPage').classList.toggle('hidden',validPage!=='planner');
  $('#todoPage').classList.toggle('hidden',validPage!=='todo');
  $('#habitsPage').classList.toggle('hidden',validPage!=='habits');
+ $('#gratitudePage').classList.toggle('hidden',validPage!=='gratitude');
  $('#settingsPage').classList.toggle('hidden',validPage!=='settings');
  document.querySelectorAll('.side-link').forEach(button=>button.classList.toggle('active',button.dataset.page===validPage));
  if(validPage==='planner') render();
  if(validPage==='todo') renderTodo();
  if(validPage==='habits') renderHabits();
+ if(validPage==='gratitude') renderGratitude();
  window.scrollTo({top:0,behavior:'smooth'});
 }
 document.querySelectorAll('.side-link').forEach(button=>button.addEventListener('click',()=>showPage(button.dataset.page)));
@@ -687,6 +751,30 @@ $('#taskForm').addEventListener('submit',e=>{
  e.preventDefault();const name=$('#taskName').value.trim();if(!name)return;
  const k=key(selected);(tasks[k]??=[]).push({name,time:$('#taskTime').value,color:$('#taskColor').value,done:false,repeat:$('#taskRepeat').value,until:$('#taskRepeatUntil').value||''});
  save();$('#taskName').value='';$('#taskRepeat').value='none';$('#taskRepeatUntil').value='';render();
+});
+// Daily gratitude check-in
+const gratitudeStorageKey='splimGratitudeEntries';
+let gratitudeEntries={};
+try{gratitudeEntries=JSON.parse(localStorage.getItem(gratitudeStorageKey)||'{}')||{}}catch(e){gratitudeEntries={}}
+const gratitudeFields=['mood','positive','selfcare'];
+function renderGratitude(){
+ const dateKey=key(new Date()),entry=gratitudeEntries[dateKey]||{};
+ $('#gratitudeDate').textContent=new Date().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ gratitudeFields.forEach(name=>{document.querySelectorAll('input[name="'+name+'"]').forEach(input=>input.checked=input.value===(entry[name]||''))});
+ $('#gratitudeWin').value=entry.win||'';
+ $('#gratitudeOne').value=entry.one||'';
+ $('#gratitudeTwo').value=entry.two||'';
+ $('#gratitudeThree').value=entry.three||'';
+ $('#gratitudeSaved').textContent=entry.savedAt?'Твои ответы за сегодня уже сохранены. Их можно изменить и сохранить снова ♡':'Записи сохраняются только в этом браузере.';
+}
+$('#gratitudeForm').addEventListener('submit',e=>{
+ e.preventDefault();const dateKey=key(new Date()),entry={};
+ gratitudeFields.forEach(name=>entry[name]=document.querySelector('input[name="'+name+'"]:checked')?.value||'');
+ entry.win=$('#gratitudeWin').value.trim();
+ entry.one=$('#gratitudeOne').value.trim();entry.two=$('#gratitudeTwo').value.trim();entry.three=$('#gratitudeThree').value.trim();
+ entry.savedAt=new Date().toISOString();gratitudeEntries[dateKey]=entry;
+ localStorage.setItem(gratitudeStorageKey,JSON.stringify(gratitudeEntries));
+ $('#gratitudeSaved').textContent='Твой сегодняшний день бережно сохранён ♡';
 });
 // Weekly habit tracker
 const habitsStorageKey='splimHabits';
