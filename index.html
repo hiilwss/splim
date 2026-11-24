@@ -389,6 +389,21 @@ body[data-mode="dark"] .profile-hero{background:linear-gradient(135deg,#493444,#
 .side-icon .ui-icon{width:21px;height:21px}.section-card-icon .ui-icon{width:25px;height:25px}.care-big-emoji{display:grid;place-items:center;color:var(--pink)}.care-big-emoji .ui-icon{width:34px;height:34px;stroke-width:1.45}
 .splash-mark,.brand-mark{background:color-mix(in srgb,var(--pink2) 32%,var(--panel));color:var(--pink);box-shadow:0 8px 22px color-mix(in srgb,var(--pink) 12%,transparent);border:1px solid color-mix(in srgb,var(--pink) 24%,var(--line))}
 .splash-mark{animation:none}.splim-symbol{fill:none;stroke:currentColor;stroke-width:1.45;stroke-linecap:round;stroke-linejoin:round}.section-card-icon{background:color-mix(in srgb,var(--pink2) 25%,var(--panel))}
+
+/* Navigation follows the exact order and visibility of the home-page section cards. */
+.side-nav{display:flex;flex-direction:column;align-items:stretch;gap:7px;min-height:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin}
+.side-link{box-sizing:border-box;width:100%;min-width:0;justify-content:flex-start;white-space:normal}
+.side-link[hidden]{display:none!important}
+@media(min-width:821px){
+ .app-shell{grid-template-columns:260px minmax(0,1fr)!important}
+ .sidebar{position:sticky;top:0;height:100vh;min-height:100vh;box-sizing:border-box;display:flex;flex-direction:column;overflow:hidden;padding:24px 16px}
+ .side-nav{display:flex!important;flex:1 1 auto;flex-direction:column!important;align-items:stretch;width:100%;overflow-x:hidden!important;overflow-y:auto!important;padding:0 2px 8px}
+ .side-link{display:flex;width:100%;flex:0 0 auto;white-space:normal;text-align:left}
+}
+@media(max-width:820px){
+ .side-nav{display:flex!important;flex-direction:row!important;align-items:center;width:100%;overflow-x:auto!important;overflow-y:hidden!important}
+ .side-link{width:auto;flex:0 0 auto;white-space:nowrap}
+}
 </style>
 
 <style>
@@ -1475,7 +1490,10 @@ function applyHomeLayout(){
  if(nav){
   const home=nav.querySelector('[data-page="home"]'),settings=nav.querySelector('[data-page="settings"]');
   if(home)nav.appendChild(home);
-  homeLayout.sections.forEach(id=>{const link=nav.querySelector('[data-page="'+id+'"]');if(link){link.hidden=!homeLayout.visible.includes(id);nav.insertBefore(link,settings||null);}});
+  homeLayout.sections.forEach(id=>{
+   const link=nav.querySelector('[data-page="'+id+'"]');
+   if(link){link.hidden=!homeLayout.visible.includes(id);nav.appendChild(link);}
+  });
   if(settings)nav.appendChild(settings);
  }
 }
