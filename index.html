@@ -1251,9 +1251,13 @@ function queueCloudSave(){
 async function applyCloudSnapshot(storage){
  window.splimSyncApplying=true;let changed=false;
  try{SPLIM_SYNC_KEYS.forEach(key=>{
-  const next=Object.prototype.hasOwnProperty.call(storage||{},key)?String(storage[key]):null,current=localStorage.getItem(key);
+  // Старые облачные снимки могут не содержать новые ключи настроек.
+  // Отсутствующий ключ не означает удаление: сохраняем локальное значение,
+  // иначе инициализация страницы создаёт его снова и вызывает бесконечные reload.
+  if(!Object.prototype.hasOwnProperty.call(storage||{},key))return;
+  const next=String(storage[key]),current=localStorage.getItem(key);
   if(current!==next)changed=true;
-  if(next===null)localStorage.removeItem(key);else localStorage.setItem(key,next);
+  if(current!==next)localStorage.setItem(key,next);
  });}finally{window.splimSyncApplying=false;}
  return changed;
 }
@@ -1308,7 +1312,11 @@ async function syncAccountData(user){
    const backupKey='splimLocalBackup_'+user.id;
    if(!localStorage.getItem(backupKey))nativeSetItem.call(localStorage,backupKey,JSON.stringify({savedAt:new Date().toISOString(),storage:local.storage}));
   }
-  const changed=await applyCloudSnapshot(cloudStorage);syncReady=true;await syncWallpaperForUser(user);
+  const needsCloudMerge=Object.keys(local.storage||{}).some(key=>!Object.prototype.hasOwnProperty.call(cloudStorage,key));
+  const changed=await applyCloudSnapshot(cloudStorage);syncReady=true;
+  // Возвращаем в облако новые локальные ключи, которых ещё нет в старом снимке.
+  if(needsCloudMerge)await writeCloudSnapshot(user);
+  await syncWallpaperForUser(user);
   if(changed){setSyncStatus('♡ Загружены записи из твоего облачного профиля. Обновляем планер…');setTimeout(()=>location.reload(),150);return;}
   startRealtime(user);
   setSyncStatus('♡ Все записи синхронизированы с твоим аккаунтом.');
