@@ -2335,8 +2335,8 @@ function renderHabits(){
   const stats=habitStreakStats(habit);
   const label=document.createElement('div');label.className='habit-label';
   const main=document.createElement('div');main.className='habit-label-main';main.textContent=habit.name;
-  const streak=document.createElement('div');streak.className='habit-streak';streak.textContent='🔥 '+stats.current+' '+studyCount(stats.current,'день','дня','дней');
-  const record=document.createElement('div');record.className='habit-streak record';record.textContent='Рекорд: '+stats.best+' '+studyCount(stats.best,'день','дня','дней');
+  const streak=document.createElement('div');streak.className='habit-streak';streak.textContent='🔥 '+studyCount(stats.current,'день','дня','дней');
+  const record=document.createElement('div');record.className='habit-streak record';record.textContent='Рекорд: '+studyCount(stats.best,'день','дня','дней');
   label.append(main,streak,record);
   const remove=document.createElement('button');remove.className='habit-delete';remove.type='button';remove.textContent='×';remove.setAttribute('aria-label','Удалить привычку');
   remove.addEventListener('click',()=>{if(!confirm('Удалить привычку «'+habit.name+'» и её отметки?'))return;habits=habits.filter(x=>x.id!==habit.id);saveHabits();renderHabits()});
