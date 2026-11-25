@@ -89,6 +89,15 @@ body.has-wallpaper{background:linear-gradient(135deg,color-mix(in srgb,var(--bg1
 .gratitude-saved{text-align:center;color:var(--muted);font-size:12px;margin:12px 0 0}
 @media(max-width:520px){.mood-options{gap:4px}.mood-options label span{min-height:68px;border-radius:11px;font-size:21px}.mood-options small{font-size:9px}.text-options{grid-template-columns:1fr}.gratitude-panel{padding:16px}}
 .habits-panel{overflow:hidden}
+.habits-streak-overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-bottom:22px}
+.habits-streak-overview article{display:grid;gap:5px;padding:14px 8px;text-align:center;border:1px solid var(--line);border-radius:15px;background:color-mix(in srgb,var(--pink2) 16%,var(--cell))}
+.habits-streak-overview strong{font-size:clamp(18px,4vw,25px);font-weight:750;color:var(--accentText);font-variant-numeric:tabular-nums}
+.habits-streak-overview span{font-size:10px;color:var(--muted)}
+.habit-label{display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:5px}
+.habit-label-main{display:flex;align-items:center;gap:5px;font-weight:650;line-height:1.35}
+.habit-streak{font-size:10px;color:var(--accentText);font-weight:600;white-space:nowrap}
+.habit-streak.record{color:var(--muted);font-weight:500}
+@media(max-width:600px){.habits-streak-overview{gap:6px;margin-bottom:18px}.habits-streak-overview article{padding:11px 4px}.habits-streak-overview span{font-size:9px}.habit-label{gap:4px}.habit-streak{font-size:9px}}
 .habits-weekbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;text-align:center}
 .habits-weekbar h2{margin:0;font-size:20px;text-transform:capitalize}
 .habits-weekbar .ghost{font-size:25px;min-width:42px}
@@ -778,6 +787,7 @@ if('serviceWorker' in navigator){
     <section class="page habits-page hidden" id="habitsPage">
       <header class="settings-heading"><div class="eyebrow">МАЛЕНЬКИЕ ШАГИ К БОЛЬШОМУ</div><h1>Трекер привычек ✿</h1><p>Отмечай свои маленькие победы каждый день. Не обязательно быть идеальной — важно продолжать.</p></header>
       <section class="panel habits-panel">
+        <div class="habits-streak-overview" id="habitsStreakOverview"><article><strong id="habitsActiveCount">0</strong><span>Привычек</span></article><article><strong id="habitsWeekDone">0</strong><span>Отметок за неделю</span></article><article><strong id="habitsBestStreak">0 дней</strong><span>Личный рекорд</span></article></div>
         <div class="habits-weekbar">
           <button class="ghost" id="habitsPrevWeek" type="button" aria-label="Предыдущая неделя">‹</button>
           <div><h2 id="habitsWeekTitle">Эта неделя</h2><button class="habits-today" id="habitsThisWeek" type="button">К текущей неделе</button></div>
@@ -2251,6 +2261,24 @@ function weekStart(offset=0){
  const now=new Date();now.setHours(0,0,0,0);
  const monday=new Date(now);monday.setDate(now.getDate()-(now.getDay()+6)%7+offset*7);return monday;
 }
+function habitStreakStats(habit){
+ const dates=Object.keys(habit.done||{}).filter(d=>habit.done[d]).sort();
+ let best=0,run=0,previous=null;
+ dates.forEach(value=>{
+  const [y,m,d]=value.split('-').map(Number),date=new Date(y,m-1,d);date.setHours(0,0,0,0);
+  const stamp=date.getTime();
+  if(previous!==null&&stamp-previous===86400000)run++;else run=1;
+  best=Math.max(best,run);previous=stamp;
+ });
+ const todayDate=new Date();todayDate.setHours(0,0,0,0);
+ const todayKey=key(todayDate),yesterday=new Date(todayDate);yesterday.setDate(yesterday.getDate()-1);
+ let cursor=(habit.done||{})[todayKey]?todayDate:yesterday;
+ let current=0;
+ while((habit.done||{})[key(cursor)]){
+  current++;cursor=new Date(cursor);cursor.setDate(cursor.getDate()-1);
+ }
+ return {current,best};
+}
 function renderHabits(){
  const grid=$('#habitsGrid');if(!grid)return;grid.innerHTML='';
  const start=weekStart(habitsWeekOffset);
@@ -2267,15 +2295,21 @@ function renderHabits(){
   head.append(day,num);grid.appendChild(head);
  }
  let completed=0,total=0;
+ let weekDone=0;
  habits.forEach(habit=>{
-  const label=document.createElement('div');label.className='habit-label';label.textContent=habit.name;
+  const stats=habitStreakStats(habit);
+  const label=document.createElement('div');label.className='habit-label';
+  const main=document.createElement('div');main.className='habit-label-main';main.textContent=habit.name;
+  const streak=document.createElement('div');streak.className='habit-streak';streak.textContent='🔥 '+stats.current+' '+studyCount(stats.current,'день','дня','дней')+' подряд';
+  const record=document.createElement('div');record.className='habit-streak record';record.textContent='Рекорд: '+stats.best+' '+studyCount(stats.best,'день','дня','дней');
+  label.append(main,streak,record);
   const remove=document.createElement('button');remove.className='habit-delete';remove.type='button';remove.textContent='×';remove.setAttribute('aria-label','Удалить привычку');
   remove.addEventListener('click',()=>{if(!confirm('Удалить привычку «'+habit.name+'» и её отметки?'))return;habits=habits.filter(x=>x.id!==habit.id);saveHabits();renderHabits()});
   label.appendChild(remove);grid.appendChild(label);
   dates.forEach(date=>{
    const dateKey=key(date),cell=document.createElement('div');cell.className='habit-cell';
    const check=document.createElement('input');check.type='checkbox';check.className='habit-check';check.checked=!!(habit.done&&habit.done[dateKey]);check.setAttribute('aria-label',habit.name+', '+date.toLocaleDateString('ru-RU'));
-   total++;if(check.checked)completed++;
+   total++;if(check.checked){completed++;weekDone++;}
    check.addEventListener('change',()=>{habit.done=habit.done||{};if(check.checked)habit.done[dateKey]=true;else delete habit.done[dateKey];saveHabits();renderHabits()});
    cell.appendChild(check);grid.appendChild(cell);
   });
@@ -2284,6 +2318,9 @@ function renderHabits(){
   const empty=document.createElement('div');empty.className='todo-empty';empty.style.gridColumn='1 / -1';empty.textContent='Пока здесь нет привычек. Добавь первую маленькую цель ♡';grid.appendChild(empty);
  }
  $('#habitsProgress').textContent=habits.length?'Отмечено '+completed+' из '+total+' привычек за эту неделю ♡':'Каждая маленькая отметка — уже забота о себе ♡';
+ $('#habitsActiveCount').textContent=habits.length;
+ $('#habitsWeekDone').textContent=weekDone;
+ $('#habitsBestStreak').textContent=(habits.length?Math.max(0,...habits.map(h=>habitStreakStats(h).best)):0)+' дней';
 }
 $('#habitForm').addEventListener('submit',e=>{e.preventDefault();const input=$('#habitName');const name=input.value.trim();if(!name)return;habits.push({id:Date.now()+'-'+Math.random().toString(16).slice(2),name,done:{}});saveHabits();input.value='';renderHabits()});
 $('#habitsPrevWeek').addEventListener('click',()=>{habitsWeekOffset--;renderHabits()});
