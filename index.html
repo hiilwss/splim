@@ -1261,6 +1261,16 @@ async function applyCloudSnapshot(storage){
  });}finally{window.splimSyncApplying=false;}
  return changed;
 }
+function reloadAfterCloudChange(user,storage){
+ const fingerprint=JSON.stringify(Object.keys(storage||{}).sort().map(key=>[key,String(storage[key])]));
+ const key='splimCloudReload:'+user.id;
+ try{
+  if(sessionStorage.getItem(key)===fingerprint)return false;
+  sessionStorage.setItem(key,fingerprint);
+ }catch(e){}
+ setTimeout(()=>location.reload(),250);
+ return true;
+}
 function stopRealtime(){
  if(syncChannel){window.splimSupabase?.removeChannel(syncChannel);syncChannel=null;}
 }
@@ -1284,8 +1294,8 @@ function startRealtime(user){
    }
    applyCloudSnapshot(remote).then(changed=>{
     if(changed){
-     setSyncStatus('♡ Получены изменения с другого устройства. Обновляем планер…');
-     setTimeout(()=>location.reload(),150);
+     if(reloadAfterCloudChange(user,remote))setSyncStatus('♡ Получены изменения с другого устройства. Обновляем планер…');
+     else setSyncStatus('♡ Изменения синхронизированы. Автоматическое обновление остановлено, чтобы избежать цикла.');
     }
    }).catch(error=>setSyncStatus('Не удалось применить обновления: '+(error.message||'ошибка'),true));
   })
@@ -1317,7 +1327,10 @@ async function syncAccountData(user){
   // Возвращаем в облако новые локальные ключи, которых ещё нет в старом снимке.
   if(needsCloudMerge)await writeCloudSnapshot(user);
   await syncWallpaperForUser(user);
-  if(changed){setSyncStatus('♡ Загружены записи из твоего облачного профиля. Обновляем планер…');setTimeout(()=>location.reload(),150);return;}
+  if(changed){
+   if(reloadAfterCloudChange(user,cloudStorage)){setSyncStatus('♡ Загружены записи из твоего облачного профиля. Обновляем планер…');return;}
+   setSyncStatus('♡ Данные получены. Повторную перезагрузку остановили, чтобы не запускать цикл.');
+  }
   startRealtime(user);
   setSyncStatus('♡ Все записи синхронизированы с твоим аккаунтом.');
  }catch(error){syncReady=false;setSyncStatus('Ошибка синхронизации: '+(error.message||'проверь подключение и доступ к user_data')+'. Локальные записи не удалены.',true);}
