@@ -504,7 +504,12 @@ if('serviceWorker' in navigator){
  .app-main .care-subsections,.app-main .care-panel,.app-main .study-page{width:100%;max-width:none}
 }
 </style>
-<style>.study-progress-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}.study-progress-stat{padding:17px;border:1px solid var(--line);border-radius:17px;background:var(--panel);min-width:0}.study-progress-stat small{display:block;color:var(--muted);font-size:11px}.study-progress-stat strong{display:block;margin:10px 0 4px;color:var(--accentText);font-size:clamp(21px,3vw,29px);font-variant-numeric:tabular-nums}.study-progress-stat span{font-size:10px;color:var(--muted)}.study-progress-card{padding:19px;border:1px solid var(--line);border-radius:18px;background:var(--panel)}.study-progress-card h3{margin:0;color:var(--ink);font-size:15px}.study-progress-card p{margin:5px 0 0;color:var(--muted);font-size:11px;line-height:1.5}.study-progress-top{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(240px,.8fr);gap:12px}.study-goal-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:17px}.study-goal-row label{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:11px}.study-goal-row input{width:78px;padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--cell);color:var(--ink);font:inherit}.study-goal-track{height:11px;margin-top:14px;overflow:hidden;border-radius:99px;background:var(--cell)}.study-goal-track span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--pink),var(--pink2));transition:width .25s}.study-goal-caption{display:flex;justify-content:space-between;gap:8px;margin-top:7px;color:var(--muted);font-size:10px}.study-week-chart{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;align-items:end;height:155px;margin-top:17px}.study-week-col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:7px;height:100%;min-width:0}.study-week-bar-bg{display:flex;align-items:flex-end;width:min(100%,34px);height:105px;border-radius:99px;background:var(--cell);overflow:hidden}.study-week-bar{width:100%;min-height:0;border-radius:99px;background:linear-gradient(180deg,var(--pink),var(--pink2))}.study-week-col small{color:var(--muted);font-size:10px}.study-week-col b{color:var(--muted);font-size:9px;font-weight:600}.study-subject-list{display:grid;gap:11px;margin-top:15px}.study-subject-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px 12px;align-items:center}.study-subject-row strong{font-size:12px;color:var(--ink);overflow-wrap:anywhere}.study-subject-row small{font-size:10px;color:var(--muted)}.study-subject-track{grid-column:1/-1;height:7px;border-radius:99px;background:var(--cell);overflow:hidden}.study-subject-track span{display:block;height:100%;border-radius:99px;background:var(--pink)}.study-progress-note{padding:14px 16px;border-radius:15px;background:color-mix(in srgb,var(--pink2) 20%,var(--panel));color:var(--muted);font-size:11px;line-height:1.6}@media(max-width:760px){.study-progress-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.study-progress-top{grid-template-columns:1fr}}@media(max-width:430px){.study-progress-stat{padding:13px}.study-progress-card{padding:15px}.study-week-chart{gap:5px}}</style>
+<style>.study-progress-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}.study-progress-stat{padding:17px;border:1px solid var(--line);border-radius:17px;background:var(--panel);min-width:0}.study-progress-stat small{display:block;color:var(--muted);font-size:11px}.study-progress-stat strong{display:block;margin:10px 0 4px;color:var(--accentText);font-size:clamp(21px,3vw,29px);font-variant-numeric:tabular-nums}.study-progress-stat span{font-size:10px;color:var(--muted)}.study-progress-card{padding:19px;border:1px solid var(--line);border-radius:18px;background:var(--panel)}.study-progress-card h3{margin:0;color:var(--ink);font-size:15px}.study-progress-card p{margin:5px 0 0;color:var(--muted);font-size:11px;line-height:1.5}.study-progress-top{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(240px,.8fr);gap:12px}.study-goal-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:17px}.study-goal-row label{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:11px}.study-goal-row input{width:78px;padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--cell);color:var(--ink);font:inherit}.study-goal-track{height:11px;margin-top:14px;overflow:hidden;border-radius:99px;background:var(--cell)}.study-goal-track span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--pink),var(--pink2));transition:width .25s}.study-goal-caption{display:flex;justify-content:space-between;gap:8px;margin-top:7px;color:var(--muted);font-size:10px}.study-week-chart{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;align-items:end;height:155px;margin-top:17px}.study-week-col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:7px;height:100%;min-width:0}.study-week-bar-bg{display:flex;align-items:flex-end;width:min(100%,34px);height:105px;border-radius:99px;background:var(--cell);overflow:hidden}.study-week-bar{width:100%;min-height:0;border-radius:99px;background:linear-gradient(180deg,var(--pink),var(--pink2))}.study-week-col small{color:var(--muted);font-size:10px}.study-week-col b{color:var(--muted);font-size:9px;font-weight:600}.study-subject-list{display:grid;gap:11px;margin-top:15px}.study-subject-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px 12px;align-items:center}.study-subject-row strong{font-size:12px;color:var(--ink);overflow-wrap:anywhere}.study-subject-row small{font-size:10px;color:var(--muted)}.study-subject-track{grid-column:1/-1;height:7px;border-radius:99px;background:var(--cell);overflow:hidden}.study-subject-track span{display:block;height:100%;border-radius:99px;background:var(--pink)}.study-progress-note{padding:14px 16px;border-radius:15px;background:color-mix(in srgb,var(--pink2) 20%,var(--panel));color:var(--muted);font-size:11px;line-height:1.6}@media(max-width:760px){.study-progress-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.study-progress-top{grid-template-columns:1fr}}@media(max-width:430px){.study-progress-stat{padding:13px}.study-progress-card{padding:15px}.study-week-chart{gap:5px}}
+.pet-collection{margin:22px 0 8px;padding:18px;border:1px solid var(--line);border-radius:20px;background:color-mix(in srgb,var(--pink2) 13%,var(--panel))}
+.pet-collection-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}.pet-collection-heading strong{display:block;font-size:15px;color:var(--ink)}.pet-collection-heading small{display:block;max-width:470px;margin-top:5px;color:var(--muted);font-size:12px;line-height:1.5}.pet-count{flex:none;padding:5px 9px;border-radius:999px;background:var(--cell);color:var(--accentText);font-size:11px;font-weight:800}
+.pet-collection-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px}.pet-card{min-width:0;padding:13px 10px;border:1px solid var(--line);border-radius:16px;background:var(--panel);text-align:center}.pet-card.is-locked{opacity:.65}.pet-card-emoji{font-size:34px;line-height:1.25}.pet-card strong{display:block;margin:5px 0 3px;color:var(--ink);font-size:12px}.pet-card small{display:block;min-height:30px;color:var(--muted);font-size:10px;line-height:1.4}.pet-card button{margin-top:9px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:var(--cell);color:var(--accentText);font:inherit;font-size:10px;font-weight:750;cursor:pointer}.pet-card button:disabled{opacity:.45;cursor:default}.profile-cover-pets{position:absolute;z-index:2;left:22px;right:22px;bottom:10px;display:flex;align-items:flex-end;gap:8px;min-height:48px;pointer-events:none}.profile-cover-pet{display:grid;place-items:center;width:45px;height:45px;border:1px solid #ffffffa8;border-radius:16px;background:#fff9;box-shadow:0 5px 14px #80536a22;font-size:27px;backdrop-filter:blur(8px)}body[data-mode="dark"] .profile-cover-pet{background:#302936cc;border-color:#645568}
+@media(max-width:520px){.pet-collection{padding:14px}.pet-collection-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.profile-cover-pets{left:15px;bottom:7px}.profile-cover-pet{width:39px;height:39px;font-size:24px}}
+</style>
 </head>
 <body class="auth-pending"><svg aria-hidden="true" width="0" height="0" style="position:absolute;overflow:hidden"><symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.4 2.2 4 2.2 4-2.2 4-2.2M9 9.5h.01M15 9.5h.01"/></symbol><symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 .4-8A5.8 5.8 0 0 0 6.3 9 4.5 4.5 0 0 0 7 18Z"/><path d="M9 21v-1m6 1v-1"/></symbol><symbol id="i-empty" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9 12h6"/></symbol><symbol id="i-question" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.6 2.6 0 1 1 4.6 1.7c-1.1 1.1-2.1 1.4-2.1 3M12 17.5h.01"/></symbol><symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.8 12s3.2-6 9.2-6 9.2 6 9.2 6-3.2 6-9.2 6-9.2-6-9.2-6Z"/><circle cx="12" cy="12" r="2.5"/></symbol><symbol id="i-message" viewBox="0 0 24 24"><path d="M4 5.5h16v11H9l-5 3v-14Z"/><path d="M8 10h8M8 13.5h5"/></symbol><symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 2.8c1.2 4.8 3.4 7 8.2 8.2-4.8 1.2-7 3.4-8.2 8.2-1.2-4.8-3.4-7-8.2-8.2 4.8-1.2 7-3.4 8.2-8.2Z"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1Z"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M7.5 3v4M16.5 3v4M3.5 10h17M8 14h2m4 0h2M8 17h2"/></symbol><symbol id="i-checklist" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="17" rx="2.5"/><path d="m7.5 9 1.5 1.5L12 7.5M14 9h3M7.5 16l1.5 1.5 3-3M14 16h3"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20.5 3.5C10 3 4 7 4 14a6.5 6.5 0 0 0 6.5 6.5c7 0 10-7 10-17Z"/><path d="M3 21c4-6 8-9 14-13"/></symbol><symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.5 8.5c0 5-8.5 11-8.5 11s-8.5-6-8.5-11A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 8.5 2.5Z"/></symbol><symbol id="i-note" viewBox="0 0 24 24"><path d="M6 3.5h9l4 4V21H6a2 2 0 0 1-2-2V5.5a2 2 0 0 1 2-2Z"/><path d="M14.5 3.5V8H19M8 12h8M8 16h8"/></symbol><symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M19 13.5 21 15l-2 3.5-2.5-.5-2 1-.5 2h-4l-.5-2-2-1-2.5.5L3 15l2-1.5v-3L3 9l2-3.5 2.5.5 2-1 .5-2h4l.5 2 2 1 2.5-.5L21 9l-2 1.5Z"/></symbol><symbol id="i-water" viewBox="0 0 24 24"><path d="M12 2.8S5 11 5 15.5a7 7 0 0 0 14 0C19 11 12 2.8 12 2.8Z"/><path d="M9 16a3 3 0 0 0 3 3"/></symbol><symbol id="i-moon" viewBox="0 0 24 24"><path d="M19.5 15.5A8.5 8.5 0 0 1 8.5 4.5 8.5 8.5 0 1 0 19.5 15.5Z"/></symbol><symbol id="i-shoe" viewBox="0 0 24 24"><path d="M3 15.5c3.5 0 5-2 6-6l2 1c1.5 2 3 3 5 3.5l4 1.5c1 .4 1.5 1.2 1.5 2.2V20H3Z"/><path d="M9 10l2 2m2-.5 2 2M3 17h18"/></symbol><symbol id="i-flame" viewBox="0 0 24 24"><path d="M13 2.5c1 5-3 6-2 9 1-1 2-2 2-3.5 4 3 6 6 5 9.5a6 6 0 0 1-12 0c0-3 1.5-5 4-7.5-.2 3 1 4 1 4 2-3 2-7 2-11.5Z"/></symbol><symbol id="i-yoga" viewBox="0 0 24 24"><circle cx="12" cy="4.5" r="2"/><path d="M12 7v5m0-3-5 3m5-3 5 3M12 12l-4 5m4-5 4 5M4 20h16"/></symbol></svg><link id="splimFavicon" rel="icon" type="image/svg+xml">
 <div id="wallpaperLayer" aria-hidden="true"></div>
@@ -593,14 +598,14 @@ if('serviceWorker' in navigator){
   <div class="footer">В гостевом режиме — в браузере, в аккаунте — в личном облаке ♡</div>
     </section>
     <section class="page profile-page hidden" id="profilePage">
-      <header class="profile-cover"><span class="profile-cover-mark">✿</span><span class="profile-cover-word">a little space, just for you</span></header>
+      <header class="profile-cover"><span class="profile-cover-mark">✿</span><span class="profile-cover-word">a little space, just for you</span><div class="profile-cover-pets" id="profileCoverPets" aria-label="Питомцы на баннере"></div></header>
       <section class="profile-card profile-main-card">
         <div id="profileSignedOut" class="profile-guest" hidden>Войди в аккаунт через настройки, чтобы оформить личный профиль и сохранять изменения.</div>
         <div id="profileSignedIn" hidden>
           <div class="profile-avatar-row"><div class="profile-avatar" id="profileAvatar"><span class="profile-avatar-placeholder">♡</span><img id="profileAvatarImage" alt="Аватар профиля"></div><div class="profile-identity-edit"><input id="profileDisplayName" type="text" maxlength="40" placeholder="Твоё имя" autocomplete="nickname" aria-label="Имя пользователя"><div class="profile-actions"><button class="profile-secondary" id="profileChooseAvatar" type="button">Изменить фото</button><button class="profile-secondary" id="profileRemoveAvatar" type="button" hidden>Убрать фото</button></div></div></div>
           <input id="profileAvatarFile" type="file" accept="image/jpeg,image/png,image/webp" hidden>
           <label class="profile-description-label" for="profileDescription">О себе</label><textarea id="profileDescription" class="profile-description" maxlength="240" rows="3" placeholder="Расскажи немного о себе…"></textarea>
-          <div class="profile-actions profile-save-row"><button class="profile-primary" id="profileSave" type="button">Сохранить профиль ♡</button></div>
+          <section class="pet-collection" id="petCollection"><div class="pet-collection-heading"><div><strong>Мои питомцы</strong><small>Открывай их за свои маленькие достижения и выбирай, кто будет жить на баннере ♡</small></div><span class="pet-count" id="petCount">0 / 5</span></div><div class="pet-collection-grid" id="petCollectionGrid"></div></section><div class="profile-actions profile-save-row"><button class="profile-primary" id="profileSave" type="button">Сохранить профиль ♡</button></div>
           <p class="profile-status" id="profileStatus" role="status" aria-live="polite">♡ Загружаем профиль…</p>
           <div class="profile-account-details"><div class="profile-email-row"><span>Электронная почта</span><strong id="profileEmailValue">—</strong></div><details class="profile-password-details"><summary>Сменить пароль</summary>          <form class="account-form account-password-form" id="accountChangePasswordForm">
             <label class="account-field">Новый пароль
@@ -1171,7 +1176,7 @@ if('serviceWorker' in navigator){
 
 const $=s=>document.querySelector(s);
 const root=document.documentElement;
-const SPLIM_SYNC_KEYS=['splimStudyData','pinkPlannerTasks','splimNotes','splimGratitudeEntries','splimHabits','splimTodoItems','splimHomeLayout','splimWaterTracker','splimSleepTracker','splimActivityTracker','splimMoodDiary','splimProfileDescription','pinkPlannerSettings','pinkPlannerTheme','pinkPlannerMode','splimWallpaperBlur','splimWallpaperPath'];
+const SPLIM_SYNC_KEYS=['splimPetAchievements','splimStudyData','pinkPlannerTasks','splimNotes','splimGratitudeEntries','splimHabits','splimTodoItems','splimHomeLayout','splimWaterTracker','splimSleepTracker','splimActivityTracker','splimMoodDiary','splimProfileDescription','pinkPlannerSettings','pinkPlannerTheme','pinkPlannerMode','splimWallpaperBlur','splimWallpaperPath'];
 const syncStatus=$('#syncStatus');
 let syncUser=null,syncReady=false,syncTimer=null,syncBusy=false,syncQueued=false,syncLoading=false;
 let syncChannel=null;
@@ -2404,6 +2409,53 @@ if(window.splimCurrentUser)syncAccountData(window.splimCurrentUser);
  window.splimUpdateGreeting();
  setInterval(()=>window.splimUpdateGreeting(),60000);
  function say(message,error=false){if(!status)return;status.textContent=message;status.classList.toggle('error',!!error);}
+ const PETS=[
+  {id:'kitten',emoji:'🐱',name:'Котёнок',hint:'За первое выполненное дело',goal:'Выполни 1 дело',check:m=>m.todo>=1},
+  {id:'bunny',emoji:'🐰',name:'Зайчик',hint:'За 7 отметок привычек',goal:'Отметь привычки 7 раз',check:m=>m.habitMarks>=7},
+  {id:'bear',emoji:'🐻',name:'Медвежонок',hint:'За 3 учебные сессии',goal:'Заверши 3 занятия с таймером',check:m=>m.studySessions>=3},
+  {id:'frog',emoji:'🐸',name:'Лягушонок',hint:'За 3 тренировки',goal:'Запиши 3 тренировки',check:m=>m.workouts>=3},
+  {id:'panda',emoji:'🐼',name:'Пандочка',hint:'За 5 выполненных заданий',goal:'Выполни 5 домашних заданий',check:m=>m.homework>=5}
+ ];
+ function readPetState(){try{const v=JSON.parse(localStorage.getItem('splimPetAchievements')||'null')||{};return {unlocked:Array.isArray(v.unlocked)?v.unlocked:[],active:Array.isArray(v.active)?v.active:[]};}catch(e){return {unlocked:[],active:[]};}}
+ function writePetState(v){localStorage.setItem('splimPetAchievements',JSON.stringify(v));}
+ function petMetrics(){
+  const read=k=>{try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}};
+  const todo=read('splimTodoItems'),habits=read('splimHabits'),study=read('splimStudyData'),activity=read('splimActivityTracker');
+  const todoCount=Array.isArray(todo)?todo.filter(x=>x&&x.done).length:0;
+  let habitMarks=0;if(Array.isArray(habits))habits.forEach(h=>Object.values(h.done||{}).forEach(v=>{if(v)habitMarks++;}));
+  const sessions=study&&Array.isArray(study.timerSessions)?study.timerSessions.filter(x=>x&&((x.completed===true)||x.completedAt||x.endTime||x.endedAt)): [];
+  let workouts=0;if(activity&&activity.days)Object.values(activity.days).forEach(day=>{if(day&&Array.isArray(day.workouts))workouts+=day.workouts.length;});
+  const homework=study&&Array.isArray(study.homework)?study.homework.filter(x=>x&&(x.done||x.completed||x.completedAt)).length:0;
+  return {todo:todoCount,habitMarks,studySessions:sessions.length,workouts,homework};
+ }
+ function renderPets(){
+  const grid=byId('petCollectionGrid'),cover=byId('profileCoverPets');if(!grid||!cover)return;
+  const state=readPetState(),metrics=petMetrics();
+  PETS.forEach(p=>{if(!state.unlocked.includes(p.id)&&p.check(metrics))state.unlocked.push(p.id);});
+  state.unlocked=state.unlocked.filter(id=>PETS.some(p=>p.id===id));
+  state.active=state.active.filter(id=>state.unlocked.includes(id)).slice(0,3);
+  writePetState(state);
+  byId('petCount').textContent=state.unlocked.length+' / '+PETS.length+' открыто';
+  grid.innerHTML='';
+  PETS.forEach(p=>{
+   const unlocked=state.unlocked.includes(p.id),active=state.active.includes(p.id),card=document.createElement('article');card.className='pet-card'+(unlocked?'':' is-locked');
+   const emoji=document.createElement('div');emoji.className='pet-card-emoji';emoji.textContent=unlocked?p.emoji:'🔒';
+   const name=document.createElement('strong');name.textContent=p.name;
+   const hint=document.createElement('small');hint.textContent=unlocked?p.hint:p.goal;
+   const button=document.createElement('button');button.type='button';button.disabled=!unlocked;button.textContent=!unlocked?'Пока закрыт':active?'Убрать с баннера':'На баннер';
+   button.addEventListener('click',()=>{
+    const next=readPetState();
+    if(next.active.includes(p.id))next.active=next.active.filter(id=>id!==p.id);
+    else if(next.active.length<3)next.active.push(p.id);
+    else{say('На баннер можно поставить не больше трёх питомцев ♡');return;}
+    writePetState(next);renderPets();
+   });
+   card.append(emoji,name,hint,button);grid.appendChild(card);
+  });
+  cover.innerHTML='';
+  state.active.forEach(id=>{const p=PETS.find(item=>item.id===id);if(!p)return;const pet=document.createElement('span');pet.className='profile-cover-pet';pet.textContent=p.emoji;pet.title=p.name;cover.appendChild(pet);});
+ }
+
  function showAvatar(url){if(url){avatarImage.src=url;avatar.classList.add('has-image');removeButton.hidden=false;}else{avatarImage.removeAttribute('src');avatar.classList.remove('has-image');removeButton.hidden=true;}}
  async function refresh(){
   const user=window.splimCurrentUser;signedOut.hidden=!!user;signedIn.hidden=!user;
@@ -2416,6 +2468,7 @@ if(window.splimCurrentUser)syncAccountData(window.splimCurrentUser);
    nameInput.value=data.display_name||'';byId('profileEmailValue').textContent=user.email||'—';byId('profileDescription').value=localStorage.getItem('splimProfileDescription')||'';if(window.splimUpdateGreeting)window.splimUpdateGreeting(data.display_name||'');currentPath=data.avatar_url||null;
    if(currentPath){const {data:signed,error:signedError}=await client.storage.from('user-avatars').createSignedUrl(currentPath,3600);if(signedError)throw signedError;showAvatar(signed.signedUrl);}else showAvatar(null);
    say('♡ Профиль загружен. Изменения можно сохранить в любой момент.');
+   renderPets();
   }catch(error){say('Не удалось загрузить профиль: '+(error.message||'ошибка соединения'),true);}
  }
  async function save(){
@@ -2452,6 +2505,7 @@ if(window.splimCurrentUser)syncAccountData(window.splimCurrentUser);
  byId('profileSave').addEventListener('click',save);
  byId('profileGoAccount')?.addEventListener('click',()=>{showPage('settings');document.getElementById('accountEmail')?.focus();});
  window.splimProfileRefresh=refresh;
+ document.querySelectorAll('[data-page="profile"],[data-open-page="profile"]').forEach(button=>button.addEventListener('click',()=>setTimeout(renderPets,80)));
  if(client){client.auth.onAuthStateChange(()=>setTimeout(refresh,0));client.auth.getSession().then(({data})=>{if(data&&data.session){window.splimCurrentUser=data.session.user;refresh();}else refresh();});}
  else{signedOut.hidden=false;signedIn.hidden=true;}
 })();
