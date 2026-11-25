@@ -429,7 +429,42 @@ body[data-mode="dark"] .care-settings-box{background:#292430;border-color:#40364
 </style>
 
 <style>
-.study-page{display:grid;gap:19px;max-width:950px}.study-welcome{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:24px;background:linear-gradient(120deg,color-mix(in srgb,var(--pink2) 38%,var(--panel)),var(--panel));border:1px solid var(--line)}.study-welcome h2{font-size:25px;margin:7px 0;color:var(--ink)}.study-welcome p,.study-title p{font-size:13px;line-height:1.55;color:var(--muted);margin:5px 0 0}.study-welcome>span{font-size:48px;color:var(--pink);background:color-mix(in srgb,var(--pink2) 40%,var(--panel));padding:12px 20px;border-radius:25px}.study-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:7px}.study-tabs button{border:0;border-radius:13px;padding:12px 6px;background:transparent;color:var(--muted);font:inherit;font-size:12px;line-height:1.7;cursor:pointer}.study-tabs button.is-active{background:color-mix(in srgb,var(--pink2) 30%,var(--panel));color:var(--accentText);font-weight:700}.study-tabs button:first-letter{font-size:18px}.study-panel{display:grid;gap:14px}.study-panel.hidden{display:none!important}.study-duration-field small{font-weight:400;color:var(--muted)}.study-title{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--pink);font-size:25px}.study-title h2{font-size:22px;color:var(--ink);margin:4px 0}.study-form{display:grid;gap:13px;padding:17px}.study-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.study-form label{display:grid;gap:6px;min-width:0;color:var(--ink);font-size:12px;font-weight:650}.study-form label small{font-weight:400;color:var(--muted)}.study-form input,.study-form select,.study-form textarea{box-sizing:border-box;width:100%;min-width:0;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--cell);color:var(--ink);font:inherit;font-size:13px}.study-form textarea{resize:vertical;line-height:1.5}.study-add{justify-self:start;border:0;border-radius:12px;padding:11px 17px;background:var(--pink);color:white;font:inherit;font-size:13px;font-weight:700;cursor:pointer}.study-list-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.study-list-head h3{font-size:16px;color:var(--ink);margin:0}.study-list-head span{font-size:11px;color:var(--muted)}.study-list{display:grid;gap:9px}.study-item{display:flex;align-items:flex-start;gap:11px;padding:14px;border:1px solid var(--line);border-radius:15px;background:var(--panel);min-width:0}.study-item.is-done{opacity:.68}.study-item input[type=checkbox]{width:20px;height:20px;flex:0 0 20px;accent-color:var(--pink);margin:2px 0 0}.study-item-copy{flex:1;min-width:0}.study-item-title{font-size:13px;font-weight:700;color:var(--ink);overflow-wrap:anywhere}.study-item.is-done .study-item-title{text-decoration:line-through;color:var(--muted)}.study-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.study-chip{padding:4px 8px;border-radius:99px;background:var(--cell);font-size:10px;color:var(--muted)}.study-chip.important{color:var(--accentText);background:color-mix(in srgb,var(--pink2) 40%,var(--panel))}.study-item-note{font-size:11px;line-height:1.5;color:var(--muted);margin:8px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}.study-delete{border:0;background:transparent;color:var(--muted);font-size:19px;cursor:pointer;padding:0 5px}.study-delete:hover{color:var(--pink)}.study-empty{padding:24px 15px;border:1px dashed var(--line);border-radius:15px;text-align:center;color:var(--muted);font-size:12px;line-height:1.6}.study-day{display:grid;gap:8px}.study-day h4{margin:7px 0 0;color:var(--accentText);font-size:12px}.study-time{font-size:12px;font-weight:750;color:var(--pink);white-space:nowrap}.study-foot{text-align:center;color:var(--muted);font-size:11px;margin:0 0 8px}@media(max-width:600px){.study-grid{grid-template-columns:1fr}.study-welcome>span{font-size:34px;padding:9px 14px}.study-welcome{padding:18px}.study-tabs button{font-size:10px;padding:10px 3px}}.progress-page{display:grid;gap:20px;max-width:1000px}.progress-heading h1 span{color:var(--pink)}
+.study-page{display:grid;gap:19px;max-width:950px}.study-welcome{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:24px;background:linear-gradient(120deg,color-mix(in srgb,var(--pink2) 38%,var(--panel)),var(--panel));border:1px solid var(--line)}.study-welcome h2{font-size:25px;margin:7px 0;color:var(--ink)}.study-welcome p,.study-title p{font-size:13px;line-height:1.55;color:var(--muted);margin:5px 0 0}.study-welcome>span{font-size:48px;color:var(--pink);background:color-mix(in srgb,var(--pink2) 40%,var(--panel));padding:12px 20px;border-radius:25px}.study-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;padding:7px}.study-tabs button{border:0;border-radius:13px;padding:12px 6px;background:transparent;color:var(--muted);font:inherit;font-size:12px;line-height:1.7;cursor:pointer}.study-tabs button.is-active{background:color-mix(in srgb,var(--pink2) 30%,var(--panel));color:var(--accentText);font-weight:700}.study-tabs button:first-letter{font-size:18px}.study-panel{display:grid;gap:14px}.study-panel.hidden{display:none!important}
+.study-timer-card{padding:clamp(18px,4vw,30px);display:grid;gap:18px;justify-items:center;background:linear-gradient(145deg,color-mix(in srgb,var(--pink2) 22%,var(--panel)),var(--panel))}
+.study-timer-modes{display:flex;gap:6px;padding:5px;border-radius:99px;background:var(--cell);border:1px solid var(--line)}
+.study-timer-modes button{border:0;border-radius:99px;padding:9px 17px;background:transparent;color:var(--muted);font:inherit;font-size:12px;cursor:pointer}
+.study-timer-modes button.is-active{background:var(--pink);color:white;font-weight:700}
+.study-timer-subject{width:min(100%,360px);display:grid;gap:6px;text-align:center;color:var(--muted);font-size:12px}
+.study-timer-subject input,.study-timer-options input{width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--cell);color:var(--ink);font:inherit;text-align:center}
+.study-timer-clock,.study-focus-clock{font-size:clamp(48px,12vw,78px);font-weight:650;letter-spacing:-3px;line-height:1.1;color:var(--accentText);font-variant-numeric:tabular-nums}
+.study-timer-phase{color:var(--muted);font-size:13px;text-align:center}
+.study-timer-progress{width:min(100%,420px);height:7px;background:var(--cell);border-radius:99px;overflow:hidden}
+.study-timer-progress span{display:block;width:0;height:100%;background:var(--pink);border-radius:99px;transition:width .3s}
+.study-timer-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.study-timer-actions button,.study-focus-bottom button{border:0;border-radius:13px;padding:12px 17px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.study-timer-primary,.study-focus-bottom button:first-child{background:var(--pink);color:white}
+.study-timer-secondary,.study-focus-bottom button:last-child{background:var(--cell);color:var(--accentText);border:1px solid var(--line)!important}
+.study-timer-actions button:disabled{opacity:.4;cursor:not-allowed}
+.study-timer-options{width:min(100%,420px);grid-template-columns:1fr 1fr;gap:10px}
+.study-timer-options:not([hidden]){display:grid}
+.study-timer-options label{display:grid;gap:5px;color:var(--muted);font-size:11px}
+.study-timer-options small{grid-column:1/-1;color:var(--muted);font-size:10px;text-align:center}
+.study-focus-button{border:0;background:transparent;color:var(--accentText);font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.study-timer-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.study-timer-summary article{padding:13px 8px;text-align:center;display:grid;gap:5px}
+.study-timer-summary strong{font-size:clamp(16px,4vw,22px);color:var(--accentText);font-variant-numeric:tabular-nums}
+.study-timer-summary span{font-size:10px;color:var(--muted)}
+.study-focus-overlay{position:fixed;inset:0;z-index:10000;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;justify-content:space-between;padding:clamp(18px,5vw,42px);box-sizing:border-box}
+.study-focus-overlay[hidden]{display:none!important}
+.study-focus-top,.study-focus-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.study-focus-top{color:var(--muted);font-size:12px}
+.study-focus-top button{border:0;background:var(--cell);color:var(--ink);border-radius:50%;width:40px;height:40px;font-size:25px;cursor:pointer}
+.study-focus-center{display:grid;justify-items:center;gap:15px;text-align:center}
+.study-focus-center>span{font-size:48px;color:var(--pink)}
+.study-focus-center p{margin:0;color:var(--ink);font-size:16px}
+.study-focus-center small{color:var(--muted)}
+.study-focus-bottom{justify-content:center;flex-wrap:wrap}
+@media(max-width:430px){.study-timer-summary{gap:6px}.study-timer-summary article{padding:11px 4px}.study-timer-summary span{font-size:9px}.study-timer-actions{width:100%}.study-timer-actions button{flex:1;padding:11px 8px;font-size:11px}}.study-duration-field small{font-weight:400;color:var(--muted)}.study-title{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--pink);font-size:25px}.study-title h2{font-size:22px;color:var(--ink);margin:4px 0}.study-form{display:grid;gap:13px;padding:17px}.study-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.study-form label{display:grid;gap:6px;min-width:0;color:var(--ink);font-size:12px;font-weight:650}.study-form label small{font-weight:400;color:var(--muted)}.study-form input,.study-form select,.study-form textarea{box-sizing:border-box;width:100%;min-width:0;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--cell);color:var(--ink);font:inherit;font-size:13px}.study-form textarea{resize:vertical;line-height:1.5}.study-add{justify-self:start;border:0;border-radius:12px;padding:11px 17px;background:var(--pink);color:white;font:inherit;font-size:13px;font-weight:700;cursor:pointer}.study-list-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.study-list-head h3{font-size:16px;color:var(--ink);margin:0}.study-list-head span{font-size:11px;color:var(--muted)}.study-list{display:grid;gap:9px}.study-item{display:flex;align-items:flex-start;gap:11px;padding:14px;border:1px solid var(--line);border-radius:15px;background:var(--panel);min-width:0}.study-item.is-done{opacity:.68}.study-item input[type=checkbox]{width:20px;height:20px;flex:0 0 20px;accent-color:var(--pink);margin:2px 0 0}.study-item-copy{flex:1;min-width:0}.study-item-title{font-size:13px;font-weight:700;color:var(--ink);overflow-wrap:anywhere}.study-item.is-done .study-item-title{text-decoration:line-through;color:var(--muted)}.study-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.study-chip{padding:4px 8px;border-radius:99px;background:var(--cell);font-size:10px;color:var(--muted)}.study-chip.important{color:var(--accentText);background:color-mix(in srgb,var(--pink2) 40%,var(--panel))}.study-item-note{font-size:11px;line-height:1.5;color:var(--muted);margin:8px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}.study-delete{border:0;background:transparent;color:var(--muted);font-size:19px;cursor:pointer;padding:0 5px}.study-delete:hover{color:var(--pink)}.study-empty{padding:24px 15px;border:1px dashed var(--line);border-radius:15px;text-align:center;color:var(--muted);font-size:12px;line-height:1.6}.study-day{display:grid;gap:8px}.study-day h4{margin:7px 0 0;color:var(--accentText);font-size:12px}.study-time{font-size:12px;font-weight:750;color:var(--pink);white-space:nowrap}.study-foot{text-align:center;color:var(--muted);font-size:11px;margin:0 0 8px}@media(max-width:600px){.study-grid{grid-template-columns:1fr}.study-welcome>span{font-size:34px;padding:9px 14px}.study-welcome{padding:18px}.study-tabs button{font-size:10px;padding:10px 3px}}.progress-page{display:grid;gap:20px;max-width:1000px}.progress-heading h1 span{color:var(--pink)}
 .progress-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;overflow:hidden;position:relative;padding:clamp(20px,4vw,30px);background:linear-gradient(120deg,color-mix(in srgb,var(--pink2) 35%,var(--panel)),var(--panel));border:1px solid var(--line)}
 .progress-hero-copy{position:relative;z-index:1;max-width:620px}.progress-kicker{font-size:10px;letter-spacing:1.5px;font-weight:800;color:var(--muted)}.progress-hero h2{font-size:clamp(21px,4vw,29px);margin:8px 0;color:var(--ink)}.progress-hero p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}.progress-flower{width:100px;height:100px;flex:0 0 100px;border-radius:34px;display:grid;place-items:center;background:color-mix(in srgb,var(--pink2) 45%,var(--panel));color:var(--pink);font-size:65px;transform:rotate(10deg)}
 .progress-controls{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;padding:15px}.progress-period-tabs{display:flex;gap:5px;padding:4px;border-radius:14px;background:var(--cell)}.progress-period-tabs button,.progress-today{border:0;border-radius:11px;padding:9px 13px;background:transparent;color:var(--muted);font:inherit;font-size:13px;cursor:pointer}.progress-period-tabs button.is-active{background:var(--panel);color:var(--ink);box-shadow:0 2px 9px #0000000b}.progress-date-nav{display:flex;align-items:center;justify-content:center;gap:15px;text-align:center}.progress-date-nav>button{width:34px;height:34px;border:1px solid var(--line);border-radius:11px;background:var(--cell);color:var(--ink);font-size:22px;cursor:pointer}.progress-date-nav strong,.progress-date-nav small{display:block}.progress-date-nav strong{font-size:14px;color:var(--ink)}.progress-date-nav small{font-size:11px;color:var(--muted);margin-top:3px}.progress-today{background:color-mix(in srgb,var(--pink2) 28%,var(--panel));color:var(--accentText);white-space:nowrap}
@@ -593,7 +628,7 @@ if('serviceWorker' in navigator){
     <section class="page study-page hidden" id="studyPage">
 <header class="settings-heading"><div class="eyebrow">ТВОЁ ПРОСТРАНСТВО ДЛЯ ЗНАНИЙ</div><h1>Учёба <span style="color:var(--pink)">♡</span></h1><p>Планируй, учись и двигайся к своим целям в комфортном ритме.</p></header>
 <section class="study-welcome panel"><div><div class="eyebrow">ONE STEP AT A TIME</div><h2>У тебя всё получится ✿</h2><p>Учебные дела, расписание и подготовка к важным датам — в одном уютном месте.</p></div><span>✎</span></section>
-<nav class="study-tabs panel" aria-label="Учебные разделы"><button class="is-active" type="button" data-study-tab="homework">☷<br>Домашнее задание</button><button type="button" data-study-tab="schedule">▦<br>Расписание</button><button type="button" data-study-tab="exams">✧<br>Экзамены</button></nav>
+<nav class="study-tabs panel" aria-label="Учебные разделы"><button class="is-active" type="button" data-study-tab="homework">☷<br>Домашнее задание</button><button type="button" data-study-tab="schedule">▦<br>Расписание</button><button type="button" data-study-tab="exams">✧<br>Экзамены</button><button type="button" data-study-tab="timer">♡<br>Таймер</button></nav>
 <section id="studyHomework" class="study-panel"><div class="study-title"><div><div class="eyebrow">ТВОИ ЗАДАНИЯ</div><h2>Домашнее задание</h2><p>Записывай, что нужно сделать, и отмечай выполненное.</p></div>♡</div>
 <form id="studyHomeworkForm" class="study-form panel"><div class="study-grid"><label>Задание<input id="studyHomeworkTitle" maxlength="120" required placeholder="Например, прочитать главу 3"></label><label>Предмет<input id="studyHomeworkSubject" maxlength="50" placeholder="Например, история"></label><label>Срок выполнения<input id="studyHomeworkDue" type="date"></label><label>Важность<select id="studyHomeworkPriority"><option value="normal">Обычная</option><option value="high">Важная</option><option value="low">Можно позже</option></select></label></div><label>Подробности <small>(необязательно)</small><textarea id="studyHomeworkNote" rows="2" maxlength="500" placeholder="Страница, упражнение или материалы…"></textarea></label><button class="study-add" type="submit">＋ Добавить задание</button></form>
 <div class="study-list-head"><h3>Мои задания</h3><span id="studyHomeworkCount"></span></div><div class="study-list" id="studyHomeworkList"></div></section>
@@ -603,6 +638,26 @@ if('serviceWorker' in navigator){
 <section id="studyExams" class="study-panel hidden"><div class="study-title"><div><div class="eyebrow">ВАЖНЫЕ ДАТЫ</div><h2>Экзамены</h2><p>Собирай даты экзаменов и записывай, что нужно повторить.</p></div>✧</div>
 <form id="studyExamForm" class="study-form panel"><div class="study-grid"><label>Экзамен / контрольная<input id="studyExamTitle" maxlength="120" required placeholder="Итоговый экзамен"></label><label>Предмет<input id="studyExamSubject" maxlength="50" placeholder="Например, биология"></label><label>Дата экзамена<input id="studyExamDate" type="date" required></label></div><label>План подготовки <small>(необязательно)</small><textarea id="studyExamPrep" rows="3" maxlength="1000" placeholder="Темы, главы, вопросы для повторения…"></textarea></label><button class="study-add" type="submit">＋ Добавить экзамен</button></form>
 <div class="study-list-head"><h3>Предстоящие экзамены</h3><span id="studyExamCount"></span></div><div class="study-list" id="studyExamList"></div></section>
+<section id="studyTimer" class="study-panel hidden">
+<div class="study-title"><div><div class="eyebrow">ВРЕМЯ ДЛЯ СЕБЯ И ЗНАНИЙ</div><h2>Study Timer</h2><p>Сосредоточься на одном маленьком шаге за раз.</p></div><span>✿</span></div>
+<div class="study-timer-card panel" id="studyTimerCard">
+<div class="study-timer-modes" role="group" aria-label="Режим таймера"><button type="button" data-timer-mode="free" class="is-active">Свободный</button><button type="button" data-timer-mode="pomodoro">Pomodoro</button></div>
+<label class="study-timer-subject">Предмет или тема<input id="studyTimerSubject" maxlength="80" placeholder="Например, китайский · HSK"></label>
+<div class="study-timer-clock" id="studyTimerClock" aria-live="off">00:00:00</div>
+<div class="study-timer-phase" id="studyTimerPhase">Готова начать? ♡</div>
+<div class="study-timer-progress"><span id="studyTimerProgress"></span></div>
+<div class="study-timer-actions"><button type="button" class="study-timer-primary" id="studyTimerStart">▶ Начать</button><button type="button" class="study-timer-secondary" id="studyTimerPause" disabled>Ⅱ Пауза</button><button type="button" class="study-timer-secondary" id="studyTimerFinish" disabled>✓ Завершить</button></div>
+<div class="study-timer-options" id="studyPomodoroOptions" hidden><label>Работа, минут<input id="studyPomodoroWork" type="number" min="1" max="180" value="25"></label><label>Перерыв, минут<input id="studyPomodoroBreak" type="number" min="1" max="60" value="5"></label><small>После рабочего интервала таймер автоматически переключится на перерыв.</small></div>
+<button type="button" class="study-focus-button" id="studyFocusOpen">✧ Открыть Focus Mode</button>
+</div>
+<div class="study-timer-summary"><article class="panel"><strong id="studyTimerToday">0 мин</strong><span>Сегодня занималась</span></article><article class="panel"><strong id="studyTimerWeek">0 мин</strong><span>За последние 7 дней</span></article><article class="panel"><strong id="studyTimerSessions">0</strong><span>Завершённых сессий</span></article></div>
+<div class="study-list-head"><h3>История занятий</h3><span id="studyTimerHistoryCount">0 сессий</span></div><div class="study-list" id="studyTimerHistory"></div>
+</section>
+<div class="study-focus-overlay" id="studyFocusOverlay" hidden>
+<div class="study-focus-top"><span>splim · focus</span><button type="button" id="studyFocusClose" aria-label="Выйти из Focus Mode">×</button></div>
+<div class="study-focus-center"><span>✿</span><div class="study-focus-clock" id="studyFocusClock">00:00:00</div><p id="studyFocusSubject">Твоё время для концентрации</p><small id="studyFocusPhase">Один шаг за раз ♡</small></div>
+<div class="study-focus-bottom"><button type="button" id="studyFocusToggle">▶ Начать</button><button type="button" id="studyFocusFinish">Завершить сессию</button></div>
+</div>
 <p class="study-foot">Твой темп — правильный. Маленькие шаги тоже приводят к большим результатам ♡</p></section><section class="page settings-page hidden" id="settingsPage">
       <header class="settings-heading"><div class="eyebrow">ТВОЙ УЮТНЫЙ УГОЛОК</div><h1>Настройки</h1><p>Настрой splim под своё настроение ♡</p></header>
             <section class="panel settings-panel account-panel profile-account-panel" id="profileAccountPanel">
@@ -1720,13 +1775,13 @@ document.getElementById('progressNext').addEventListener('click',()=>{if(progres
 document.getElementById('progressToday').addEventListener('click',()=>{progressOffset=0;renderProgress();});
 
 const STUDY_KEY='splimStudyData',STUDY_DAYS=[['Понедельник',1],['Вторник',2],['Среда',3],['Четверг',4],['Пятница',5],['Суббота',6],['Воскресенье',0]];
-let studyTab='homework',studyData={homework:[],schedule:[],exams:[]};
-try{const d=JSON.parse(localStorage.getItem(STUDY_KEY)||'null')||{};studyData={homework:Array.isArray(d.homework)?d.homework:[],schedule:Array.isArray(d.schedule)?d.schedule:[],exams:Array.isArray(d.exams)?d.exams:[]};}catch(e){}
+let studyTab='homework',studyData={homework:[],schedule:[],exams:[],timerSessions:[],timerActive:null};
+try{const d=JSON.parse(localStorage.getItem(STUDY_KEY)||'null')||{};studyData={...d,homework:Array.isArray(d.homework)?d.homework:[],schedule:Array.isArray(d.schedule)?d.schedule:[],exams:Array.isArray(d.exams)?d.exams:[],timerSessions:Array.isArray(d.timerSessions)?d.timerSessions:[],timerActive:d.timerActive&&typeof d.timerActive==='object'?d.timerActive:null};}catch(e){}
 const studyEsc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const studyCount=(n,a,b,c)=>n+' '+(n%100>=11&&n%100<=14?c:n%10===1?a:n%10>=2&&n%10<=4?b:c);
 const studyDate=v=>v?new Date(v+'T12:00:00').toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'}):'';
 function studySave(){localStorage.setItem(STUDY_KEY,JSON.stringify(studyData));renderStudy();}
-function studyTabSet(t){studyTab=t;document.querySelectorAll('[data-study-tab]').forEach(b=>{b.classList.toggle('is-active',b.dataset.studyTab===t);b.setAttribute('aria-pressed',String(b.dataset.studyTab===t));});['homework','schedule','exams'].forEach(x=>document.getElementById('study'+x[0].toUpperCase()+x.slice(1)).classList.toggle('hidden',x!==t));}
+function studyTabSet(t){studyTab=t;document.querySelectorAll('[data-study-tab]').forEach(b=>{b.classList.toggle('is-active',b.dataset.studyTab===t);b.setAttribute('aria-pressed',String(b.dataset.studyTab===t));});['homework','schedule','exams','timer'].forEach(x=>document.getElementById('study'+x[0].toUpperCase()+x.slice(1)).classList.toggle('hidden',x!==t));if(t==='timer')studyTimerRender();}
 function studyEmpty(t){return '<div class="study-empty">'+t+'</div>';}
 function renderStudy(){
  const hw=[...studyData.homework].sort((a,b)=>(a.done-b.done)||(a.dueDate||'9999').localeCompare(b.dueDate||'9999'));
@@ -1736,7 +1791,7 @@ function renderStudy(){
  document.getElementById('studyScheduleList').innerHTML=schedule.length?STUDY_DAYS.map(([name,day])=>{const xs=schedule.filter(x=>Number(x.day)===day);return xs.length?'<div class="study-day"><h4>'+name+'</h4>'+xs.map(x=>'<article class="study-item"><div class="study-time">'+studyEsc(x.start||'—')+(x.end?'–'+studyEsc(x.end):'')+'</div><div class="study-item-copy"><div class="study-item-title">'+studyEsc(x.title)+'</div><div class="study-meta">'+(x.place?'<span class="study-chip">'+studyEsc(x.place)+'</span>':'')+(x.note?'<span class="study-chip">'+studyEsc(x.note)+'</span>':'')+'</div></div><button class="study-delete" data-study-delete="schedule" data-id="'+studyEsc(x.id)+'" aria-label="Удалить">×</button></article>').join('')+'</div>':'';}).join(''):studyEmpty('Расписание пока пустое.<br>Добавь занятия на свою неделю ♡');
  const exams=[...studyData.exams].sort((a,b)=>(a.date||'').localeCompare(b.date||''));document.getElementById('studyExamCount').textContent=studyCount(exams.length,'экзамен','экзамена','экзаменов');
  document.getElementById('studyExamList').innerHTML=exams.length?exams.map(x=>{const diff=Math.ceil((new Date(x.date+'T00:00:00')-new Date(new Date().toDateString()))/86400000),when=diff<0?'Дата прошла':diff===0?'Сегодня':diff===1?'Завтра':'Через '+diff+' дн.';return '<article class="study-item '+(x.done?'is-done':'')+'"><input type="checkbox" data-study-toggle="exams" data-id="'+studyEsc(x.id)+'" '+(x.done?'checked':'')+' aria-label="Подготовлено"><div class="study-item-copy"><div class="study-item-title">'+studyEsc(x.title)+'</div><div class="study-meta">'+(x.subject?'<span class="study-chip">'+studyEsc(x.subject)+'</span>':'')+'<span class="study-chip">'+studyEsc(studyDate(x.date))+'</span><span class="study-chip important">'+when+'</span></div>'+(x.prep?'<p class="study-item-note">'+studyEsc(x.prep)+'</p>':'')+'</div><button class="study-delete" data-study-delete="exams" data-id="'+studyEsc(x.id)+'" aria-label="Удалить">×</button></article>';}).join(''):studyEmpty('Здесь появятся экзамены и контрольные.<br>Добавь важную дату и план подготовки ✧');
- studyTabSet(studyTab);
+ studyTabSet(studyTab);if(studyTab==='timer')studyTimerRender();
 }
 document.querySelectorAll('[data-study-tab]').forEach(b=>b.addEventListener('click',()=>studyTabSet(b.dataset.studyTab)));
 document.getElementById('studyHomeworkForm').addEventListener('submit',e=>{e.preventDefault();const v=id=>document.getElementById(id).value.trim();studyData.homework.push({id:'hw-'+Date.now()+'-'+Math.random().toString(36).slice(2),title:v('studyHomeworkTitle'),subject:v('studyHomeworkSubject'),dueDate:v('studyHomeworkDue'),priority:v('studyHomeworkPriority'),note:v('studyHomeworkNote'),done:false});e.target.reset();studySave();});
@@ -1745,6 +1800,85 @@ document.getElementById('studyScheduleForm').addEventListener('submit',e=>{e.pre
 document.getElementById('studyExamForm').addEventListener('submit',e=>{e.preventDefault();const v=id=>document.getElementById(id).value.trim();studyData.exams.push({id:'ex-'+Date.now()+'-'+Math.random().toString(36).slice(2),title:v('studyExamTitle'),subject:v('studyExamSubject'),date:v('studyExamDate'),prep:v('studyExamPrep'),done:false});e.target.reset();studySave();});
 document.getElementById('studyPage').addEventListener('click',e=>{const b=e.target.closest('[data-study-delete]');if(!b)return;const k=b.dataset.studyDelete;studyData[k]=studyData[k].filter(x=>x.id!==b.dataset.id);studySave();});
 document.getElementById('studyPage').addEventListener('change',e=>{const b=e.target.closest('[data-study-toggle]');if(!b)return;const x=studyData[b.dataset.studyToggle].find(x=>x.id===b.dataset.id);if(x)x.done=b.checked;studySave();});
+
+let studyTimerMode='free',studyTimerInterval=null;
+const studyTimerNow=()=>Date.now();
+const studyTimerElapsed=a=>Math.max(0,(a.elapsedMs||0)+(a.status==='running'?studyTimerNow()-(a.startedAt||studyTimerNow()):0));
+const studyTimerFmt=ms=>{const sec=Math.floor(Math.max(0,ms)/1000),h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;return [h,m,s].map(n=>String(n).padStart(2,'0')).join(':');};
+const studyTimerDate=d=>new Date(d).toLocaleDateString('sv-SE');
+function studyTimerPersist(){localStorage.setItem(STUDY_KEY,JSON.stringify(studyData));}
+function studyTimerTodayMs(){const today=studyTimerDate(Date.now());return studyData.timerSessions.filter(x=>studyTimerDate(x.endedAt)===today).reduce((n,x)=>n+x.durationMs,0);}
+function studyTimerWeekMs(){const cutoff=Date.now()-7*86400000;return studyData.timerSessions.filter(x=>new Date(x.endedAt).getTime()>=cutoff).reduce((n,x)=>n+x.durationMs,0);}
+function studyTimerRender(){
+ const a=studyData.timerActive,clock=document.getElementById('studyTimerClock'),phase=document.getElementById('studyTimerPhase'),start=document.getElementById('studyTimerStart'),pause=document.getElementById('studyTimerPause'),finish=document.getElementById('studyTimerFinish'),opts=document.getElementById('studyPomodoroOptions');
+ if(!clock)return;
+ document.querySelectorAll('[data-timer-mode]').forEach(b=>{b.classList.toggle('is-active',b.dataset.timerMode===studyTimerMode);b.disabled=!!a;});
+ opts.hidden=studyTimerMode!=='pomodoro';
+ const running=!!a&&a.status==='running';
+ if(a){
+  const elapsed=studyTimerElapsed(a);
+  if(a.mode==='pomodoro'){const remain=Math.max(0,(a.phaseEndsAt||Date.now())-Date.now());clock.textContent=studyTimerFmt(remain);phase.textContent=a.phase==='break'?'Перерыв · отдохни немного ♡':(a.status==='paused'?'Пауза · рабочий интервал':'Время концентрации · '+(a.subject||'твоя задача'));}
+  else{clock.textContent=studyTimerFmt(elapsed);phase.textContent=a.status==='paused'?'Пауза · можно продолжить':(a.subject||'Твоя учебная сессия');}
+  document.getElementById('studyTimerSubject').value=a.subject||'';
+  start.textContent=running?'Идёт занятие…':(a.status==='paused'?'▶ Продолжить':'▶ Начать');
+  start.disabled=running;pause.disabled=!running;pause.textContent='Ⅱ Пауза';finish.disabled=false;
+  const total=a.mode==='pomodoro'?Math.max(1,a.phase==='break'?a.breakMs:a.workMs):0;
+  document.getElementById('studyTimerProgress').style.width=total?Math.min(100,Math.max(0,100-((a.phaseEndsAt-Date.now())/total*100)))+'%':'0%';
+ }else{
+  clock.textContent=studyTimerMode==='pomodoro'?studyTimerFmt(Number(document.getElementById('studyPomodoroWork').value||25)*60000):'00:00:00';
+  phase.textContent='Готова начать? ♡';document.getElementById('studyTimerProgress').style.width='0%';
+  document.getElementById('studyTimerSubject').disabled=false;start.disabled=false;start.textContent='▶ Начать';pause.disabled=true;finish.disabled=true;
+ }
+ if(a)document.getElementById('studyTimerSubject').disabled=true;
+ const today=studyTimerTodayMs(),week=studyTimerWeekMs();
+ document.getElementById('studyTimerToday').textContent=Math.floor(today/60000)+' мин';
+ document.getElementById('studyTimerWeek').textContent=(week/3600000).toFixed(1)+' ч';
+ document.getElementById('studyTimerSessions').textContent=studyData.timerSessions.length;
+ document.getElementById('studyTimerHistoryCount').textContent=studyTimerCount(studyData.timerSessions.length);
+ const history=[...studyData.timerSessions].sort((x,y)=>y.endedAt-x.endedAt).slice(0,12);
+ document.getElementById('studyTimerHistory').innerHTML=history.length?history.map(x=>'<article class="study-item"><div class="study-item-copy"><div class="study-item-title">'+studyEsc(x.subject||'Учебная сессия')+'</div><div class="study-meta"><span class="study-chip">'+new Date(x.endedAt).toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+'</span><span class="study-chip">'+studyEsc(x.mode==='pomodoro'?'Pomodoro':'Свободный таймер')+'</span><span class="study-chip">'+studyTimerFmt(x.durationMs)+'</span></div></div></article>').join(''):studyEmpty('Здесь появятся завершённые учебные сессии ♡');
+ studyFocusRender();
+}
+function studyTimerCount(n){return studyCount(n,'сессия','сессии','сессий');}
+function studyFocusRender(){const a=studyData.timerActive,clock=document.getElementById('studyFocusClock');if(!clock)return;if(a){clock.textContent=a.mode==='pomodoro'?studyTimerFmt(Math.max(0,a.phaseEndsAt-Date.now())):studyTimerFmt(studyTimerElapsed(a));document.getElementById('studyFocusSubject').textContent=a.subject||'Твоё время для концентрации';document.getElementById('studyFocusPhase').textContent=a.phase==='break'?'Небольшой перерыв ♡':a.status==='paused'?'Сессия на паузе':'Ты справляешься. Продолжай в своём ритме.';document.getElementById('studyFocusToggle').textContent=a.status==='running'?'Ⅱ Пауза':'▶ Продолжить';}else{clock.textContent='00:00:00';document.getElementById('studyFocusSubject').textContent='Твоё время для концентрации';document.getElementById('studyFocusPhase').textContent='Один шаг за раз ♡';document.getElementById('studyFocusToggle').textContent='▶ Начать';}}
+function studyTimerStart(){
+ const a=studyData.timerActive;
+ if(a&&a.status==='paused'){a.status='running';a.startedAt=studyTimerNow();if(a.mode==='pomodoro')a.phaseEndsAt=studyTimerNow()+a.remainingMs;studyTimerPersist();}
+ else if(!a){const subject=document.getElementById('studyTimerSubject').value.trim(),work=Math.min(180,Math.max(1,Number(document.getElementById('studyPomodoroWork').value)||25))*60000,br=Math.min(60,Math.max(1,Number(document.getElementById('studyPomodoroBreak').value)||5))*60000;studyData.timerActive={id:'study-'+studyTimerNow(),mode:studyTimerMode,subject,status:'running',startedAt:studyTimerNow(),elapsedMs:0,phase:'work',workMs:work,breakMs:br,phaseEndsAt:studyTimerMode==='pomodoro'?studyTimerNow()+work:null,focusElapsedMs:0};studyTimerPersist();}
+ studyTimerRender();studyTimerTickStart();
+}
+function studyTimerPause(){
+ const a=studyData.timerActive;if(!a||a.status!=='running')return;
+ if(a.mode==='free')a.elapsedMs=studyTimerElapsed(a);else a.remainingMs=Math.max(0,a.phaseEndsAt-studyTimerNow());
+ a.status='paused';a.startedAt=null;studyTimerPersist();studyTimerRender();studyTimerTickStop();
+}
+function studyTimerCompletePhase(){
+ const a=studyData.timerActive;if(!a)return;
+ if(a.phase==='work'){a.focusElapsedMs=(a.focusElapsedMs||0)+a.workMs;a.phase='break';a.remainingMs=a.breakMs;a.phaseEndsAt=studyTimerNow()+a.breakMs;a.startedAt=studyTimerNow();studyTimerPersist();}
+ else{a.phase='work';a.remainingMs=a.workMs;a.phaseEndsAt=studyTimerNow()+a.workMs;a.startedAt=studyTimerNow();studyTimerPersist();}
+ studyTimerRender();
+}
+function studyTimerFinish(){
+ const a=studyData.timerActive;if(!a)return;
+ let duration=a.mode==='pomodoro'?(a.focusElapsedMs||0)+(a.phase==='work'?Math.min(a.workMs,Math.max(0,a.workMs-(a.phaseEndsAt-studyTimerNow()))):0):studyTimerElapsed(a);
+ if(a.mode==='free'&&a.status==='running')duration=studyTimerElapsed(a);
+ if(duration>=1000)studyData.timerSessions.push({id:a.id,subject:a.subject,mode:a.mode,durationMs:Math.round(duration),endedAt:studyTimerNow()});
+ studyData.timerActive=null;studyTimerPersist();studyTimerTickStop();studyTimerRender();
+}
+function studyTimerTick(){const a=studyData.timerActive;if(!a)return;if(a.mode==='pomodoro'&&a.status==='running'&&studyTimerNow()>=a.phaseEndsAt)studyTimerCompletePhase();studyTimerRender();}
+function studyTimerTickStart(){studyTimerTickStop();studyTimerInterval=setInterval(studyTimerTick,500);}
+function studyTimerTickStop(){if(studyTimerInterval){clearInterval(studyTimerInterval);studyTimerInterval=null;}}
+document.querySelectorAll('[data-timer-mode]').forEach(b=>b.addEventListener('click',()=>{if(studyData.timerActive)return;studyTimerMode=b.dataset.timerMode;studyTimerRender();}));
+document.getElementById('studyTimerStart').addEventListener('click',studyTimerStart);
+document.getElementById('studyTimerPause').addEventListener('click',studyTimerPause);
+document.getElementById('studyTimerFinish').addEventListener('click',studyTimerFinish);
+document.getElementById('studyFocusOpen').addEventListener('click',()=>{document.getElementById('studyFocusOverlay').hidden=false;studyFocusRender();});
+document.getElementById('studyFocusClose').addEventListener('click',()=>{document.getElementById('studyFocusOverlay').hidden=true;});
+document.getElementById('studyFocusToggle').addEventListener('click',()=>{const a=studyData.timerActive;if(a&&a.status==='running')studyTimerPause();else studyTimerStart();});
+document.getElementById('studyFocusFinish').addEventListener('click',()=>{studyTimerFinish();document.getElementById('studyFocusOverlay').hidden=true;});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&studyData.timerActive){studyTimerTick();studyTimerTickStart();}});
+if(studyData.timerActive&&studyData.timerActive.status==='running')studyTimerTickStart();
+
 
 function showPage(page){
  const validPage=['home','progress','study','profile','planner','todo','habits','gratitude','notes','settings','care','water','sleep','activity','mood'].includes(page)?page:'home';
