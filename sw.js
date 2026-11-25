@@ -1,4 +1,4 @@
-const CACHE_NAME = 'splim-shell-v2';
+const CACHE_NAME = 'splim-shell-v3';
 const APP_ROOT = new URL('./', self.registration.scope);
 const APP_FILES = [
   APP_ROOT.href,
