@@ -1817,13 +1817,13 @@ function studyTimerRender(){
  const running=!!a&&a.status==='running';
  if(a){
   const elapsed=studyTimerElapsed(a);
-  if(a.mode==='pomodoro'){const remain=Math.max(0,(a.phaseEndsAt||Date.now())-Date.now());clock.textContent=studyTimerFmt(remain);phase.textContent=a.phase==='break'?'Перерыв · отдохни немного ♡':(a.status==='paused'?'Пауза · рабочий интервал':'Время концентрации · '+(a.subject||'твоя задача'));}
+  if(a.mode==='pomodoro'){const remain=Math.max(0,a.status==='paused'?(a.remainingMs||0):(a.phaseEndsAt||Date.now())-Date.now());clock.textContent=studyTimerFmt(remain);phase.textContent=a.phase==='break'?'Перерыв · отдохни немного ♡':(a.status==='paused'?'Пауза · рабочий интервал':'Время концентрации · '+(a.subject||'твоя задача'));}
   else{clock.textContent=studyTimerFmt(elapsed);phase.textContent=a.status==='paused'?'Пауза · можно продолжить':(a.subject||'Твоя учебная сессия');}
   document.getElementById('studyTimerSubject').value=a.subject||'';
   start.textContent=running?'Идёт занятие…':(a.status==='paused'?'▶ Продолжить':'▶ Начать');
   start.disabled=running;pause.disabled=!running;pause.textContent='Ⅱ Пауза';finish.disabled=false;
   const total=a.mode==='pomodoro'?Math.max(1,a.phase==='break'?a.breakMs:a.workMs):0;
-  document.getElementById('studyTimerProgress').style.width=total?Math.min(100,Math.max(0,100-((a.phaseEndsAt-Date.now())/total*100)))+'%':'0%';
+  document.getElementById('studyTimerProgress').style.width=total?Math.min(100,Math.max(0,100-(((a.status==='paused'?a.remainingMs:a.phaseEndsAt-Date.now())/total)*100)))+'%':'0%';
  }else{
   clock.textContent=studyTimerMode==='pomodoro'?studyTimerFmt(Number(document.getElementById('studyPomodoroWork').value||25)*60000):'00:00:00';
   phase.textContent='Готова начать? ♡';document.getElementById('studyTimerProgress').style.width='0%';
@@ -1840,7 +1840,7 @@ function studyTimerRender(){
  studyFocusRender();
 }
 function studyTimerCount(n){return studyCount(n,'сессия','сессии','сессий');}
-function studyFocusRender(){const a=studyData.timerActive,clock=document.getElementById('studyFocusClock');if(!clock)return;if(a){clock.textContent=a.mode==='pomodoro'?studyTimerFmt(Math.max(0,a.phaseEndsAt-Date.now())):studyTimerFmt(studyTimerElapsed(a));document.getElementById('studyFocusSubject').textContent=a.subject||'Твоё время для концентрации';document.getElementById('studyFocusPhase').textContent=a.phase==='break'?'Небольшой перерыв ♡':a.status==='paused'?'Сессия на паузе':'Ты справляешься. Продолжай в своём ритме.';document.getElementById('studyFocusToggle').textContent=a.status==='running'?'Ⅱ Пауза':'▶ Продолжить';}else{clock.textContent='00:00:00';document.getElementById('studyFocusSubject').textContent='Твоё время для концентрации';document.getElementById('studyFocusPhase').textContent='Один шаг за раз ♡';document.getElementById('studyFocusToggle').textContent='▶ Начать';}}
+function studyFocusRender(){const a=studyData.timerActive,clock=document.getElementById('studyFocusClock');if(!clock)return;if(a){clock.textContent=a.mode==='pomodoro'?studyTimerFmt(Math.max(0,a.status==='paused'?(a.remainingMs||0):a.phaseEndsAt-Date.now())):studyTimerFmt(studyTimerElapsed(a));document.getElementById('studyFocusSubject').textContent=a.subject||'Твоё время для концентрации';document.getElementById('studyFocusPhase').textContent=a.phase==='break'?'Небольшой перерыв ♡':a.status==='paused'?'Сессия на паузе':'Ты справляешься. Продолжай в своём ритме.';document.getElementById('studyFocusToggle').textContent=a.status==='running'?'Ⅱ Пауза':'▶ Продолжить';}else{clock.textContent='00:00:00';document.getElementById('studyFocusSubject').textContent='Твоё время для концентрации';document.getElementById('studyFocusPhase').textContent='Один шаг за раз ♡';document.getElementById('studyFocusToggle').textContent='▶ Начать';}}
 function studyTimerStart(){
  const a=studyData.timerActive;
  if(a&&a.status==='paused'){a.status='running';a.startedAt=studyTimerNow();if(a.mode==='pomodoro')a.phaseEndsAt=studyTimerNow()+a.remainingMs;studyTimerPersist();}
@@ -1860,7 +1860,7 @@ function studyTimerCompletePhase(){
 }
 function studyTimerFinish(){
  const a=studyData.timerActive;if(!a)return;
- let duration=a.mode==='pomodoro'?(a.focusElapsedMs||0)+(a.phase==='work'?Math.min(a.workMs,Math.max(0,a.workMs-(a.phaseEndsAt-studyTimerNow()))):0):studyTimerElapsed(a);
+ let duration=a.mode==='pomodoro'?(a.focusElapsedMs||0)+(a.phase==='work'?Math.min(a.workMs,Math.max(0,a.workMs-(a.status==='paused'?(a.remainingMs||0):a.phaseEndsAt-studyTimerNow()))):0):studyTimerElapsed(a);
  if(a.mode==='free'&&a.status==='running')duration=studyTimerElapsed(a);
  if(duration>=1000)studyData.timerSessions.push({id:a.id,subject:a.subject,mode:a.mode,durationMs:Math.round(duration),endedAt:studyTimerNow()});
  studyData.timerActive=null;studyTimerPersist();studyTimerTickStop();studyTimerRender();
