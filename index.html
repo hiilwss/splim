@@ -139,6 +139,7 @@ body.has-wallpaper{background:linear-gradient(135deg,color-mix(in srgb,var(--bg1
 .settings-options .theme-control{min-width:190px}
 
 .settings-options select{min-width:190px}
+.custom-color-control{margin-top:18px;min-width:100%!important}.custom-color-picker{display:flex;align-items:center;gap:12px;margin-top:8px}.custom-color-picker input{width:58px;height:44px;padding:3px;border:1px solid var(--line);border-radius:12px;background:var(--cell);cursor:pointer}.custom-color-picker span{font-size:13px;font-weight:750;color:var(--accentText);letter-spacing:.06em}.custom-color-control small{display:block;margin-top:7px;color:var(--muted);line-height:1.5}.theme-preview{display:flex;gap:8px;margin-top:18px}.theme-preview span{height:13px;flex:1;border-radius:99px;background:var(--pink)}.theme-preview span:nth-child(2){background:var(--pink2)}.theme-preview span:nth-child(3){background:var(--bg2)}.theme-preview span:nth-child(4){background:var(--accentText)}
 .account-panel{margin-bottom:20px}
 .profile-account-panel{margin-top:24px;padding:clamp(18px,3vw,28px);border-radius:23px}
 .profile-account-panel .account-intro{align-items:center}
@@ -730,9 +731,9 @@ if('serviceWorker' in navigator){
         <p class="guest-access-notice" id="guestThemeNotice" hidden>♡ В гостевом режиме тему менять нельзя. Чтобы выбрать другую палитру или режим, войди в аккаунт или зарегистрируйся.</p>
         <div class="settings-options">
           <div class="theme-control"><label for="paletteSelect">Цвет темы</label><select id="paletteSelect" aria-label="Цветовая тема">
-            <option value="pink">Розовая</option><option value="peach">Персиковая</option><option value="lavender">Лавандовая</option><option value="mint">Мятная</option><option value="sky">Небесная</option><option value="chocolate">Шоколадная</option><option value="beige">Мягкий беж</option>
+            <option value="pink">Розовая</option><option value="peach">Персиковая</option><option value="lavender">Лавандовая</option><option value="mint">Мятная</option><option value="sky">Небесная</option><option value="chocolate">Шоколадная</option><option value="beige">Мягкий беж</option><option value="custom">Свой цвет ✨</option>
           </select></div>
-          <div class="theme-control"><label for="modeSelect">Режим</label><select id="modeSelect" aria-label="Светлая или тёмная тема"><option value="light">Светлая ☀</option><option value="dark">Тёмная ☾</option></select></div>
+          <div class="theme-control"><label for="modeSelect">Режим</label><select id="modeSelect" aria-label="Светлая или тёмная тема"><option value="light">Светлая ☀</option><option value="dark">Тёмная ☾</option></select></div></div><div class="theme-control custom-color-control" id="customColorControl" hidden><label for="customThemeColor">Твой любимый цвет</label><div class="custom-color-picker"><input id="customThemeColor" type="color" value="#ec78a8" aria-label="Выбрать собственный цвет"><span id="customColorValue">#EC78A8</span></div><small>Фон, карточки, текст и акценты подстроятся автоматически ♡</small></div><div class="theme-preview" id="themePreview" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
         </div>
       </section>
       <section class="panel settings-panel wallpaper-panel">
@@ -1477,6 +1478,9 @@ $('#removeWallpaper').addEventListener('click',async()=>{
 })();
 const paletteSelect=$('#paletteSelect');
 const modeSelect=$('#modeSelect');
+const customColorInput=$('#customThemeColor');
+const customColorControl=$('#customColorControl');
+const customColorValue=$('#customColorValue');
 
 function readThemeSettings(){
   try{
@@ -1504,45 +1508,73 @@ function readThemeSettings(){
 window.splimSetThemeAccess=function(isAuthenticated){
   paletteSelect.disabled=!isAuthenticated;
   modeSelect.disabled=!isAuthenticated;
+  customColorInput.disabled=!isAuthenticated;
   const panel=paletteSelect.closest('.settings-panel');
   if(panel)panel.classList.toggle('guest-theme-locked',!isAuthenticated);
   let isGuest=false;try{isGuest=localStorage.getItem('splimGuestMode')==='true'&&!window.splimCurrentUser;}catch(e){}
   const notice=document.getElementById('guestThemeNotice');if(notice)notice.hidden=!!isAuthenticated||!isGuest;
 };
 window.splimApplyGuestTheme=function(){
-  try{localStorage.setItem('pinkPlannerSettings',JSON.stringify({palette:'lavender',mode:'light'}));}catch(e){}
+  try{localStorage.setItem('pinkPlannerSettings',JSON.stringify({palette:'lavender',mode:'light',customColor:'#ec78a8'}));}catch(e){}
   if(typeof window.splimSetWallpaperAccess==='function')window.splimSetWallpaperAccess(false);
   applyTheme('lavender','light');
 };
-function applyTheme(palette,mode){
-  const isGuest=(()=>{try{return localStorage.getItem('splimGuestMode')==='true'&&!window.splimCurrentUser;}catch(e){return false;}})();
-  if(isGuest){palette='lavender';mode='light';}
-  const validPalettes=['pink','peach','lavender','mint','sky','chocolate','beige'];
-  if(!validPalettes.includes(palette)) palette='pink';
-  if(mode!=='dark' && mode!=='light') mode='light';
 
-  // Both the root and body are kept in sync for all theme styles.
-  root.dataset.theme=palette;
-  root.dataset.mode=mode;
-  document.body.dataset.palette=palette;
-  document.body.dataset.mode=mode;
-
-  paletteSelect.value=palette;
-  modeSelect.value=mode;
-  const favicon=document.getElementById('splimFavicon');
-  if(favicon){const iconColor=getComputedStyle(root).getPropertyValue('--pink').trim()||'#ec78a8';const iconBg=mode==='dark'?'#24202b':'#fffafd';const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="3" y="3" width="58" height="58" rx="18" fill="'+iconBg+'" stroke="'+iconColor+'" stroke-opacity=".28"/><g fill="none" stroke="'+iconColor+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M32 34 C28 29 24 23 32 12 C40 23 36 29 32 34Z"/><path d="M32 34 C28 29 24 23 32 12 C40 23 36 29 32 34Z" transform="rotate(72 32 32)"/><path d="M32 34 C28 29 24 23 32 12 C40 23 36 29 32 34Z" transform="rotate(144 32 32)"/><path d="M32 34 C28 29 24 23 32 12 C40 23 36 29 32 34Z" transform="rotate(216 32 32)"/><path d="M32 34 C28 29 24 23 32 12 C40 23 36 29 32 34Z" transform="rotate(288 32 32)"/></g><circle cx="32" cy="32" r="2" fill="'+iconColor+'"/></svg>';favicon.href=favicon.href='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);}
-
-  try{localStorage.setItem('pinkPlannerSettings',JSON.stringify({palette,mode}));}catch(e){}
+function themeHexToHsl(hex){
+ const value=String(hex||'').replace('#','');
+ if(!/^[0-9a-fA-F]{6}$/.test(value))return {h:335,s:78,l:70};
+ const r=parseInt(value.slice(0,2),16)/255,g=parseInt(value.slice(2,4),16)/255,b=parseInt(value.slice(4,6),16)/255;
+ const max=Math.max(r,g,b),min=Math.min(r,g,b),d=max-min;let h=0,l=(max+min)/2,sat=0;
+ if(d){sat=d/(1-Math.abs(2*l-1));switch(max){case r:h=((g-b)/d)%6;break;case g:h=(b-r)/d+2;break;default:h=(r-g)/d+4;}h*=60;if(h<0)h+=360;}
+ return {h,s:sat*100,l:l*100};
+}
+function themeHslToHex(h,s,l){
+ s/=100;l/=100;const c=(1-Math.abs(2*l-1))*s,x=c*(1-Math.abs((h/60)%2-1)),m=l-c/2;let rgb=[0,0,0];
+ if(h<60)rgb=[c,x,0];else if(h<120)rgb=[x,c,0];else if(h<180)rgb=[0,c,x];else if(h<240)rgb=[0,x,c];else if(h<300)rgb=[x,0,c];else rgb=[c,0,x];
+ return '#'+rgb.map(v=>Math.round((v+m)*255).toString(16).padStart(2,'0')).join('');
+}
+function applyCustomTheme(color,mode){
+ const hsl=themeHexToHsl(color),h=hsl.h,set=(name,value)=>root.style.setProperty(name,value);
+ set('--pink',color);
+ if(mode==='dark'){
+  set('--pink2',themeHslToHex(h,Math.max(28,hsl.s*.55),72));set('--pale','#24202b');set('--ink','#f4edf4');set('--muted','#c0b2c0');
+  set('--line',themeHslToHex(h,15,29));set('--bg1','#24202b');set('--bg2','#17151d');set('--panel','#292530e8');set('--cell','#332e39');
+  set('--accentText',themeHslToHex(h,Math.max(35,hsl.s*.65),78));
+ }else{
+  set('--pink2',themeHslToHex(h,Math.max(28,hsl.s*.48),88));set('--pale',themeHslToHex(h,Math.min(40,hsl.s*.22),98));
+  set('--ink',themeHslToHex(h,24,27));set('--muted',themeHslToHex(h,15,55));set('--line',themeHslToHex(h,22,89));
+  set('--bg1',themeHslToHex(h,Math.min(38,hsl.s*.22),98));set('--bg2',themeHslToHex(h,Math.min(48,hsl.s*.34),94));
+  set('--panel','#ffffffdf');set('--cell',themeHslToHex(h,Math.min(35,hsl.s*.18),99));set('--accentText',themeHslToHex(h,Math.max(35,hsl.s*.72),37));
+ }
+}
+function applyTheme(palette,mode,customColor){
+ const isGuest=(()=>{try{return localStorage.getItem('splimGuestMode')==='true'&&!window.splimCurrentUser;}catch(e){return false;}})();
+ if(isGuest){palette='lavender';mode='light';}
+ const validPalettes=['pink','peach','lavender','mint','sky','chocolate','beige','custom'];
+ if(!validPalettes.includes(palette))palette='pink';
+ if(mode!=='dark'&&mode!=='light')mode='light';
+ let savedColor='#ec78a8';
+ try{const saved=JSON.parse(localStorage.getItem('pinkPlannerSettings')||'null');if(saved&&/^#[0-9a-fA-F]{6}$/.test(saved.customColor||''))savedColor=saved.customColor;}catch(e){}
+ if(!/^#[0-9a-fA-F]{6}$/.test(customColor||''))customColor=savedColor;
+ ['--pink','--pink2','--pale','--ink','--muted','--line','--bg1','--bg2','--panel','--cell','--accentText'].forEach(name=>root.style.removeProperty(name));
+ root.dataset.theme=palette;root.dataset.mode=mode;document.body.dataset.palette=palette;document.body.dataset.mode=mode;
+ if(palette==='custom')applyCustomTheme(customColor,mode);
+ paletteSelect.value=palette;modeSelect.value=mode;customColorInput.value=customColor;customColorValue.textContent=customColor.toUpperCase();customColorControl.hidden=palette!=='custom';
+ const favicon=document.getElementById('splimFavicon');
+ if(favicon){const iconColor=getComputedStyle(root).getPropertyValue('--pink').trim()||'#ec78a8',iconBg=mode==='dark'?'#24202b':'#fffafd';const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="3" y="3" width="58" height="58" rx="18" fill="'+iconBg+'" stroke="'+iconColor+'" stroke-opacity=".28"/><g fill="none" stroke="'+iconColor+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M32 34 C28 29 24 23 32 12 C40 23 36 29 32 34Z"/><path d="M32 34 C28 29 24 23 32 12 C40 23 36 29 32 34Z" transform="rotate(72 32 32)"/><path d="M32 34 C28 29 24 23 32 34Z" transform="rotate(144 32 32)"/><path d="M32 34 C28 29 24 23 32 34Z" transform="rotate(216 32 32)"/><path d="M32 34 C28 29 24 23 32 34Z" transform="rotate(288 32 32)"/></g><circle cx="32" cy="32" r="2" fill="'+iconColor+'"/></svg>';favicon.href='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);}
+ try{localStorage.setItem('pinkPlannerSettings',JSON.stringify({palette,mode,customColor}));}catch(e){}
 }
 
+
 const initialTheme=readThemeSettings();
-applyTheme(initialTheme.palette||'pink',initialTheme.mode||'light');
+applyTheme(initialTheme.palette||'pink',initialTheme.mode||'light',initialTheme.customColor);
 window.splimSetThemeAccess(!!window.splimCurrentUser);
 let initiallyGuest=false;try{initiallyGuest=localStorage.getItem('splimGuestMode')==='true';}catch(e){}
 if(initiallyGuest&&!window.splimCurrentUser)window.splimApplyGuestTheme();
 
-paletteSelect.addEventListener('change',()=>{if(!paletteSelect.disabled)applyTheme(paletteSelect.value,modeSelect.value);});
-modeSelect.addEventListener('change',()=>{if(!modeSelect.disabled)applyTheme(paletteSelect.value,modeSelect.value);});
+paletteSelect.addEventListener('change',()=>{if(!paletteSelect.disabled)applyTheme(paletteSelect.value,modeSelect.value,customColorInput.value);});
+modeSelect.addEventListener('change',()=>{if(!modeSelect.disabled)applyTheme(paletteSelect.value,modeSelect.value,customColorInput.value);});
+customColorInput.addEventListener('input',()=>{if(!customColorInput.disabled){if(paletteSelect.value!=='custom')paletteSelect.value='custom';applyTheme('custom',modeSelect.value,customColorInput.value);}});
 
 
 const affirmations=[
